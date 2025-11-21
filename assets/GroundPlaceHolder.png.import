@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://pemp4jeluyn5"
-path="res://.godot/imported/New Piskel.png-fcada460228b171ddf3b794f17cbd959.ctex"
+path="res://.godot/imported/GroundPlaceHolder.png-bc1e0a1f908f5ca767fbb538c3a86eb2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/New Piskel.png"
-dest_files=["res://.godot/imported/New Piskel.png-fcada460228b171ddf3b794f17cbd959.ctex"]
+source_file="res://assets/GroundPlaceHolder.png"
+dest_files=["res://.godot/imported/GroundPlaceHolder.png-bc1e0a1f908f5ca767fbb538c3a86eb2.ctex"]
 
 [params]
 

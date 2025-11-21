@@ -1,0 +1,9 @@
+res://scenes/main.tscn
+res://grapple_point.tscn
+res://grapple_point.gd
+res://scenes/grapple/grapple_point.tscn
+res://scenes/grapple/grapple_point.gd
+res://scenes/player.gd
+res://BreakablePlatform.gd
+res://scenes/breakableplatform/breakable_platform.tscn
+res://scenes/breakableplatform/BreakablePlatform.gd

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://d2h62s6xwuld"]
+
+[ext_resource type="Script" uid="uid://bdknh11x3uu1" path="res://scenes/breakableplatform/BreakablePlatform.gd" id="1_gk0wa"]
+[ext_resource type="Texture2D" uid="uid://brppyjhao8iw5" path="res://assets/BreakablePlatform.png" id="2_vegg3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4px8n"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2aexv"]
+size = Vector2(16, 16)
+
+[node name="BreakablePlatform" type="Node2D"]
+script = ExtResource("1_gk0wa")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("2_vegg3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_4px8n")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_2aexv")
+
+[node name="BreakTimer" type="Timer" parent="CharacterBody2D"]
+one_shot = true
+
+[node name="RegenTimer" type="Timer" parent="CharacterBody2D"]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="body_entered" from="CharacterBody2D/Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="CharacterBody2D/Area2D" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="CharacterBody2D/BreakTimer" to="." method="_on_BreakTimer_timeout"]
+[connection signal="timeout" from="CharacterBody2D/RegenTimer" to="." method="_on_RegenTimer_timeout"]

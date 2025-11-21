@@ -1,6 +1,9 @@
+CharacterBody2D
+StaticBody2D
+Timer
+CollisionShape2D
+Area2D
+Sprite2D
+Line2D
 TileMap
 Camera2D
-CollisionShape2D
-StaticBody2D
-Sprite2D
-CharacterBody2D

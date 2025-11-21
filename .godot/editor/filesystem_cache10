@@ -1,10 +1,19 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1763760385
+::res://::1763764741
+BreakablePlatform.gd::GDScript::77012771190186914::1763764712::0::1::::<>Node2D<><>0<>0<><>::
 icon.svg::CompressedTexture2D::4817894111877080472::1763755413::1763755419::1::::<><><>0<>0<>d089b273879588d6d4092fc8ee3b874f<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
-::res://scenes/::1763760077
-main.tscn::PackedScene::3465095680211921877::1763760077::0::1::::<><><>0<>0<><>::uid://cikm0sgul6rns::::res://scenes/player.gd<>uid://pemp4jeluyn5::::res://scenes/New Piskel.png
-New Piskel.png::CompressedTexture2D::1061847093686145480::1763756862::1763756723::1::::<><><>0<>0<>8228e19f63af0c8ba6244380a8891290<>res://.godot/imported/New Piskel.png-fcada460228b171ddf3b794f17cbd959.ctex::
-player.gd::GDScript::5355770098405654712::1763760076::0::1::::<>CharacterBody2D<><>0<>0<><>::
+::res://assets/::1763764189
+BreakablePlatform.png::CompressedTexture2D::3611550789339560658::1763764189::1763764189::1::::<><><>0<>0<>dfa906cfc8693274e54ea0f02ca1f2a5<>res://.godot/imported/BreakablePlatform.png-e410993a4194b0e4758f6cbd7f3b69e1.ctex::
+GrappleReceiver.png::CompressedTexture2D::8026242134112230337::1763761649::1763761649::1::::<><><>0<>0<>76797e37197d63ac250715f88ce1d811<>res://.godot/imported/GrappleReceiver.png-04620724e0e3fd98bad2738157756e0f.ctex::
+GroundPlaceHolder.png::CompressedTexture2D::1061847093686145480::1763756862::1763761667::1::::<><><>0<>0<>3f757f890ea38ed7c1e55174b08c3317<>res://.godot/imported/GroundPlaceHolder.png-bc1e0a1f908f5ca767fbb538c3a86eb2.ctex::
+::res://scenes/::1763764738
+main.tscn::PackedScene::3465095680211921877::1763763757::0::1::::<><><>0<>0<><>::uid://cikm0sgul6rns::::res://scenes/player.gd<>uid://pemp4jeluyn5::::res://assets/GroundPlaceHolder.png<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn
+player.gd::GDScript::5355770098405654712::1763763757::0::1::::<>CharacterBody2D<><>0<>0<><>::
+::res://scenes/breakableplatform/::1763764741
+breakable_platform.tscn::PackedScene::266786556211183561::1763764743::0::1::::<><><>0<>0<><>::uid://bdknh11x3uu1::::res://BreakablePlatform.gd<>uid://brppyjhao8iw5::::res://assets/BreakablePlatform.png
+::res://scenes/grapple/::1763762901
+grapple_point.gd::GDScript::191319388508722381::1763762172::0::1::::<>Area2D<><>0<>0<><>::
+grapple_point.tscn::PackedScene::1635221708565270098::1763762901::0::1::::<><><>0<>0<><>::uid://dml8bg2o5rhnd::::res://assets/GrappleReceiver.png<>uid://cyxac0n8au10::::res://scenes/grapple/grapple_point.gd
 ::res://scenes/levels/::1763759416
 level_1.tscn::PackedScene::658907479013354519::1763759416::0::1::::<><><>0<>0<><>::
 level_2.tscn::PackedScene::8576747145048874590::1763758904::0::1::::<><><>0<>0<><>::
