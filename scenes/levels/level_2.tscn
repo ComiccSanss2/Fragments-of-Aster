@@ -1,9 +1,92 @@
-[gd_scene load_steps=2 format=3 uid="uid://dugv1i5ou5f0i"]
+[gd_scene load_steps=6 format=3 uid="uid://dugv1i5ou5f0i"]
+
+[ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_g2h2n"]
+[ext_resource type="Texture2D" uid="uid://nkbfn1rorjwa" path="res://assets/pic-right.png" id="3_fiq81"]
+[ext_resource type="Texture2D" uid="uid://bxdevy7rf16fn" path="res://assets/pic-left.png" id="4_l37oo"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fiq81"]
+texture = ExtResource("1_g2h2n")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_gkh53"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_fiq81")
 
 [node name="Level1" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2(1, 0)
 tile_set = SubResource("TileSet_gkh53")
 format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 720896, 0, 0, 786432, 0, 0, 851968, 0, 0, 917504, 0, 0, 917505, 0, 0, 851969, 0, 0, 786433, 0, 0, 720897, 0, 0, 655361, 0, 0, 589825, 0, 0, 524289, 0, 0, 458753, 0, 0, 1, 0, 0, 65537, 0, 0, 131073, 0, 0, 196609, 0, 0, 262145, 0, 0, 327681, 0, 0, 393217, 0, 0, 7, 0, 0, -65529, 0, 0, -131065, 0, 0, -327673, 0, 0, -327672, 0, 0, -262136, 0, 0, -196600, 0, 0, -131064, 0, 0, -65528, 0, 0, 8, 0, 0, 65544, 0, 0, 131080, 0, 0, 196616, 0, 0, 262152, 0, 0, 327688, 0, 0, 327687, 0, 0, 262151, 0, 0, 196615, 0, 0, 131079, 0, 0, 65543, 0, 0, -262137, 0, 0, -196601, 0, 0, 917513, 0, 0, 851977, 0, 0, 786441, 0, 0, 720905, 0, 0, 720906, 0, 0, 720907, 0, 0, 720908, 0, 0, 786444, 0, 0, 851980, 0, 0, 917516, 0, 0, 917515, 0, 0, 917514, 0, 0, 851978, 0, 0, 786442, 0, 0, 786443, 0, 0, 851979, 0, 0, 327693, 0, 0, 327694, 0, 0, 262158, 0, 0, 196622, 0, 0, -327667, 0, 0, -327666, 0, 0, -262130, 0, 0, -196594, 0, 0, -131058, 0, 0, -65522, 0, 0, 14, 0, 0, 65550, 0, 0, 131086, 0, 0, 262157, 0, 0, 196621, 0, 0, 131085, 0, 0, 65549, 0, 0, 13, 0, 0, -65523, 0, 0, -131059, 0, 0, -196595, 0, 0, -262131, 0, 0, 720914, 0, 0, 786450, 0, 0, 851986, 0, 0, 917522, 0, 0, 917523, 0, 0, 851987, 0, 0, 786451, 0, 0, 720915, 0, 0, 655379, 0, 0, 589843, 0, 0, 524307, 0, 0, 196627, 0, 0, 196626, 0, 0, 262162, 0, 0, 327698, 0, 0, 393234, 0, 0, 458770, 0, 0, 524306, 0, 0, 589842, 0, 0, 655378, 0, 0, 458771, 0, 0, 393235, 0, 0, 327699, 0, 0, 262163, 0, 0, 983049, 0, 0, 983050, 0, 0, 983051, 0, 0, 983052, 0, 0, 983058, 0, 0, 983059, 0, 0, 983040, 0, 0, 983041, 0, 0, 983067, 0, 0, 917531, 0, 0, 720923, 0, 0, 655387, 0, 0, 589851, 0, 0, 524315, 0, 0, 458779, 0, 0, 393243, 0, 0, 327707, 0, 0, 262171, 0, 0, 196635, 0, 0, 131099, 0, 0, 65563, 0, 0, 27, 0, 0, -65509, 0, 0, -131045, 0, 0, -196581, 0, 0, -262117, 0, 0, -327653, 0, 0, -393189, 0, 0, -458725, 0, 0, 983068, 0, 0, 917532, 0, 0, 720924, 0, 0, 655388, 0, 0, 589852, 0, 0, 524316, 0, 0, 458780, 0, 0, 393244, 0, 0, 327708, 0, 0, 262172, 0, 0, 196636, 0, 0, 131100, 0, 0, 65564, 0, 0, 28, 0, 0, -65508, 0, 0, -131044, 0, 0, -196580, 0, 0, -262116, 0, 0, -327652, 0, 0, -393188, 0, 0, -458724, 0, 0, -458726, 0, 0, -393190, 0, 0, -327654, 0, 0, -262118, 0, 0, -196582, 0, 0, -131046, 0, 0, -65510, 0, 0, 26, 0, 0, 65562, 0, 0, 131098, 0, 0, 196634, 0, 0, 262170, 0, 0, 327706, 0, 0, 393242, 0, 0, 458778, 0, 0, 524314, 0, 0, 589850, 0, 0, 655386, 0, 0, 917530, 0, 0, 983066, 0, 0, 589849, 0, 0, 524313, 0, 0, 458777, 0, 0, 393241, 0, 0, 327705, 0, 0, 262169, 0, 0, 196633, 0, 0, 131097, 0, 0, 65561, 0, 0, 25, 0, 0, -65511, 0, 0, -131047, 0, 0, -196583, 0, 0, -458727, 0, 0, -327655, 0, 0, -393191, 0, 0, -262119, 0, 0, 917529, 0, 0, 983065, 0, 0, 917524, 0, 0, 524312, 0, 0, 720922, 0, 0, 720921, 0, 0, 655385, 0, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(8.080212, -8.638115)
+
+[node name="PicRight" type="Sprite2D" parent="."]
+position = Vector2(249, -71)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight2" type="Sprite2D" parent="."]
+position = Vector2(249, -55)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight3" type="Sprite2D" parent="."]
+position = Vector2(249, -39)
+texture = ExtResource("3_fiq81")
+
+[node name="PicLeft" type="Sprite2D" parent="."]
+position = Vector2(281, 56)
+texture = ExtResource("4_l37oo")
+
+[node name="PicRight4" type="Sprite2D" parent="."]
+position = Vector2(329, 56)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight5" type="Sprite2D" parent="."]
+position = Vector2(329, 72)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight6" type="Sprite2D" parent="."]
+position = Vector2(329, 88)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight7" type="Sprite2D" parent="."]
+position = Vector2(249, -47)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight8" type="Sprite2D" parent="."]
+position = Vector2(249, -63)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight9" type="Sprite2D" parent="."]
+position = Vector2(249, -31)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight10" type="Sprite2D" parent="."]
+position = Vector2(249, -15)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight11" type="Sprite2D" parent="."]
+position = Vector2(249, -23)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight12" type="Sprite2D" parent="."]
+position = Vector2(249, -7)
+texture = ExtResource("3_fiq81")
+
+[node name="PicLeft2" type="Sprite2D" parent="."]
+position = Vector2(281, 64)
+texture = ExtResource("4_l37oo")
+
+[node name="PicRight13" type="Sprite2D" parent="."]
+position = Vector2(329, 64)
+texture = ExtResource("3_fiq81")
+
+[node name="PicRight14" type="Sprite2D" parent="."]
+position = Vector2(329, 80)
+texture = ExtResource("3_fiq81")

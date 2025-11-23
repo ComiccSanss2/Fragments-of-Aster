@@ -67,6 +67,7 @@ func _on_BreakTimer_timeout():
 func _on_RegenTimer_timeout():
 	# Si le joueur est encore dessus → attendre
 	if player_on:
+		$CharacterBody2D/CollisionShape2D.disabled = false
 		return
 
 	# Reset complet

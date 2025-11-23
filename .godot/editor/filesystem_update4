@@ -1,9 +1,5 @@
+res://scenes/levels/level_1.tscn
 res://scenes/main.tscn
-res://grapple_point.tscn
-res://grapple_point.gd
-res://scenes/grapple/grapple_point.tscn
-res://scenes/grapple/grapple_point.gd
-res://scenes/player.gd
-res://BreakablePlatform.gd
-res://scenes/breakableplatform/breakable_platform.tscn
-res://scenes/breakableplatform/BreakablePlatform.gd
+res://scenes/levels/level_2.tscn
+res://scenes/levels/end_trigger.gd
+res://scenes/main.gd
