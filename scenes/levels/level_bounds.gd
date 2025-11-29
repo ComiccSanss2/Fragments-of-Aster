@@ -12,7 +12,7 @@ func _ready():
 	if get_parent().has_node("PlayerStart"):
 		player_start = get_parent().get_node("PlayerStart")
 	else:
-		push_error("❌ PlayerStart introuvable dans ce niveau !")
+		push_error("PlayerStart introuvable dans ce niveau !")
 
 	# Le Player dans la scène Main
 	player = get_tree().get_root().get_node("Main/Player")
@@ -38,7 +38,6 @@ func _physics_process(delta):
 
 	var pos = player.global_position
 
-	# Le joueur sort des limites ?
 	if pos.x < left \
 	or pos.x > right \
 	or pos.y < top \

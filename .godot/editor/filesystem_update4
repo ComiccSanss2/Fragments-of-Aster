@@ -14,3 +14,8 @@ res://scenes/main.gd
 res://scenes/player.tscn
 res://scenes/cpu_particles_2d.tscn
 res://scenes/cpu_particles_2d.gd
+res://scenes/levels/level_6.tscn
+res://scenes/levels/end_trigger_5.gd
+res://scenes/grapple/grapple_point.gd
+res://scenes/breakableplatform/breakable_platform.tscn
+res://scenes/breakableplatform/BreakablePlatform.gd

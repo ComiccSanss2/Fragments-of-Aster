@@ -10,8 +10,8 @@ const GRAVITY = 800.0
 # ------------------------------------------------------------
 # VARIABLE JUMP (SAUT CHARGÉ)
 # ------------------------------------------------------------
-const JUMP_HOLD_FORCE = -250.0        # force supplémentaire pendant maintien
-const MAX_JUMP_HOLD_TIME = 0.18      # durée max de maintien (0.18-0.25 idéal)
+const JUMP_HOLD_FORCE = -250.0
+const MAX_JUMP_HOLD_TIME = 0.18
 
 var jump_held_time = 0.0
 var is_jump_held = false
@@ -50,6 +50,8 @@ var grapple_speed := 500.0
 var grapple_line: Line2D
 var grapple_launch_timer := 0.0
 
+var grapple_direction := Vector2.ZERO   # 🔥 direction verrouillée
+
 # ------------------------------------------------------------
 # READY
 # ------------------------------------------------------------
@@ -64,7 +66,7 @@ func _ready():
 func _physics_process(delta):
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 
-	# UPDATE FACING DIR + FLIP
+	# Direction + Flip
 	if input_dir != 0:
 		facing_dir = input_dir
 		$AnimatedSprite2D.flip_h = facing_dir < 0
@@ -72,9 +74,14 @@ func _physics_process(delta):
 	# --- GRAPPLE ACTIVATION ---
 	if Input.is_action_just_pressed("grapple") and not grappling and grapple_launch_timer <= 0:
 		grapple_target = find_grapple_point()
+
 		if grapple_target != null:
 			grappling = true
 			wall_grabbing = false
+
+			# 🔥 Verrouiller direction au moment du latch
+			grapple_direction = (grapple_target.global_position - global_position).normalized()
+
 			grapple_line.visible = true
 			grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
 
@@ -102,7 +109,7 @@ func _physics_process(delta):
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * delta
 
-	# --- INPUT JUMP BUFFER ---
+	# --- JUMP BUFFER ---
 	if Input.is_action_just_pressed("ui_accept"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
 
@@ -115,17 +122,17 @@ func _physics_process(delta):
 	else:
 		coyote_timer -= delta
 
-	# --- HORIZONTAL MOVE ---
+	# --- MOVE ---
 	velocity.x = input_dir * SPEED
 
-	# --- HANDLE JUMP (WITH VARIABLE JUMP) ---
+	# --- JUMP ---
 	handle_jump(delta)
 
 	# --- WALL SYSTEM ---
 	handle_wall_grab(delta)
 	handle_wall_jump()
 
-	# --- ANIMATIONS ---
+	# --- ANIM ---
 	update_animation(input_dir)
 
 	move_and_slide()
@@ -156,10 +163,9 @@ func update_animation(input_dir):
 
 
 # ------------------------------------------------------------
-# JUMP SYSTEM (VARIABLE JUMP INCLUDED)
+# VARIABLE JUMP SYSTEM
 # ------------------------------------------------------------
 func handle_jump(delta):
-	# --- START JUMP (tap, coyote, buffer) ---
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
 		velocity.y = JUMP_FORCE
 		is_jump_held = true
@@ -168,26 +174,22 @@ func handle_jump(delta):
 		jump_buffer_timer = 0
 		coyote_timer = 0
 
-	# --- HOLD JUMP = charge / hauteur variable ---
+	# Hold jump
 	if is_jump_held:
 		if Input.is_action_pressed("ui_accept") and jump_held_time < MAX_JUMP_HOLD_TIME:
-			# plus on tient longtemps, plus on ajoute de la force
 			velocity.y += JUMP_HOLD_FORCE * delta
 			jump_held_time += delta
 		else:
-			# arrêt du maintien
 			is_jump_held = false
 
-	# --- CUT JUMP = mini-saut quand on relâche vite ---
+	# Cut jump
 	if Input.is_action_just_released("ui_accept") and velocity.y < 0:
-		# coupe instantanément la montée
-		velocity.y *= 0.45  # 0.35–0.55 selon feeling
+		velocity.y *= 0.45
 		is_jump_held = false
 
 
-
 # ------------------------------------------------------------
-# WALL DETECTION
+# WALL SYSTEM
 # ------------------------------------------------------------
 func is_on_wall_left() -> bool:
 	return is_on_wall() and get_wall_normal().x > 0.1
@@ -196,9 +198,6 @@ func is_on_wall_right() -> bool:
 	return is_on_wall() and get_wall_normal().x < -0.1
 
 
-# ------------------------------------------------------------
-# WALL GRAB
-# ------------------------------------------------------------
 func handle_wall_grab(delta):
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
@@ -229,9 +228,6 @@ func handle_wall_grab(delta):
 			velocity.y = WALL_SLIDE_SPEED
 
 
-# ------------------------------------------------------------
-# WALL JUMP
-# ------------------------------------------------------------
 func handle_wall_jump():
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
@@ -249,34 +245,34 @@ func handle_wall_jump():
 
 
 # ------------------------------------------------------------
-# GRAPPLE SYSTEM
+# GRAPPLE SYSTEM (FIX MULTI-POINT)
 # ------------------------------------------------------------
-func find_grapple_point():
-	var closest = null
-	var closest_dist = INF
+func find_grapple_point() -> Area2D:
+	var best_point: Area2D = null
+	var best_dist: float = INF
 
 	for p in get_tree().get_nodes_in_group("grapple_points"):
-		var dist = global_position.distance_to(p.global_position)
+
+		var dist: float = global_position.distance_to(p.global_position)
 
 		if dist < p.min_distance or dist > p.max_distance:
 			continue
 
-		var dir_to_point = sign(p.global_position.x - global_position.x)
-		if dir_to_point != facing_dir:
-			continue
+		if dist < best_dist:
+			best_dist = dist
+			best_point = p
 
-		if dist < closest_dist:
-			closest_dist = dist
-			closest = p
-
-	return closest
+	return best_point
 
 
 func handle_grapple(delta):
-	var direction = (grapple_target.global_position - global_position).normalized()
-	velocity = direction * grapple_speed
+	# désactiver collisions pendant le grappin
+	collision_layer = 0
+	collision_mask = 0
 
-	grapple_line.visible = true
+	velocity = grapple_direction * grapple_speed
+
+	# ligne de grappin
 	grapple_line.points = [
 		Vector2.ZERO,
 		grapple_target.global_position - global_position
@@ -288,6 +284,11 @@ func handle_grapple(delta):
 
 func finish_grapple():
 	grappling = false
+
+	# réactiver collisions
+	collision_layer = 1
+	collision_mask = 1
+
 	velocity.x = facing_dir * 320
 	velocity.y = -280
 
@@ -296,7 +297,11 @@ func finish_grapple():
 
 	grapple_line.visible = false
 	grapple_line.points = []
-	
+
+
+# ------------------------------------------------------------
+# DUST EFFECT
+# ------------------------------------------------------------
 func spawn_dust():
 	var dust_scene = load("res://scenes/cpu_particles_2d.tscn")
 	var d = dust_scene.instantiate()

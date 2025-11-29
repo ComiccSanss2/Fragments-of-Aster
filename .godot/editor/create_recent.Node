@@ -1,3 +1,4 @@
+StaticBody2D
 Node2D
 CPUParticles2D
 ColorRect
@@ -7,7 +8,6 @@ CollisionShape2D
 Area2D
 AnimatedSprite2D
 CharacterBody2D
-StaticBody2D
 Timer
 Sprite2D
 Line2D

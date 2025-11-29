@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dmfysmau2te23"]
+[gd_scene load_steps=10 format=3 uid="uid://dmfysmau2te23"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_r1vs7"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="2_845dy"]
 [ext_resource type="Texture2D" uid="uid://bxdevy7rf16fn" path="res://assets/pic-left.png" id="3_dswqx"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="4_laj7o"]
+[ext_resource type="Script" uid="uid://bieymvjoqikhk" path="res://scenes/levels/end_trigger_5.gd" id="5_fi56y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_845dy"]
 texture = ExtResource("1_r1vs7")
@@ -16,6 +17,9 @@ sources/0 = SubResource("TileSetAtlasSource_845dy")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_laj7o"]
 size = Vector2(1691, 366)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hldbq"]
+size = Vector2(14.875, 33)
 
 [node name="Level5" type="Node2D"]
 
@@ -40,3 +44,12 @@ shape = SubResource("RectangleShape2D_laj7o")
 
 [node name="PlayerStart" type="Node2D" parent="."]
 position = Vector2(12, -15)
+
+[node name="EndTrigger5" type="Area2D" parent="."]
+script = ExtResource("5_fi56y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger5"]
+position = Vector2(776.5625, 0)
+shape = SubResource("RectangleShape2D_hldbq")
+
+[connection signal="body_entered" from="EndTrigger5" to="EndTrigger5" method="_on_body_entered"]

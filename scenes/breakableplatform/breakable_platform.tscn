@@ -10,30 +10,31 @@ size = Vector2(16, 16)
 size = Vector2(16, 16)
 
 [node name="BreakablePlatform" type="Node2D"]
+visibility_layer = 128
 script = ExtResource("1_gk0wa")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
 texture = ExtResource("2_vegg3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("RectangleShape2D_4px8n")
 
-[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+[node name="Area2D" type="Area2D" parent="StaticBody2D"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D"]
 position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_2aexv")
 
-[node name="BreakTimer" type="Timer" parent="CharacterBody2D"]
+[node name="BreakTimer" type="Timer" parent="StaticBody2D"]
 one_shot = true
 
-[node name="RegenTimer" type="Timer" parent="CharacterBody2D"]
+[node name="RegenTimer" type="Timer" parent="StaticBody2D"]
 wait_time = 3.0
 one_shot = true
 
-[connection signal="body_entered" from="CharacterBody2D/Area2D" to="." method="_on_Area2D_body_entered"]
-[connection signal="body_exited" from="CharacterBody2D/Area2D" to="." method="_on_Area2D_body_exited"]
-[connection signal="timeout" from="CharacterBody2D/BreakTimer" to="." method="_on_BreakTimer_timeout"]
-[connection signal="timeout" from="CharacterBody2D/RegenTimer" to="." method="_on_RegenTimer_timeout"]
+[connection signal="body_entered" from="StaticBody2D/Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="StaticBody2D/Area2D" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="StaticBody2D/BreakTimer" to="." method="_on_BreakTimer_timeout"]
+[connection signal="timeout" from="StaticBody2D/RegenTimer" to="." method="_on_RegenTimer_timeout"]

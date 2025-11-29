@@ -44,11 +44,16 @@ position = Vector2(7.311508, -12.998077)
 script = ExtResource("3_anwe6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(623.8125, -451)
+position = Vector2(624, -452)
 shape = SubResource("RectangleShape2D_ogj6a")
 
 [node name="PicLeft2" type="Sprite2D" parent="LevelBounds"]
 position = Vector2(216, -232)
+rotation = 1.5707964
+texture = ExtResource("3_w6h2s")
+
+[node name="PicLeft" type="Sprite2D" parent="LevelBounds"]
+position = Vector2(228, -120)
 rotation = 1.5707964
 texture = ExtResource("3_w6h2s")
 
@@ -58,5 +63,20 @@ script = ExtResource("4_ogj6a")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger4"]
 position = Vector2(599.125, -384)
 shape = SubResource("RectangleShape2D_anwe6")
+
+[node name="PicLeft" type="Sprite2D" parent="."]
+position = Vector2(236, -120)
+rotation = 1.5707964
+texture = ExtResource("3_w6h2s")
+
+[node name="PicLeft2" type="Sprite2D" parent="."]
+position = Vector2(244, -120)
+rotation = 1.5707964
+texture = ExtResource("3_w6h2s")
+
+[node name="PicLeft3" type="Sprite2D" parent="."]
+position = Vector2(252, -120)
+rotation = 1.5707964
+texture = ExtResource("3_w6h2s")
 
 [connection signal="body_entered" from="EndTrigger4" to="EndTrigger4" method="_on_body_entered"]
