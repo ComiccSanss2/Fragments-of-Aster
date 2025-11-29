@@ -1,6 +1,7 @@
-Control
 ColorRect
+CanvasLayer
 Node2D
+Control
 CollisionShape2D
 Area2D
 AnimatedSprite2D

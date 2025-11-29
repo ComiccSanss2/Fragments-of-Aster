@@ -39,3 +39,6 @@ func load_level(path: String):
 		camera.set_bounds(bounds)
 	else:
 		push_error("⚠ Aucun LevelBounds trouvé dans: " + path)
+		
+		
+		

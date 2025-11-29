@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dugv1i5ou5f0i"]
+[gd_scene load_steps=10 format=3 uid="uid://dugv1i5ou5f0i"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_g2h2n"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="2_l37oo"]
 [ext_resource type="Texture2D" uid="uid://nkbfn1rorjwa" path="res://assets/pic-right.png" id="3_fiq81"]
+[ext_resource type="Script" uid="uid://bxjp52mrduwvt" path="res://scenes/levels/end_trigger_2.gd" id="4_fiq81"]
 [ext_resource type="Texture2D" uid="uid://bxdevy7rf16fn" path="res://assets/pic-left.png" id="4_l37oo"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fiq81"]
@@ -14,9 +16,12 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_fiq81")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra442"]
-size = Vector2(463, 336)
+size = Vector2(949, 336)
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l37oo"]
+size = Vector2(32, 29.5)
+
+[node name="Level2" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2(1, 0)
@@ -28,9 +33,10 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608,
 position = Vector2(8.080212, -8.638115)
 
 [node name="LevelBounds" type="Node2D" parent="."]
+script = ExtResource("2_l37oo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(232.5, 89)
+position = Vector2(475.5, 89)
 shape = SubResource("RectangleShape2D_ra442")
 
 [node name="PicRight" type="Sprite2D" parent="."]
@@ -96,3 +102,12 @@ texture = ExtResource("3_fiq81")
 [node name="PicRight14" type="Sprite2D" parent="."]
 position = Vector2(329, 80)
 texture = ExtResource("3_fiq81")
+
+[node name="EndTrigger2" type="Area2D" parent="."]
+script = ExtResource("4_fiq81")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger2"]
+position = Vector2(448, 209)
+shape = SubResource("RectangleShape2D_l37oo")
+
+[connection signal="body_entered" from="EndTrigger2" to="EndTrigger2" method="_on_body_entered"]

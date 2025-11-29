@@ -1,9 +1,80 @@
-[gd_scene load_steps=2 format=3 uid="uid://dx4nivxq7c3s3"]
+[gd_scene load_steps=10 format=3 uid="uid://dx4nivxq7c3s3"]
+
+[ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_0ljxa"]
+[ext_resource type="Texture2D" uid="uid://nkbfn1rorjwa" path="res://assets/pic-right.png" id="2_0qepi"]
+[ext_resource type="Texture2D" uid="uid://bxdevy7rf16fn" path="res://assets/pic-left.png" id="3_0ljxa"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="3_fmg3e"]
+[ext_resource type="Script" uid="uid://b7al8ro4wwjpb" path="res://scenes/levels/end_trigger_3.gd" id="4_0qepi"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ftfob"]
+texture = ExtResource("1_0ljxa")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_gkh53"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_ftfob")
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fkk1g"]
+size = Vector2(1220, 368)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fmg3e"]
+size = Vector2(37, 29.5)
+
+[node name="Level3" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gkh53")
 format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 720896, 0, 0, 786432, 0, 0, -65536, 0, 0, -131072, 0, 0, -196608, 0, 0, -262144, 0, 0, -65530, 0, 0, -65529, 0, 0, -65528, 0, 0, 131085, 0, 0, 65549, 0, 0, 13, 0, 0, 131091, 0, 0, 196627, 0, 0, 262163, 0, 0, 262164, 0, 0, 262165, 0, 0, 196629, 0, 0, 131093, 0, 0, 131092, 0, 0, 196628, 0, 0, 131100, 0, 0, 65564, 0, 0, 28, 0, 0, -65508, 0, 0, -131044, 0, 0, -196580, 0, 0, -262116, 0, 0, -327652, 0, 0, -393188, 0, 0, -458724, 0, 0, -458723, 0, 0, -458722, 0, 0, -393186, 0, 0, -327650, 0, 0, -262114, 0, 0, -196578, 0, 0, -131042, 0, 0, -65506, 0, 0, 30, 0, 0, 65566, 0, 0, 131102, 0, 0, 131101, 0, 0, 65565, 0, 0, 29, 0, 0, -65507, 0, 0, -131043, 0, 0, -196579, 0, 0, -262115, 0, 0, -327651, 0, 0, -393187, 0, 0, 589856, 0, 0, 589857, 0, 0, 589858, 0, 0, 655392, 0, 0, 720928, 0, 0, 786464, 0, 0, 852000, 0, 0, 917536, 0, 0, 983072, 0, 0, 983073, 0, 0, 983074, 0, 0, 917538, 0, 0, 852002, 0, 0, 786466, 0, 0, 720930, 0, 0, 655394, 0, 0, 655393, 0, 0, 720929, 0, 0, 786465, 0, 0, 852001, 0, 0, 917537, 0, 0, 589859, 0, 0, 196636, 0, 0, 196637, 0, 0, 196638, 0, 0, 851967, 0, 0, 786431, 0, 0, 589823, 0, 0, 524287, 0, 0, 458751, 0, 0, 393215, 0, 0, 327679, 0, 0, 262143, 0, 0, 196607, 0, 0, 131071, 0, 0, 65535, 0, 0, -1, 0, 0, -65537, 0, 0, -131073, 0, 0, -196609, 0, 0, 458780, 0, 0)
+
+[node name="PicRight2" type="Sprite2D" parent="."]
+position = Vector2(216, -8)
+rotation = 4.712389
+texture = ExtResource("2_0qepi")
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(-7, 171)
+
+[node name="LevelBounds" type="Node2D" parent="."]
+script = ExtResource("3_fmg3e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
+position = Vector2(593, 73)
+shape = SubResource("RectangleShape2D_fkk1g")
+
+[node name="PicLeft" type="Sprite2D" parent="LevelBounds"]
+position = Vector2(200, 25)
+texture = ExtResource("3_0ljxa")
+
+[node name="PicLeft2" type="Sprite2D" parent="LevelBounds"]
+position = Vector2(200, 40)
+texture = ExtResource("3_0ljxa")
+
+[node name="PicLeft3" type="Sprite2D" parent="LevelBounds"]
+position = Vector2(488, 72)
+rotation = 4.712389
+texture = ExtResource("3_0ljxa")
+
+[node name="PicLeft" type="Sprite2D" parent="."]
+position = Vector2(200, 8)
+texture = ExtResource("3_0ljxa")
+
+[node name="PicLeft2" type="Sprite2D" parent="."]
+position = Vector2(456, 72)
+rotation = 4.712389
+texture = ExtResource("3_0ljxa")
+
+[node name="PicLeft3" type="Sprite2D" parent="."]
+position = Vector2(472, 72)
+rotation = 4.712389
+texture = ExtResource("3_0ljxa")
+
+[node name="EndTrigger3" type="Area2D" parent="."]
+script = ExtResource("4_0qepi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger3"]
+position = Vector2(551.5, 129)
+shape = SubResource("RectangleShape2D_fmg3e")
+
+[connection signal="body_entered" from="EndTrigger3" to="EndTrigger3" method="_on_body_entered"]

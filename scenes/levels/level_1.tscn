@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://jngd0b8bsbpv"]
+[gd_scene load_steps=8 format=3 uid="uid://jngd0b8bsbpv"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_6iamk"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="3_6761a"]
 [ext_resource type="Script" uid="uid://cpxeepvxj2u6y" path="res://scenes/levels/end_trigger.gd" id="3_nsrm0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x42e6"]
@@ -16,7 +17,7 @@ sources/2 = SubResource("TileSetAtlasSource_x42e6")
 size = Vector2(32, 29.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6iamk"]
-size = Vector2(415, 366)
+size = Vector2(908, 366)
 
 [node name="Level1" type="Node2D"]
 
@@ -36,9 +37,10 @@ shape = SubResource("RectangleShape2D_nsrm0")
 position = Vector2(-7.251587, -8.100998)
 
 [node name="LevelBounds" type="Node2D" parent="."]
+script = ExtResource("3_6761a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(191.5, -87)
+position = Vector2(438, -87)
 shape = SubResource("RectangleShape2D_6iamk")
 
 [connection signal="body_entered" from="EndTrigger" to="EndTrigger" method="_on_body_entered"]

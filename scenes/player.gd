@@ -8,6 +8,15 @@ const JUMP_FORCE = -300.0
 const GRAVITY = 800.0
 
 # ------------------------------------------------------------
+# VARIABLE JUMP (SAUT CHARGÉ)
+# ------------------------------------------------------------
+const JUMP_HOLD_FORCE = -250.0        # force supplémentaire pendant maintien
+const MAX_JUMP_HOLD_TIME = 0.18      # durée max de maintien (0.18-0.25 idéal)
+
+var jump_held_time = 0.0
+var is_jump_held = false
+
+# ------------------------------------------------------------
 # WALL SYSTEM CONSTANTS
 # ------------------------------------------------------------
 const WALL_GRAB_DURATION = 8.0
@@ -48,6 +57,7 @@ func _ready():
 	grapple_line = $GrappleLine
 	grapple_line.visible = true
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
+
 # ------------------------------------------------------------
 # MAIN LOOP
 # ------------------------------------------------------------
@@ -71,11 +81,11 @@ func _physics_process(delta):
 	# --- GRAPPLE PULL ---
 	if grappling and grapple_target:
 		handle_grapple(delta)
-		play_anim("jump")  # during grapple, use jump anim
+		play_anim("jump")
 		move_and_slide()
 		return
 
-	# --- GRAPPLE PARABOLIC EXIT ---
+	# --- GRAPPLE EXIT ---
 	if grapple_launch_timer > 0:
 		grapple_launch_timer -= delta
 
@@ -108,8 +118,8 @@ func _physics_process(delta):
 	# --- HORIZONTAL MOVE ---
 	velocity.x = input_dir * SPEED
 
-	# --- HANDLE JUMP ---
-	handle_jump()
+	# --- HANDLE JUMP (WITH VARIABLE JUMP) ---
+	handle_jump(delta)
 
 	# --- WALL SYSTEM ---
 	handle_wall_grab(delta)
@@ -122,7 +132,7 @@ func _physics_process(delta):
 
 
 # ------------------------------------------------------------
-# ANIMATION HELPERS (idle, walk, jump, fall)
+# ANIMATION HELPERS
 # ------------------------------------------------------------
 func play_anim(name: String):
 	if $AnimatedSprite2D.animation != name:
@@ -135,12 +145,10 @@ func play_air_anim():
 		play_anim("fall")
 
 func update_animation(input_dir):
-	# AIR
 	if not is_on_floor():
 		play_air_anim()
 		return
 
-	# WALK
 	if input_dir != 0:
 		play_anim("walk")
 	else:
@@ -148,13 +156,34 @@ func update_animation(input_dir):
 
 
 # ------------------------------------------------------------
-# JUMP SYSTEM
+# JUMP SYSTEM (VARIABLE JUMP INCLUDED)
 # ------------------------------------------------------------
-func handle_jump():
+func handle_jump(delta):
+	# --- START JUMP (tap, coyote, buffer) ---
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
 		velocity.y = JUMP_FORCE
+		is_jump_held = true
+		jump_held_time = 0.0
+
 		jump_buffer_timer = 0
 		coyote_timer = 0
+
+	# --- HOLD JUMP = charge / hauteur variable ---
+	if is_jump_held:
+		if Input.is_action_pressed("ui_accept") and jump_held_time < MAX_JUMP_HOLD_TIME:
+			# plus on tient longtemps, plus on ajoute de la force
+			velocity.y += JUMP_HOLD_FORCE * delta
+			jump_held_time += delta
+		else:
+			# arrêt du maintien
+			is_jump_held = false
+
+	# --- CUT JUMP = mini-saut quand on relâche vite ---
+	if Input.is_action_just_released("ui_accept") and velocity.y < 0:
+		# coupe instantanément la montée
+		velocity.y *= 0.45  # 0.35–0.55 selon feeling
+		is_jump_held = false
+
 
 
 # ------------------------------------------------------------
@@ -253,21 +282,17 @@ func handle_grapple(delta):
 		grapple_target.global_position - global_position
 	]
 
-	# Collision avec le point de grappin
 	if global_position.distance_to(grapple_target.global_position) < 12:
 		finish_grapple()
 
 
 func finish_grapple():
 	grappling = false
-
-	# Impulsion finale
 	velocity.x = facing_dir * 320
 	velocity.y = -280
 
 	grapple_launch_timer = 0.25
 	grapple_target = null
 
-	# 🔥 Reset propre du rope
 	grapple_line.visible = false
 	grapple_line.points = []
