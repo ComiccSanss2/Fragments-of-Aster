@@ -11,3 +11,6 @@ res://scenes/levels/level_5.tscn
 res://scenes/levels/end_trigger_4.gd
 res://scenes/levels/level_bounds.gd
 res://scenes/main.gd
+res://scenes/player.tscn
+res://scenes/cpu_particles_2d.tscn
+res://scenes/cpu_particles_2d.gd

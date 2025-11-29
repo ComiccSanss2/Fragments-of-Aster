@@ -195,3 +195,5 @@ z_index = 20
 points = PackedVector2Array(0, 0, 0, 0)
 width = 2.0
 default_color = Color(0, 0, 0, 1)
+
+[node name="DustSpawner" type="Node2D" parent="."]

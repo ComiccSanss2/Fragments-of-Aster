@@ -39,4 +39,4 @@ position = Vector2(820.5, -102)
 shape = SubResource("RectangleShape2D_laj7o")
 
 [node name="PlayerStart" type="Node2D" parent="."]
-position = Vector2(37.470974, 44.536903)
+position = Vector2(12, -15)

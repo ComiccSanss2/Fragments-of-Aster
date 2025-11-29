@@ -53,3 +53,4 @@ func _physics_process(delta):
 func respawn_player():
 	player.velocity = Vector2.ZERO
 	player.global_position = player_start.global_position
+	player.spawn_dust()

@@ -296,3 +296,9 @@ func finish_grapple():
 
 	grapple_line.visible = false
 	grapple_line.points = []
+	
+func spawn_dust():
+	var dust_scene = load("res://scenes/cpu_particles_2d.tscn")
+	var d = dust_scene.instantiate()
+	d.global_position = global_position
+	get_tree().current_scene.add_child(d)

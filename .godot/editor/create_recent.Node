@@ -1,6 +1,7 @@
+Node2D
+CPUParticles2D
 ColorRect
 CanvasLayer
-Node2D
 Control
 CollisionShape2D
 Area2D
@@ -11,4 +12,3 @@ Timer
 Sprite2D
 Line2D
 TileMap
-Camera2D
