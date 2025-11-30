@@ -46,93 +46,117 @@ var facing_dir := 1
 var grappling := false
 var grapple_target: Area2D = null
 var grapple_speed := 500.0
-
+var grapple_unlocked: bool = false   # <-- ACTIVÉ PAR LE SHARD
+var can_move := true
 var grapple_line: Line2D
 var grapple_launch_timer := 0.0
+var grapple_direction := Vector2.ZERO
 
-var grapple_direction := Vector2.ZERO   # 🔥 direction verrouillée
+# UI popup
+@onready var popup := $EchoText
+
 
 # ------------------------------------------------------------
 # READY
 # ------------------------------------------------------------
 func _ready():
 	grapple_line = $GrappleLine
-	grapple_line.visible = true
+	grapple_line.visible = false
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
+
+
 
 # ------------------------------------------------------------
 # MAIN LOOP
 # ------------------------------------------------------------
 func _physics_process(delta):
+	# Si bloqué (cinématique)
+	if not can_move:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
+
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 
-	# Direction + Flip
+	# --- DIRECTION + FLIP ---
 	if input_dir != 0:
 		facing_dir = input_dir
 		$AnimatedSprite2D.flip_h = facing_dir < 0
 
-	# --- GRAPPLE ACTIVATION ---
-	if Input.is_action_just_pressed("grapple") and not grappling and grapple_launch_timer <= 0:
+
+	# ------------------------------------------------------------
+	# GRAPPLE ACTIVATION
+	# ------------------------------------------------------------
+	if grapple_unlocked \
+	and Input.is_action_just_pressed("grapple") \
+	and not grappling \
+	and grapple_launch_timer <= 0:
+
 		grapple_target = find_grapple_point()
 
-		if grapple_target != null:
+		if grapple_target:
 			grappling = true
 			wall_grabbing = false
 
-			# 🔥 Verrouiller direction au moment du latch
+			# direction verrouillée
 			grapple_direction = (grapple_target.global_position - global_position).normalized()
 
 			grapple_line.visible = true
 			grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
 
-	# --- GRAPPLE PULL ---
+
+	# ------------------------------------------------------------
+	# GRAPPLE PULL
+	# ------------------------------------------------------------
 	if grappling and grapple_target:
 		handle_grapple(delta)
 		play_anim("jump")
 		move_and_slide()
 		return
 
-	# --- GRAPPLE EXIT ---
+
+	# ------------------------------------------------------------
+	# GRAPPLE EXIT (LAUNCH)
+	# ------------------------------------------------------------
 	if grapple_launch_timer > 0:
 		grapple_launch_timer -= delta
 
-		if grapple_launch_timer > 0.05:
-			velocity.y += GRAVITY * 0.12 * delta
-		else:
-			velocity.y += GRAVITY * 0.6 * delta
+		velocity.y += GRAVITY * (0.12 if grapple_launch_timer > 0.05 else 0.6) * delta
 
 		play_air_anim()
 		move_and_slide()
 		return
 
-	# --- NORMAL GRAVITY ---
+
+	# ------------------------------------------------------------
+	# NORMAL MOVEMENT
+	# ------------------------------------------------------------
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * delta
 
-	# --- JUMP BUFFER ---
+	# JUMP BUFFER
 	if Input.is_action_just_pressed("ui_accept"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
-
 	if jump_buffer_timer > 0:
 		jump_buffer_timer -= delta
 
-	# --- COYOTE ---
+	# COYOTE TIME
 	if is_on_floor():
 		coyote_timer = COYOTE_TIME
 	else:
 		coyote_timer -= delta
 
-	# --- MOVE ---
+	# MOVE
 	velocity.x = input_dir * SPEED
 
-	# --- JUMP ---
+	# JUMP
 	handle_jump(delta)
 
-	# --- WALL SYSTEM ---
+	# WALL SYSTEM
 	handle_wall_grab(delta)
 	handle_wall_jump()
 
-	# --- ANIM ---
+	# ANIMATIONS
 	update_animation(input_dir)
 
 	move_and_slide()
@@ -163,18 +187,16 @@ func update_animation(input_dir):
 
 
 # ------------------------------------------------------------
-# VARIABLE JUMP SYSTEM
+# VARIABLE JUMP
 # ------------------------------------------------------------
 func handle_jump(delta):
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
 		velocity.y = JUMP_FORCE
 		is_jump_held = true
 		jump_held_time = 0.0
-
 		jump_buffer_timer = 0
 		coyote_timer = 0
 
-	# Hold jump
 	if is_jump_held:
 		if Input.is_action_pressed("ui_accept") and jump_held_time < MAX_JUMP_HOLD_TIME:
 			velocity.y += JUMP_HOLD_FORCE * delta
@@ -182,7 +204,6 @@ func handle_jump(delta):
 		else:
 			is_jump_held = false
 
-	# Cut jump
 	if Input.is_action_just_released("ui_accept") and velocity.y < 0:
 		velocity.y *= 0.45
 		is_jump_held = false
@@ -245,19 +266,16 @@ func handle_wall_jump():
 
 
 # ------------------------------------------------------------
-# GRAPPLE SYSTEM (FIX MULTI-POINT)
+# GRAPPLE SYSTEM
 # ------------------------------------------------------------
 func find_grapple_point() -> Area2D:
 	var best_point: Area2D = null
 	var best_dist: float = INF
 
 	for p in get_tree().get_nodes_in_group("grapple_points"):
-
-		var dist: float = global_position.distance_to(p.global_position)
-
+		var dist = global_position.distance_to(p.global_position)
 		if dist < p.min_distance or dist > p.max_distance:
 			continue
-
 		if dist < best_dist:
 			best_dist = dist
 			best_point = p
@@ -266,13 +284,11 @@ func find_grapple_point() -> Area2D:
 
 
 func handle_grapple(delta):
-	# désactiver collisions pendant le grappin
 	collision_layer = 0
 	collision_mask = 0
 
 	velocity = grapple_direction * grapple_speed
 
-	# ligne de grappin
 	grapple_line.points = [
 		Vector2.ZERO,
 		grapple_target.global_position - global_position
@@ -285,7 +301,6 @@ func handle_grapple(delta):
 func finish_grapple():
 	grappling = false
 
-	# réactiver collisions
 	collision_layer = 1
 	collision_mask = 1
 
@@ -300,10 +315,26 @@ func finish_grapple():
 
 
 # ------------------------------------------------------------
-# DUST EFFECT
+# FX & POPUP
 # ------------------------------------------------------------
 func spawn_dust():
 	var dust_scene = load("res://scenes/cpu_particles_2d.tscn")
 	var d = dust_scene.instantiate()
 	d.global_position = global_position
 	get_tree().current_scene.add_child(d)
+
+
+func show_popup(msg: String):
+	var lbl = $EchoText
+	lbl.text = msg
+	lbl.visible = true
+	lbl.modulate.a = 0.0
+
+	var tween := create_tween()
+	tween.tween_property(lbl, "modulate:a", 1.0, 0.3)
+	await tween.finished
+
+	
+func hide_popup():
+	$EchoText.visible = false
+	

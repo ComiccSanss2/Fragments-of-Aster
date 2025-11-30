@@ -41,4 +41,15 @@ func load_level(path: String):
 		push_error("⚠ Aucun LevelBounds trouvé dans: " + path)
 		
 		
+func show_grapple_message(msg: String):
+	var label = $UI/CenterContainer/EchoText
+	label.text = msg
+	$UI.visible = true
+
+
+func hide_grapple_message():
+	$UI.visible = false
+
+
+		
 		

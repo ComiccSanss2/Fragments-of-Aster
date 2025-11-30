@@ -1,0 +1,189 @@
+[gd_scene load_steps=12 format=3 uid="uid://x4sbvg5yhc06"]
+
+[ext_resource type="Texture2D" uid="uid://3gs8bb7qu4dt" path="res://assets/shard.png" id="1_pmddc"]
+[ext_resource type="Script" uid="uid://b7g3tckw8p00w" path="res://scenes/shard.gd" id="1_x0ayr"]
+[ext_resource type="Texture2D" uid="uid://b1actdxei6f4" path="res://assets/haloshard.png" id="3_ua2y8"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x0ayr"]
+radius = 7.0
+height = 16.0
+
+[sub_resource type="Animation" id="Animation_ncd80"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.61]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_kl2g3"]
+resource_name = "breath"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tuq6x"]
+resource_name = "float"
+length = 1.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -4), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ua2y8"]
+resource_name = "glow"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.47, 3.89, 0.47]
+}
+
+[sub_resource type="Animation" id="Animation_xr22o"]
+resource_name = "pickup"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PointLight2D:energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [6.0, 2.0, 0.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3, 4.5, 4.5333333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"start_move_to_player"
+}, {
+"args": [],
+"method": &"stop_move_to_player"
+}, {
+"args": [],
+"method": &"_on_collect_finished"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3, 4.4333334, 4.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(0.6, 0.6), Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ncd80"]
+_data = {
+&"RESET": SubResource("Animation_ncd80"),
+&"breath": SubResource("Animation_kl2g3"),
+&"float": SubResource("Animation_tuq6x"),
+&"glow": SubResource("Animation_ua2y8"),
+&"pickup": SubResource("Animation_xr22o")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ua2y8"]
+size = Vector2(14.199999, 20.05)
+
+[node name="Shard" type="Area2D" groups=["shards"]]
+script = ExtResource("1_x0ayr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visibility_layer = 2
+shape = SubResource("CapsuleShape2D_x0ayr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -2
+texture = ExtResource("1_pmddc")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ncd80")
+}
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+energy = 1.61
+texture = ExtResource("3_ua2y8")
+
+[node name="TriggerArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
+position = Vector2(2.8610232e-06, 0.4999924)
+scale = Vector2(10.000001, 10.000001)
+shape = SubResource("RectangleShape2D_ua2y8")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="TriggerArea" to="." method="_on_TriggerArea_body_entered"]
