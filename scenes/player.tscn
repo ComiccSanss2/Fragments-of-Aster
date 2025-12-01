@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=29 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://b7vhvtrfw5mq" path="res://assets/Lyra/red-riding-hood_1.png" id="2_qhqgy"]
@@ -177,6 +177,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sugp2"]
 size = Vector2(10.5, 15)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qhqgy"]
+blend_mode = 1
+
 [sub_resource type="LabelSettings" id="LabelSettings_dqkch"]
 font = ExtResource("3_qhqgy")
 font_size = 10
@@ -199,9 +202,10 @@ shape = SubResource("RectangleShape2D_sugp2")
 [node name="GrappleLine" type="Line2D" parent="."]
 visible = false
 z_index = 20
+material = SubResource("CanvasItemMaterial_qhqgy")
 points = PackedVector2Array(0, 0, 0, 0)
 width = 2.0
-default_color = Color(0, 0, 0, 1)
+default_color = Color(2.468219, 0, 2.5779047, 1)
 
 [node name="DustSpawner" type="Node2D" parent="."]
 

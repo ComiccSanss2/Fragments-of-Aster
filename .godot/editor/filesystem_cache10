@@ -1,7 +1,9 @@
 63f7b34db8d8cdea90c76aacccf841ec
-::res://::1764474779
+::res://::1764557454
+dialogue_box.gd::GDScript::2463052231272788826::1764551127::0::1::::<>Control<><>0<>0<><>::
+dialogue_box.tscn::PackedScene::3707287518856925000::1764552351::0::1::::<><><>0<>0<><>::uid://bbded0u4v4uja::::res://dialogue_box.gd<>uid://dncl6yb44sner::::res://assets/dialoguebox/background.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://1k8wa8y7ty3v::::res://assets/dialoguebox/portrait.png<>uid://bdgrhkl2o2tqw::::res://assets/dialoguebox/spacebarpixel.png
 icon.svg::CompressedTexture2D::4817894111877080472::1763755413::1763755419::1::::<><><>0<>0<>d089b273879588d6d4092fc8ee3b874f<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
-::res://assets/::1764473629
+::res://assets/::1764547040
 BreakablePlatform.png::CompressedTexture2D::3611550789339560658::1763764189::1763764189::1::::<><><>0<>0<>dfa906cfc8693274e54ea0f02ca1f2a5<>res://.godot/imported/BreakablePlatform.png-e410993a4194b0e4758f6cbd7f3b69e1.ctex::
 dustparticles.png::CompressedTexture2D::3914697559450643958::1764413535::1764413535::1::::<><><>0<>0<>abae171e277b48c7587592a460144fda<>res://.godot/imported/dustparticles.png-82824a95197a9a1c59d997f7d9d285b8.ctex::
 GrappleReceiver.png::CompressedTexture2D::8026242134112230337::1763761649::1763761649::1::::<><><>0<>0<>76797e37197d63ac250715f88ce1d811<>res://.godot/imported/GrappleReceiver.png-04620724e0e3fd98bad2738157756e0f.ctex::
@@ -10,22 +12,27 @@ haloshard.png::CompressedTexture2D::123867240460172899::1764471287::1764471287::
 pic-left.png::CompressedTexture2D::4007238901047380467::1763935160::1763935160::1::::<><><>0<>0<>e76cb5ce6b22241d0fb18cc06bce569e<>res://.godot/imported/pic-left.png-9c78691ab58b1b55b45a2aaf31b9969b.ctex::
 pic-right.png::CompressedTexture2D::933169114557566616::1763935160::1763935160::1::::<><><>0<>0<>6b97f7ce412ac6ea2e3ba4e041104a45<>res://.godot/imported/pic-right.png-a361dc4b1e518f58b3a3765cb418a5a9.ctex::
 shard.png::CompressedTexture2D::1978825781002212557::1764470382::1764470382::1::::<><><>0<>0<>c382903bc9075c3f67af90c20b473223<>res://.godot/imported/shard.png-9b07a4cef2a4cd6c0e7e4d4210bf27cb.ctex::
+::res://assets/dialoguebox/::1764547051
+background.png::CompressedTexture2D::8076570283875638157::1764545635::1764547045::1::::<><><>0<>0<>ecb4c9afa7a18aa978011a8a4d52ff04<>res://.godot/imported/background.png-9a8df566f120aaeaa557af06379b5a81.ctex::
+portrait.png::CompressedTexture2D::1847596712469174917::1764545595::1764547049::1::::<><><>0<>0<>ca14a89d9fff7dc5f0bbd9905f0dc5e0<>res://.godot/imported/portrait.png-dc1ce15c1b7507799f9cbe2f30f0b0b8.ctex::
+spacebarpixel.png::CompressedTexture2D::2610418714038819930::1764547051::1764547051::1::::<><><>0<>0<>64c48a8075eb2806ddfe065143408c22<>res://.godot/imported/spacebarpixel.png-492fafd45233f231b7aaac30524ca745.ctex::
 ::res://assets/fonts/::1764473634
 Daydream DEMO.otf::FontFile::1162453481869351098::1764473634::1764473634::1::::<><><>0<>0<>efa8cd7b5cdc6d79405b52ec5cab708c<>res://.godot/imported/Daydream DEMO.otf-b6f813878fa9ce4ff47aa5fa36a2b81e.fontdata::
-::res://assets/Lyra/::1763776318
+::res://assets/Lyra/::1764547049
 red-riding-hood_1.png::CompressedTexture2D::137537622294995840::1763776318::1763776318::1::::<><><>0<>0<>32ccd364cdd20bff6aac8b0860b08c82<>res://.godot/imported/red-riding-hood_1.png-dd3a8e188c3647234e1734f2ef3f73b3.ctex::
-::res://scenes/::1764474763
-camera_2d.gd::GDScript::6898031080620646080::1763944372::0::1::::<>Camera2D<><>0<>0<><>::
+::res://scenes/::1764552110
+camera_2d.gd::GDScript::6898031080620646080::1764511424::0::1::::<>Camera2D<><>0<>0<><>::
 cpu_particles_2d.gd::GDScript::6044288644677617967::1764414069::0::1::::<>CPUParticles2D<><>0<>0<><>::
 cpu_particles_2d.tscn::PackedScene::1935076646674217529::1764414370::0::1::::<><><>0<>0<><>::uid://bv1kq5mtqjagc::::res://assets/dustparticles.png<>uid://csd5sy3ophysd::::res://scenes/cpu_particles_2d.gd
 global.gd::GDScript::1439969980842107941::1764474505::0::1::::<>Node<><>0<>0<><>::
-main.gd::GDScript::4406858676038861977::1764474167::0::1::::<>Node2D<><>0<>0<><>::
-main.tscn::PackedScene::3465095680211921877::1764474169::0::1::::<><><>0<>0<><>::uid://pbmoqjvodepq::::res://scenes/player.tscn<>uid://b31yk3icfbvmv::::res://scenes/main.gd<>uid://c5jptgcyika05::::res://scenes/camera_2d.gd<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf
-player.gd::GDScript::5355770098405654712::1764470762::0::1::::<>CharacterBody2D<><>0<>0<><>::
-player.tscn::PackedScene::1055651492602229366::1764470762::0::1::::<><><>0<>0<><>::uid://cikm0sgul6rns::::res://scenes/player.gd<>uid://b7vhvtrfw5mq::::res://assets/Lyra/red-riding-hood_1.png
-shard.gd::GDScript::4646584074055192212::1764474357::0::1::::<>Area2D<><>0<>0<><>::
-shard.tscn::PackedScene::1675306163860772209::1764474763::0::1::::<><><>0<>0<><>::uid://3gs8bb7qu4dt::::res://assets/shard.png<>uid://b7g3tckw8p00w::::res://scenes/shard.gd<>uid://b1actdxei6f4::::res://assets/haloshard.png
-shard_impact_fx.tscn::PackedScene::2994184333911020809::1764473156::0::1::::<><><>0<>0<><>::
+main.gd::GDScript::4406858676038861977::1764477116::0::1::::<>Node2D<><>0<>0<><>::
+main.tscn::PackedScene::3465095680211921877::1764552110::0::1::::<><><>0<>0<><>::uid://pbmoqjvodepq::::res://scenes/player.tscn<>uid://b31yk3icfbvmv::::res://scenes/main.gd<>uid://c5jptgcyika05::::res://scenes/camera_2d.gd<>uid://bs23qpjbpsg3y::::res://dialogue_box.tscn
+player.gd::GDScript::5355770098405654712::1764545272::0::1::::<>CharacterBody2D<><>0<>0<><>::
+player.tscn::PackedScene::1055651492602229366::1764511997::0::1::::<><><>0<>0<><>::uid://cikm0sgul6rns::::res://scenes/player.gd<>uid://b7vhvtrfw5mq::::res://assets/Lyra/red-riding-hood_1.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf
+shard.gd::GDScript::4646584074055192212::1764550752::0::1::::<>Area2D<><>0<>0<><>::
+shard.gdshader::Shader::6459931072961099706::1764544879::0::1::::<><><>0<>0<><>::
+shard.tscn::PackedScene::1675306163860772209::1764547902::0::1::::<><><>0<>0<><>::uid://3gs8bb7qu4dt::::res://assets/shard.png<>uid://b7g3tckw8p00w::::res://scenes/shard.gd<>uid://b1actdxei6f4::::res://assets/haloshard.png
+shard_impact_fx.tscn::PackedScene::2994184333911020809::1764512057::0::1::::<><><>0<>0<><>::
 ::res://scenes/breakableplatform/::1764470097
 BreakablePlatform.gd::GDScript::77012771190186914::1764470096::0::1::::<>Node2D<><>0<>0<><>::
 breakable_platform.tscn::PackedScene::266786556211183561::1764470097::0::1::::<><><>0<>0<><>::uid://bdknh11x3uu1::::res://scenes/breakableplatform/BreakablePlatform.gd<>uid://brppyjhao8iw5::::res://assets/BreakablePlatform.png

@@ -328,13 +328,23 @@ func show_popup(msg: String):
 	var lbl = $EchoText
 	lbl.text = msg
 	lbl.visible = true
-	lbl.modulate.a = 0.0
 
-	var tween := create_tween()
-	tween.tween_property(lbl, "modulate:a", 1.0, 0.3)
-	await tween.finished
+	lbl.modulate.a = 0.0
+	lbl.scale = Vector2(0.8, 0.8)
+
+	var t = create_tween()
+	t.tween_property(lbl, "modulate:a", 1.0, 0.25)
+	t.tween_property(lbl, "scale", Vector2(1,1), 0.25)\
+	.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
 
 	
 func hide_popup():
-	$EchoText.visible = false
+	var lbl = $EchoText
+	if lbl.visible:
+		var t = create_tween()
+		t.tween_property(lbl, "modulate:a", 0.0, 0.25)
+		await t.finished
+	lbl.visible = false
+
 	

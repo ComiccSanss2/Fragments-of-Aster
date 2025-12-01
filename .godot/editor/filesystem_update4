@@ -1,7 +1,7 @@
+res://dialogue_box.tscn
+res://scenes/shard.gdshader
+res://dialogue_box.gd
+res://scenes/main.tscn
+res://scenes/player.tscn
 res://scenes/shard.tscn
 res://scenes/shard.gd
-res://scenes/player.tscn
-res://scenes/player.gd
-res://scenes/main.tscn
-res://scenes/main.gd
-res://scenes/shard_impact_fx.tscn
