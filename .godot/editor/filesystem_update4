@@ -1,7 +1,7 @@
-res://dialogue_box.tscn
+res://scenes/levels/level_1.tscn
 res://scenes/shard.gdshader
+res://scenes/levels/level_1.gd
+res://scenes/shard.tscn
+res://dialogue_box.tscn
 res://dialogue_box.gd
 res://scenes/main.tscn
-res://scenes/player.tscn
-res://scenes/shard.tscn
-res://scenes/shard.gd

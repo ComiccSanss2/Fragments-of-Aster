@@ -10,6 +10,7 @@ script = ExtResource("1_tbgi4")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 physics_interpolation_mode = 1
+position = Vector2(-1, 0)
 offset = Vector2(60, 0)
 zoom = Vector2(7, 7)
 position_smoothing_enabled = true

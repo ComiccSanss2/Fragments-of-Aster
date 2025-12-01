@@ -9,8 +9,10 @@
 [sub_resource type="LabelSettings" id="LabelSettings_85jfh"]
 line_spacing = 8.0
 font = ExtResource("3_351bv")
-font_size = 36
+font_size = 40
 font_color = Color(0.12662846, 0.817157, 0.7425928, 1)
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
 
 [node name="DialogueBox" type="Control"]
 z_index = 100

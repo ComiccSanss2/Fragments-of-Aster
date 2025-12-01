@@ -9,8 +9,10 @@ var waiting_for_space := false
 
 
 func _ready():
-	visible = false
+	visible = false 
 	modulate.a = 1.0
+
+
 
 
 # MONTRE LE TEXTE + ATTEND SPACE POUR CONTINUER
