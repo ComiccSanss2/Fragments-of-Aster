@@ -78,10 +78,10 @@ func _on_collect_finished():
 
 	# 1 — Popup Grapple
 	await dialog.show_dialog("Echo-Grapple Restored.")
-	await dialog.show_dialog("Press E to use when near a grapple point.")
+	await dialog.show_dialog("Press (E) to use when near a grapple point.")
 
 	# Tu peux cacher ton popup du joueur ici si tu veux
-	player.hide_popup()
+	player.hide_popup() 
 
 	# 2 — Dialogue Lyra
 	await dialog.show_dialog(

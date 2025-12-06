@@ -12,9 +12,9 @@ func _ready() -> void:
 	player.play_anim("idle")
 
 	# Lancer le dialogue d'intro
-	await dialog.show_dialog("Press ARROW KEYS to MOVE")
-	await dialog.show_dialog("Press SPACE to JUMP")
-	await dialog.show_dialog("Press SHIFT to CLIMB")
+	await dialog.show_dialog("Press (ARROW KEYS) or (DPAD) to MOVE")
+	await dialog.show_dialog("Press (SPACE) or (A) to JUMP")
+	await dialog.show_dialog("Press (SHIFT) or (RB) to CLIMB")
 	dialog.hide_dialog()
 
 

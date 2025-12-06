@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bs23qpjbpsg3y"]
+[gd_scene load_steps=8 format=3 uid="uid://bs23qpjbpsg3y"]
 
 [ext_resource type="Script" uid="uid://bbded0u4v4uja" path="res://dialogue_box.gd" id="1_0nste"]
 [ext_resource type="Texture2D" uid="uid://dncl6yb44sner" path="res://assets/dialoguebox/background.png" id="2_if77y"]
 [ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_351bv"]
 [ext_resource type="Texture2D" uid="uid://1k8wa8y7ty3v" path="res://assets/dialoguebox/portrait.png" id="4_if77y"]
 [ext_resource type="Texture2D" uid="uid://bdgrhkl2o2tqw" path="res://assets/dialoguebox/spacebarpixel.png" id="5_351bv"]
+[ext_resource type="AudioStream" uid="uid://cuod4736sddge" path="res://assets/sfx/talking.wav" id="6_85jfh"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_85jfh"]
 line_spacing = 8.0
@@ -74,3 +75,7 @@ offset_right = 2300.0
 offset_bottom = 323.6671
 texture = ExtResource("5_351bv")
 expand_mode = 1
+
+[node name="VoicePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_85jfh")
+volume_db = -25.254

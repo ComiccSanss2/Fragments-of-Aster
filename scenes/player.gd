@@ -26,6 +26,10 @@ const WALL_SLIDE_SPEED = 40.0
 const WALL_JUMP_H = 280.0
 const WALL_JUMP_V = -220.0
 
+# ★ Nouveau : wall coyote time
+const WALL_COYOTE_TIME := 0.12
+var wall_coyote_timer := 0.0
+
 var wall_grab_time_left = WALL_GRAB_DURATION
 var wall_grabbing = false
 var wall_exhausted = false
@@ -46,7 +50,7 @@ var facing_dir := 1
 var grappling := false
 var grapple_target: Area2D = null
 var grapple_speed := 500.0
-var grapple_unlocked: bool = false   # <-- ACTIVÉ PAR LE SHARD
+var grapple_unlocked: bool = false
 var can_move := true
 var grapple_line: Line2D
 var grapple_launch_timer := 0.0
@@ -65,11 +69,11 @@ func _ready():
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
 
 
-
 # ------------------------------------------------------------
 # MAIN LOOP
 # ------------------------------------------------------------
 func _physics_process(delta):
+
 	# Si bloqué (cinématique)
 	if not can_move:
 		velocity = Vector2.ZERO
@@ -78,7 +82,7 @@ func _physics_process(delta):
 
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 
-	# --- DIRECTION + FLIP ---
+	# -- Flip sprite --
 	if input_dir != 0:
 		facing_dir = input_dir
 		$AnimatedSprite2D.flip_h = facing_dir < 0
@@ -98,16 +102,12 @@ func _physics_process(delta):
 			grappling = true
 			wall_grabbing = false
 
-			# direction verrouillée
 			grapple_direction = (grapple_target.global_position - global_position).normalized()
-
 			grapple_line.visible = true
 			grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
 
 
-	# ------------------------------------------------------------
 	# GRAPPLE PULL
-	# ------------------------------------------------------------
 	if grappling and grapple_target:
 		handle_grapple(delta)
 		play_anim("jump")
@@ -115,48 +115,61 @@ func _physics_process(delta):
 		return
 
 
-	# ------------------------------------------------------------
-	# GRAPPLE EXIT (LAUNCH)
-	# ------------------------------------------------------------
+	# GRAPPLE EXIT MOMENTUM
 	if grapple_launch_timer > 0:
 		grapple_launch_timer -= delta
-
 		velocity.y += GRAVITY * (0.12 if grapple_launch_timer > 0.05 else 0.6) * delta
-
 		play_air_anim()
 		move_and_slide()
 		return
 
 
 	# ------------------------------------------------------------
-	# NORMAL MOVEMENT
+	# NORMAL GRAVITY
 	# ------------------------------------------------------------
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * delta
 
+
+	# ------------------------------------------------------------
 	# JUMP BUFFER
+	# ------------------------------------------------------------
 	if Input.is_action_just_pressed("ui_accept"):
 		jump_buffer_timer = JUMP_BUFFER_TIME
+
 	if jump_buffer_timer > 0:
 		jump_buffer_timer -= delta
 
-	# COYOTE TIME
+
+	# ------------------------------------------------------------
+	# COYOTE TIME SOL
+	# ------------------------------------------------------------
 	if is_on_floor():
 		coyote_timer = COYOTE_TIME
 	else:
 		coyote_timer -= delta
 
+
+	# ------------------------------------------------------------
 	# MOVE
+	# ------------------------------------------------------------
 	velocity.x = input_dir * SPEED
 
+
+	# ------------------------------------------------------------
 	# JUMP
+	# ------------------------------------------------------------
 	handle_jump(delta)
 
+	# ------------------------------------------------------------
 	# WALL SYSTEM
+	# ------------------------------------------------------------
 	handle_wall_grab(delta)
 	handle_wall_jump()
 
-	# ANIMATIONS
+	# ------------------------------------------------------------
+	# ANIMS
+	# ------------------------------------------------------------
 	update_animation(input_dir)
 
 	move_and_slide()
@@ -179,7 +192,6 @@ func update_animation(input_dir):
 	if not is_on_floor():
 		play_air_anim()
 		return
-
 	if input_dir != 0:
 		play_anim("walk")
 	else:
@@ -223,6 +235,13 @@ func handle_wall_grab(delta):
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
 
+	# --- Wall coyote timer ---
+	if on_wall:
+		wall_coyote_timer = WALL_COYOTE_TIME
+	else:
+		wall_coyote_timer -= delta
+
+	# Reset normal wall grab
 	if is_on_floor():
 		wall_grab_time_left = WALL_GRAB_DURATION
 		wall_exhausted = false
@@ -249,11 +268,17 @@ func handle_wall_grab(delta):
 			velocity.y = WALL_SLIDE_SPEED
 
 
+# ------------------------------------------------------------
+# WALL JUMP (avec wall coyote)
+# ------------------------------------------------------------
 func handle_wall_jump():
 	var grabbing_button = Input.is_action_pressed("grab")
-	var on_wall = is_on_wall() and not is_on_floor()
 
-	if on_wall and grabbing_button and not wall_exhausted and Input.is_action_just_pressed("ui_accept"):
+	if wall_coyote_timer > 0.0 \
+	and grabbing_button \
+	and not wall_exhausted \
+	and Input.is_action_just_pressed("ui_accept"):
+
 		wall_grabbing = false
 		jump_buffer_timer = 0
 
@@ -335,10 +360,9 @@ func show_popup(msg: String):
 	var t = create_tween()
 	t.tween_property(lbl, "modulate:a", 1.0, 0.25)
 	t.tween_property(lbl, "scale", Vector2(1,1), 0.25)\
-	.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 
-	
 func hide_popup():
 	var lbl = $EchoText
 	if lbl.visible:
@@ -346,5 +370,3 @@ func hide_popup():
 		t.tween_property(lbl, "modulate:a", 0.0, 0.25)
 		await t.finished
 	lbl.visible = false
-
-	
