@@ -1,10 +1,10 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1765051713
-dialogue_box.gd::GDScript::2463052231272788826::1765051523::0::1::::<>Control<><>0<>0<><>::
-dialogue_box.tscn::PackedScene::3707287518856925000::1765051713::0::1::::<><><>0<>0<><>::uid://bbded0u4v4uja::::res://dialogue_box.gd<>uid://dncl6yb44sner::::res://assets/dialoguebox/background.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://1k8wa8y7ty3v::::res://assets/dialoguebox/portrait.png<>uid://bdgrhkl2o2tqw::::res://assets/dialoguebox/spacebarpixel.png<>uid://b1jm3vathquj::::res://assets/sfx/talking.mp3
+::res://::1765053436
+background.tscn::PackedScene::7118553675040912326::1765049011::0::1::::<><><>0<>0<><>::uid://d0opw5p13hoqj::::res://assets/Parallax/1.png<>uid://dgdfs07xtnowr::::res://assets/Parallax/2.png<>uid://cb356o7yedki8::::res://assets/Parallax/3.png<>uid://dv1t2nvyryp4t::::res://assets/Parallax/4.png
+dialogue_box.gd::GDScript::2463052231272788826::1765052471::0::1::::<>Control<><>0<>0<><>::
+dialogue_box.tscn::PackedScene::3707287518856925000::1765052567::0::1::::<><><>0<>0<><>::uid://bbded0u4v4uja::::res://dialogue_box.gd<>uid://dncl6yb44sner::::res://assets/dialoguebox/background.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://1k8wa8y7ty3v::::res://assets/dialoguebox/portrait.png<>uid://bdgrhkl2o2tqw::::res://assets/dialoguebox/spacebarpixel.png<>uid://cuod4736sddge::::res://assets/sfx/talking.wav
 export_presets.cfg::TextFile::-1::1764632130::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D::4817894111877080472::1763755413::1763755419::1::::<><><>0<>0<>d089b273879588d6d4092fc8ee3b874f<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
-background.tscn::PackedScene::7118553675040912326::1765049011::0::1::::<><><>0<>0<><>::uid://d0opw5p13hoqj::::res://assets/Parallax/1.png<>uid://dgdfs07xtnowr::::res://assets/Parallax/2.png<>uid://cb356o7yedki8::::res://assets/Parallax/3.png<>uid://dv1t2nvyryp4t::::res://assets/Parallax/4.png
 spike.gd::GDScript::5413206761345478990::1764588914::0::1::::<>Area2D<><>0<>0<><>::
 ::res://assets/::1765050046
 basetiles.png::CompressedTexture2D::8387314242550384140::1765045433::1765045433::1::::<><><>0<>0<>19a0bd781925d76f3caecf5e1fec3516<>res://.godot/imported/basetiles.png-e2f23c014986f2a486e58469b3953d56.ctex::
@@ -34,7 +34,8 @@ red-riding-hood_1.png::CompressedTexture2D::137537622294995840::1763776318::1763
 2.png::CompressedTexture2D::7586925339012225197::1765048489::1765048490::1::::<><><>0<>0<>d4a590c16eb03fb1fb3c1c9ab726dd37<>res://.godot/imported/2.png-3839b16e274f89fb92fdde551008ff1d.ctex::
 3.png::CompressedTexture2D::4902710443388522545::1765048489::1765048490::1::::<><><>0<>0<>4294a773aed7148979b72fa473003fac<>res://.godot/imported/3.png-26f19237081662f55907fdc78880f035.ctex::
 4.png::CompressedTexture2D::8688104144740106553::1765048489::1765048490::1::::<><><>0<>0<>b3af2083aac8cc00de3ff99681ff6c78<>res://.godot/imported/4.png-baa2db5af1303147d6e7a1e5a139f240.ctex::
-::res://assets/sfx/::1765051912
+::res://assets/sfx/::1765053604
+fragments of roots.mp3::AudioStreamMP3::7860563092719124746::1765053604::1765053626::1::::<><><>0<>0<>c41bb26c551ca22c88398e1b8bce2d87<>res://.godot/imported/fragments of roots.mp3-e5157d2ff5cab589fdcf4734e0c3b461.mp3str::
 talking.wav::AudioStreamWAV::6205755193139630068::1765051912::1765051912::1::::<><><>0<>0<>8b20725606f2afdcbca46b8e626ac71f<>res://.godot/imported/talking.wav-799f30474681db3f6ad757e2d77c5a2c.sample::
 wind.wav::AudioStreamWAV::3048666908401406739::1765050054::1765050090::1::::<><><>0<>0<>6017db4dcf55118b77a77d32891e6156<>res://.godot/imported/wind.wav-7a116a46835d124581db14339172e8c6.sample::
 ::res://scenes/::1765050153

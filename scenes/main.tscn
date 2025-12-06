@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=7 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://c5jptgcyika05" path="res://scenes/camera_2d.gd" id="2_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://bs23qpjbpsg3y" path="res://dialogue_box.tscn" id="4_jyhfs"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="5_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://dj8ylcrdheniw" path="res://assets/sfx/fragments of roots.mp3" id="6_tefeu"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tbgi4")
@@ -42,5 +43,10 @@ offset_bottom = -648.0
 
 [node name="AmbiancePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_tbgi4")
-volume_db = -15.0
+volume_db = -5.189
+autoplay = true
+
+[node name="FragmentsOfRoots" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_tefeu")
+volume_db = -36.057
 autoplay = true
