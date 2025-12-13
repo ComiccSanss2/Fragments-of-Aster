@@ -4,9 +4,10 @@
 [ext_resource type="Script" uid="uid://csd5sy3ophysd" path="res://scenes/cpu_particles_2d.gd" id="2_6vysw"]
 
 [node name="CPUParticles2D" type="CPUParticles2D"]
+visible = false
 scale = Vector2(0.6, 0.6)
 emitting = false
-amount = 25
+amount = 15
 texture = ExtResource("1_dti5m")
 one_shot = true
 explosiveness = 1.0

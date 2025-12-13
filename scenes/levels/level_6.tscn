@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://chtjrs308nwph"]
+[gd_scene load_steps=20 format=3 uid="uid://chtjrs308nwph"]
 
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_e18e5"]
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_y2agi"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="4_i0fhw"]
 [ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="5_5wshb"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="5_i0fhw"]
+[ext_resource type="Texture2D" uid="uid://baevhjj4dcbec" path="res://assets/basetilesyellow.png" id="5_kydov"]
 [ext_resource type="Script" uid="uid://ccoc147c8h2y2" path="res://scenes/levels/end_trigger_6.gd" id="6_5wshb"]
+[ext_resource type="Texture2D" uid="uid://ctxvag6uk7srq" path="res://assets/basetilesyellowmore.png" id="6_uwlxl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_741xk"]
 texture = ExtResource("1_y2agi")
@@ -135,11 +137,49 @@ texture = ExtResource("3_b6i88")
 0:20/0 = 0
 0:20/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4wfvb"]
+texture = ExtResource("5_kydov")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tqv5a"]
+texture = ExtResource("6_uwlxl")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:3/0 = 0
+1:3/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_gkh53"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_741xk")
 sources/1 = SubResource("TileSetAtlasSource_b6i88")
 sources/2 = SubResource("TileSetAtlasSource_e18e5")
+sources/3 = SubResource("TileSetAtlasSource_4wfvb")
+sources/4 = SubResource("TileSetAtlasSource_tqv5a")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5wshb"]
 size = Vector2(1719, 1431.5)
@@ -158,7 +198,7 @@ transform = Transform2D(1.3, 0, 0, 1.3, 0, -300)
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gkh53")
 format = 2
-layer_0/tile_data = PackedInt32Array(1, 1, 0, 2, 196609, 0, 65538, 196609, 1, 131074, 196609, 1, 196610, 196609, 1, 262146, 327681, 3, 262145, 131073, 3, 196609, 1, 1, 131073, 1, 1, 65537, 1, 1, -458742, 2, 12, -393200, 2, 9, -327664, 2, 4, -262128, 2, 8, -1048552, 2, 5, -1048553, 2, 10, -1048551, 2, 11, -786393, 1, 0, -786392, 131073, 0, -786391, 196609, 0, -720857, 131073, 3, -720856, 262145, 3, -720855, 327681, 3)
+layer_0/tile_data = PackedInt32Array(1, 3, 805306370, 2, 3, 1610612738, 65538, 3, 1342177280, 131074, 3, 1342177280, 196610, 3, 1342177280, 262146, 3, 2, 262145, 3, 1342177282, 196609, 3, 1610612736, 131073, 3, 1610612736, 65537, 3, 1610612736, -458742, 3, 805306368, -393200, 4, 805306369, -327664, 4, 1610612736, -262128, 4, 1, -786393, 65539, 1, -786392, 3, 1342177281, -786391, 65539, 1342177281, -720857, 65539, 1610612737, -720856, 3, 1610612737, -720855, 65539, 805306369, -983017, 4, 1342177281, -983016, 4, 805306368, -983015, 4, 1610612737)
 
 [node name="GrapplePoint" parent="." instance=ExtResource("2_g44gb")]
 position = Vector2(168, -88)
@@ -176,7 +216,7 @@ position = Vector2(373, -54)
 position = Vector2(357, -54)
 
 [node name="GrapplePoint2" parent="." instance=ExtResource("2_g44gb")]
-position = Vector2(392, -232)
+position = Vector2(392, -216)
 
 [node name="BreakablePlatform4" parent="." instance=ExtResource("4_i0fhw")]
 position = Vector2(493, -190)

@@ -1,9 +1,303 @@
-[gd_scene load_steps=2 format=3 uid="uid://co6rsobboontg"]
+[gd_scene load_steps=15 format=3 uid="uid://co6rsobboontg"]
+
+[ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_sewkk"]
+[ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="2_5bask"]
+[ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="2_ntgks"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="3_5bask"]
+[ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="3_gr7jt"]
+[ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="4_gr7jt"]
+[ext_resource type="PackedScene" uid="uid://cybl4x8shcwxi" path="res://scenes/moving_platform.tscn" id="5_bk8ll"]
+[ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="6_ntgks"]
+[ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="9_bk8ll"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4fty2"]
+texture = ExtResource("1_sewkk")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gr7jt"]
+texture = ExtResource("2_5bask")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bk8ll"]
+texture = ExtResource("3_gr7jt")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_gkh53"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_4fty2")
+sources/1 = SubResource("TileSetAtlasSource_gr7jt")
+sources/2 = SubResource("TileSetAtlasSource_bk8ll")
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1nnno"]
+size = Vector2(3712, 1649.5)
+
+[node name="Level11" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gkh53")
 format = 2
+layer_0/tile_data = PackedInt32Array(983040, 65537, 1342177280, 983041, 1, 805306368, 983042, 1, 805306368, 983043, 1, 805306368, 983044, 65537, 805306368, 1048580, 1, 1610612736, 1114116, 1, 1610612736, 1179652, 1, 1610612736, 1245188, 1, 1610612736, 1310724, 1, 1610612736, 1376260, 65537, 1610612736, 1376259, 1, 0, 1376258, 1, 0, 1376257, 1, 0, 1376256, 65537, 0, 1048576, 1, 1342177280, 1114112, 1, 1342177280, 1179648, 1, 1342177280, 1245184, 1, 1342177280, 1310720, 1, 1342177280, 1310721, 1, 1, 1310722, 1, 1, 1310723, 1, 1, 1245187, 1, 1, 1179651, 1, 1, 1114115, 1, 1, 1048579, 1, 1, 1048578, 1, 1, 1048577, 1, 1, 1114113, 1, 1, 1179649, 1, 1, 1245185, 1, 1, 1245186, 1, 1, 1179650, 1, 1, 1114114, 1, 1, 1310739, 1, 1342177280, 1245203, 1, 1342177280, 1179667, 1, 1342177280, 1114131, 1, 1342177280, 1048595, 1, 1342177280, 983059, 65537, 1342177280, 983060, 1, 805306368, 1048596, 1, 1, 1114132, 1, 1, 1179668, 1, 1, 1376275, 65537, 0, 1376276, 1, 0, 1310740, 1, 1, 1245204, 1, 1, 983061, 1, 1610612736, 1048597, 1, 1610612736, 1114133, 1, 1610612736, 1179669, 1, 1610612736, 1245205, 1, 1610612736, 1310741, 1, 1610612736, 1376277, 65537, 1610612736, 917525, 2, 1342177280, 851989, 2, 1342177280, 786453, 2, 1342177280, 720917, 2, 1342177280, 655381, 2, 1342177280, 589845, 2, 1342177280, 524309, 2, 1342177280, 458773, 2, 1342177280, 393237, 2, 1342177280, 327701, 2, 1342177280, 262165, 2, 1342177280, 196629, 2, 1342177280, 131093, 1, 1610612736, 131092, 1, 0, 65556, 1, 1, 65557, 1, 1610612736, 20, 1, 805306368, 21, 65537, 805306368, 131091, 65537, 0, 65555, 1, 1342177280, 19, 65537, 1342177280, 42, 1, 805306368, -196554, 2, 0, -196553, 2, 1610612737, -196555, 2, 1342177281, -196544, 2, 0, -196545, 2, 1342177281, -196543, 2, 1610612737, -393142, 1, 0, -196527, 2, 1342177280, -262063, 2, 1342177280, -130991, 2, 1, -327599, 2, 805306369, -130977, 2, 1, -327585, 2, 805306369, -262049, 2, 1342177280, -196513, 2, 1342177280, 107, 65537, 536870912, 111, 65537, 1073741824, 131183, 65537, 268435456, 131179, 65537, 1879048192, 131180, 1, 0, 131181, 1, 0, 131182, 1, 0, 65647, 1, 1610612736, 110, 1, 805306368, 109, 1, 805306368, 108, 1, 805306368, 65643, 1, 1342177280, 65644, 1, 1, 65645, 1, 1, 65646, 1, 1)
+
+[node name="Background" parent="." instance=ExtResource("2_ntgks")]
+offset = Vector2(0, -50)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
+
+[node name="LevelBounds" type="Node2D" parent="."]
+visible = false
+position = Vector2(-35, 433)
+script = ExtResource("3_5bask")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
+position = Vector2(1891, -663.25)
+shape = SubResource("RectangleShape2D_1nnno")
+
+[node name="BreakablePlatform29" parent="." instance=ExtResource("4_gr7jt")]
+position = Vector2(517, 8)
+
+[node name="MovingPlatform" parent="." instance=ExtResource("5_bk8ll")]
+position = Vector2(737, -29.000002)
+scale = Vector2(1.5, 1.5)
+distance = 400.0
+speed = 7.0
+pause_time = 1.0
+
+[node name="Spike108" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(664, 4)
+rotation = 3.1415927
+
+[node name="Spike109" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(664, 12)
+rotation = 3.1415927
+
+[node name="Spike112" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(852, -56)
+rotation = 4.712389
+
+[node name="Spike113" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(860, -56)
+rotation = 4.712389
+
+[node name="Spike114" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(868, -56)
+rotation = 4.712389
+
+[node name="Spike127" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(876, -56)
+rotation = 4.712389
+
+[node name="Spike128" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(884, -56)
+rotation = 4.712389
+
+[node name="Spike135" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(892, -56)
+rotation = 4.712389
+
+[node name="Spike129" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1012, -56)
+rotation = 4.712389
+
+[node name="Spike130" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1020, -56)
+rotation = 4.712389
+
+[node name="Spike131" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1028, -56)
+rotation = 4.712389
+
+[node name="Spike132" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1036, -56)
+rotation = 4.712389
+
+[node name="Spike133" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1044, -56)
+rotation = 4.712389
+
+[node name="Spike134" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1052, -56)
+rotation = 4.712389
+
+[node name="Spike136" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1300, -88)
+rotation = 4.712389
+
+[node name="Spike137" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1308, -88)
+rotation = 4.712389
+
+[node name="Spike138" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1524, -88)
+rotation = 4.712389
+
+[node name="Spike139" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1532, -88)
+rotation = 4.712389
+
+[node name="Spike140" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1716, -8)
+rotation = 4.712389
+
+[node name="Spike141" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(1724, -8)
+rotation = 4.712389
+
+[node name="Spike115" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 268)
+rotation = 3.1415927
+
+[node name="Spike142" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(327, 138)
+rotation = 1.5707964
+
+[node name="Spike143" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(319, 138)
+rotation = 1.5707964
+
+[node name="Spike144" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(311, 138)
+rotation = 1.5707964
+
+[node name="Spike145" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(311, 138)
+rotation = 1.5707964
+
+[node name="Spike147" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(308, 56)
+rotation = 1.5707964
+
+[node name="Spike157" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 44)
+rotation = 3.1415927
+
+[node name="Spike158" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 36)
+rotation = 3.1415927
+
+[node name="Spike159" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 28)
+rotation = 3.1415927
+
+[node name="Spike160" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 20)
+rotation = 3.1415927
+
+[node name="Spike161" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 12)
+rotation = 3.1415927
+
+[node name="Spike162" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(296, 4)
+rotation = 3.1415927
+
+[node name="Spike148" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(316, 56)
+rotation = 1.5707964
+
+[node name="Spike155" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(324, 56)
+rotation = 1.5707964
+
+[node name="Spike156" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(332, 56)
+rotation = 1.5707964
+
+[node name="Spike150" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(311, 122)
+rotation = 4.712389
+
+[node name="Spike151" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(319, 122)
+rotation = 4.712389
+
+[node name="Spike152" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(327, 122)
+rotation = 4.712389
+
+[node name="Spike153" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(335, 122)
+rotation = 4.712389
+
+[node name="Spike154" parent="." instance=ExtResource("6_ntgks")]
+z_index = -1
+position = Vector2(335, 138)
+rotation = 1.5707964
+
+[node name="Spike116" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 276)
+rotation = 3.1415927
+
+[node name="Spike117" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 284)
+rotation = 3.1415927
+
+[node name="Spike118" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 292)
+rotation = 3.1415927
+
+[node name="Spike119" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 300)
+rotation = 3.1415927
+
+[node name="Spike120" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 308)
+rotation = 3.1415927
+
+[node name="Spike121" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 316)
+rotation = 3.1415927
+
+[node name="Spike122" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 324)
+rotation = 3.1415927
+
+[node name="Spike123" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 332)
+rotation = 3.1415927
+
+[node name="Spike124" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 340)
+rotation = 3.1415927
+
+[node name="Spike125" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(296, 348)
+rotation = 3.1415927
+
+[node name="Spike110" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(696, 12)
+
+[node name="Spike111" parent="." instance=ExtResource("6_ntgks")]
+position = Vector2(696, 4)
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(26.323975, 216.62885)
+
+[node name="GrapplePoint" parent="." instance=ExtResource("9_bk8ll")]
+position = Vector2(1192, -72)

@@ -1,5 +1,8 @@
 extends Area2D
 
+enum ShardType { GRAPPLE, DASH }
+@export var shard_type: ShardType = ShardType.GRAPPLE
+
 @onready var sprite := $Sprite2D
 @onready var light := $PointLight2D
 @onready var anim := $AnimationPlayer
@@ -17,6 +20,20 @@ const MOVE_SPEED := 100.0
 
 
 func _ready():
+	# --- AJOUT : VÉRIFICATION DE LA MÉMOIRE ---
+	var main = get_tree().root.get_node("Main")
+	
+	if shard_type == ShardType.GRAPPLE and main.grapple_collected:
+		# Si on a déjà le grappin, ce shard n'existe plus
+		queue_free()
+		return
+		
+	if shard_type == ShardType.DASH and main.dash_collected:
+		# Si on a déjà le dash, ce shard n'existe plus
+		queue_free()
+		return
+	# ------------------------------------------
+
 	anim.play("breath")
 	camera = get_tree().root.get_node("Main/Camera2D")
 
@@ -32,7 +49,14 @@ func _on_TriggerArea_body_entered(body):
 		player.play_anim("idle")
 
 		camera.start_cinematic(self)
-		camera.zoom_to(8.5, 1.2)   
+		camera.zoom_to(7.0, 1.2)
+
+		var main = get_tree().root.get_node("Main")
+		var roots_music = main.get_node_or_null("FragmentsOfRoots")
+		
+		if roots_music:
+			var t = create_tween()
+			t.tween_property(roots_music, "volume_db", -30.0, 2.0)
 
 		anim.play("pickup")
 
@@ -46,20 +70,17 @@ func stop_move_to_player():
 
 
 func _process(delta):
-
 	if moving_to_player and player:
-
 		var dir := player.global_position - global_position
 		var dist := dir.length()
 
 		global_position += dir.normalized() * MOVE_SPEED * delta
-
 		camera.start_cinematic(self)
 
 		if dist < 0.0:
 			moving_to_player = false
+			visible = false 
 			_on_collect_finished()
-
 
 	if waiting_for_input:
 		if Input.is_action_just_pressed("ui_accept"):
@@ -67,53 +88,105 @@ func _process(delta):
 
 
 func _on_collect_finished():
-
 	var fx = fx_scene.instantiate()
 	fx.global_position = player.global_position
 	get_tree().current_scene.add_child(fx)
+	
+	# FLASH BLANC
+	var main_ui = get_tree().root.get_node("Main/UI")
+	var flash = ColorRect.new()
+	flash.color = Color.WHITE
+	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE   
+	main_ui.add_child(flash)
 
-	player.grapple_unlocked = true
+	var t_flash = create_tween()
+	t_flash.tween_interval(1.0) 
+	t_flash.tween_property(flash, "modulate:a", 0.0, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	t_flash.tween_callback(flash.queue_free)
+
+	await t_flash.finished 
 
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
+	var main = get_tree().root.get_node("Main")
 
-	# 1 — Popup Grapple
-	await dialog.show_dialog("Echo-Grapple Restored.")
-	await dialog.show_dialog("Press (E) to use when near a grapple point.")
+	# --- SYSTEM MESSAGE & SAUVEGARDE ÉTAT ---
+	if shard_type == ShardType.GRAPPLE:
+		player.grapple_unlocked = true
+		main.grapple_collected = true # <--- ON SAUVEGARDE DANS MAIN
+		
+		await dialog.show_dialog("Echo-Grapple Restored.")
+		await dialog.show_dialog("Press (E) to use when near a grapple point.")
+		
+	elif shard_type == ShardType.DASH:
+		player.dash_unlocked = true 
+		main.dash_collected = true # <--- ON SAUVEGARDE DANS MAIN
+		
+		await dialog.show_dialog("Pulse-Dash Restored.")
+		await dialog.show_dialog("Press (F) to Dash.")
+	# ----------------------------------------
 
-	# Tu peux cacher ton popup du joueur ici si tu veux
-	player.hide_popup() 
+	player.hide_popup()
 
-	# 2 — Dialogue Lyra
-	await dialog.show_dialog(
-		"Hm... this might be useful.",
-		preload("res://assets/dialoguebox/portrait.png")
-	)
+	# --- TRANSITION MUSICALE ---
+	var roots_music = main.get_node_or_null("FragmentsOfRoots")
+	var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
+
+	if roots_music and echoes_music:
+		if not echoes_music.playing:
+			echoes_music.volume_db = -80.0
+			echoes_music.play()
+		
+		var t_music = main.create_tween()
+		t_music.tween_property(roots_music, "volume_db", -80.0, 4.0)
+		t_music.parallel().tween_property(echoes_music, "volume_db", -10.0, 4.0)
+		t_music.chain().tween_callback(roots_music.stop)
+
+	# --- DIALOGUES LYRA ---
 	
-	await dialog.show_dialog(
-		"I felt a strange power in that object.",
-		preload("res://assets/dialoguebox/portrait.png")
-	)
+	if shard_type == ShardType.DASH:
+		await dialog.show_dialog(
+			"I feel lighter... quicker...",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"What is going on here in this place ?",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"What are these strange objects ?",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"Hmm... I have to keep going forward.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+
+	else:
+		await dialog.show_dialog(
+			"Hm... this might be useful.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"I felt a strange power in that object.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"Even though it was weird...",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
 	
-	await dialog.show_dialog(
-		"Even though it was weird...",
-		preload("res://assets/dialoguebox/portrait.png")
-	)
-
-
-	# Après le dernier dialogue → entrée dans end_cutscene()
 	waiting_for_input = true
 
 
-
 func end_cutscene():
-
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	dialog.hide_dialog()
 
 	waiting_for_input = false
 	cutscene_running = false
 
-	camera.zoom_to(7.0, 1.2)
+	camera.zoom_to(4.0, 1.2)
 	camera.end_cinematic()
 
 	player.can_move = true
