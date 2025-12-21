@@ -6,6 +6,8 @@ extends Node2D
 @onready var transition_screen := $UI/TransitionScreen
 
 var current_level_path: String = ""
+
+# --- VARIABLES D'ÉTAT GLOBALES ---
 var intro_played := false 
 var grapple_collected := false
 var dash_collected := false
@@ -16,16 +18,38 @@ func _ready():
 		transition_screen.visible = true
 		transition_screen.modulate.a = 0.0
 	
-	load_level("res://scenes/levels/level_1.tscn")
+	# --- INTÉGRATION SAVE SYSTEM ---
+	# 1. Vérifie si le Menu nous a dit quel niveau charger
+	if SaveManager.has_meta("level_to_load"):
+		var target_level = SaveManager.get_meta("level_to_load")
+		
+		# On nettoie la métadata pour pas que ça bug au prochain reload
+		SaveManager.remove_meta("level_to_load")
+		
+		# 2. Si on est dans un Slot valide, on charge les pouvoirs sauvegardés
+		if SaveManager.current_slot_id != -1:
+			var data = SaveManager.load_data(SaveManager.current_slot_id)
+			if data:
+				grapple_collected = data.get("grapple_unlocked", false)
+				dash_collected = data.get("dash_unlocked", false)
+				intro_played = data.get("intro_played", false)
+		
+		# 3. On lance le niveau demandé
+		load_level(target_level)
+		
+	else:
+		# Fallback : Si on lance Main.tscn directement depuis l'éditeur (Test)
+		load_level("res://scenes/levels/level_1.tscn")
+
 
 func load_level(path: String):
 	current_level_path = path
 	
-	# Nettoyage
+	# Nettoyage de l'ancien niveau
 	for c in level_root.get_children():
 		c.queue_free()
 
-	# Chargement
+	# Chargement du nouveau
 	var level_scene = load(path).instantiate()
 	level_root.add_child(level_scene)
 
@@ -39,11 +63,27 @@ func load_level(path: String):
 		player.can_move = true
 		player.is_dying = false
 		player.visible = true
+		
+		# --- APPLICATION DES POUVOIRS ---
+		# C'est ici qu'on dit au joueur : "Eh, rappelle-toi que tu as le dash !"
+		player.grapple_unlocked = grapple_collected
+		player.dash_unlocked = dash_collected
 	
 	# Setup Camera
 	if level_scene.has_node("LevelBounds"):
 		var bounds = level_scene.get_node("LevelBounds")
 		camera.set_bounds(bounds)
+
+	# --- SAUVEGARDE AUTOMATIQUE ---
+	# À chaque fois qu'on entre dans un niveau, on sauvegarde l'état
+	if SaveManager.current_slot_id != -1:
+		var data_to_save = {
+			"current_level": current_level_path,
+			"grapple_unlocked": grapple_collected,
+			"dash_unlocked": dash_collected,
+			"intro_played": intro_played
+		}
+		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 
 
 # --- TRANSITION DE NIVEAU (Simple Fade) ---
@@ -54,11 +94,11 @@ func change_level_with_transition(next_level_path: String):
 	
 	# 2. FADE OUT (L'écran devient NOIR)
 	var t = create_tween()
-	# On passe l'alpha à 1.0 en 0.5 secondes
 	t.tween_property(transition_screen, "modulate:a", 1.0, 0.5)
 	await t.finished
 	
 	# 3. CHARGEMENT DU NOUVEAU NIVEAU
+	# Cela déclenchera aussi l'Auto-Save via la fonction load_level
 	load_level(next_level_path)
 	
 	# Petite attente technique
@@ -68,7 +108,6 @@ func change_level_with_transition(next_level_path: String):
 	
 	# 4. FADE IN (L'écran redevient TRANSPARENT)
 	var t2 = create_tween()
-	# On remet l'alpha à 0.0 en 0.5 secondes
 	t2.tween_property(transition_screen, "modulate:a", 0.0, 0.5)
 	await t2.finished
 	
@@ -91,6 +130,8 @@ func play_death_sequence():
 	
 	# RELOAD
 	if current_level_path != "":
+		# Note : On ne re-sauvegarde pas forcément ici, mais load_level le fera.
+		# Ce n'est pas grave, ça sauvegarde au même endroit (début du niveau).
 		load_level(current_level_path)
 	
 	await get_tree().process_frame
@@ -108,7 +149,7 @@ func play_death_sequence():
 	player.can_move = true
 	player.is_dying = false
 
-# UI Helpers (Garde ça si tu l'utilises pour le grappin)
+# UI Helpers
 func show_grapple_message(msg: String):
 	var label = $UI/CenterContainer/EchoText
 	if label:

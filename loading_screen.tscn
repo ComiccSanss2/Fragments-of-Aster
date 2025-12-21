@@ -1,0 +1,93 @@
+[gd_scene load_steps=12 format=3 uid="uid://m4rno3dmrhni"]
+
+[ext_resource type="Script" uid="uid://cy8024qvhip17" path="res://loading_screen.gd" id="1_htrc2"]
+[ext_resource type="Texture2D" uid="uid://c0tuesen7chfi" path="res://Hana Caraka - Base Character [sample] 2/run.png" id="2_weff3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgney"]
+atlas = ExtResource("2_weff3")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_74xf4"]
+atlas = ExtResource("2_weff3")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pa1l2"]
+atlas = ExtResource("2_weff3")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_401ed"]
+atlas = ExtResource("2_weff3")
+region = Rect2(240, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38ncu"]
+atlas = ExtResource("2_weff3")
+region = Rect2(320, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrdmd"]
+atlas = ExtResource("2_weff3")
+region = Rect2(400, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qx0w1"]
+atlas = ExtResource("2_weff3")
+region = Rect2(480, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a0ihe"]
+atlas = ExtResource("2_weff3")
+region = Rect2(560, 0, 80, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rgwxq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgney")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_74xf4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pa1l2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_401ed")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38ncu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jrdmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qx0w1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a0ihe")
+}],
+"loop": true,
+"name": &"run",
+"speed": 11.0
+}]
+
+[node name="LoadingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_htrc2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.038397167, 0.038397167, 0.03839716, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1818, 983)
+scale = Vector2(3.5, 3.5)
+sprite_frames = SubResource("SpriteFrames_rgwxq")
+animation = &"run"
+frame_progress = 0.1449409

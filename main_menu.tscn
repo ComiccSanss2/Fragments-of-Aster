@@ -1,0 +1,245 @@
+[gd_scene load_steps=13 format=3 uid="uid://bxtyfo1fbee7j"]
+
+[ext_resource type="Script" uid="uid://44ktlxkrq8la" path="res://main_menu.gd" id="1_jix8l"]
+[ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="2_glbon"]
+[ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_nlkkf"]
+[ext_resource type="FontFile" uid="uid://cdoacx33j31mo" path="res://assets/fonts/04B_30__.TTF" id="4_qe12f"]
+[ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="5_glbon"]
+[ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="6_nlkkf"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_8qtwp"]
+font = ExtResource("3_nlkkf")
+font_size = 100
+font_color = Color(1, 0.62352943, 0.8509804, 1)
+outline_size = 11
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 25
+shadow_color = Color(0.16917068, 0.1676555, 0.77984864, 0.5568628)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dy7ct"]
+font = ExtResource("4_qe12f")
+font_size = 60
+font_color = Color(0.33333334, 1, 0.8901961, 0.8784314)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
+frequency = 0.0139
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tipki"]
+width = 200
+height = 600
+noise = SubResource("FastNoiseLite_nlkkf")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qe12f"]
+shader = ExtResource("5_glbon")
+shader_parameter/speed = 0.08
+shader_parameter/strength = 0.01
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
+
+[sub_resource type="LabelSettings" id="LabelSettings_nlkkf"]
+font = ExtResource("3_nlkkf")
+font_size = 50
+shadow_size = 25
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jix8l")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -288.0
+offset_top = -162.0
+offset_right = 288.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_glbon")
+stretch_mode = 6
+
+[node name="TitleContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -911.0
+offset_top = -416.0
+offset_right = 911.0
+offset_bottom = 416.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 150
+
+[node name="Label" type="Label" parent="TitleContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "FRAGMENTS
+OF
+ASTER"
+label_settings = SubResource("LabelSettings_8qtwp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="TitleContainer"]
+layout_mode = 2
+text = "PRESS ANY KEY TO START"
+label_settings = SubResource("LabelSettings_dy7ct")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WindLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="WindLayer"]
+material = SubResource("ShaderMaterial_qe12f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -289.0
+offset_top = -159.0
+offset_right = 287.0
+offset_bottom = 155.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.79607844, 1, 1, 0.39215687)
+
+[node name="AmbiancePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_nlkkf")
+volume_db = -4.208
+autoplay = true
+
+[node name="SlotContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -389.0
+offset_top = -256.0
+offset_right = 411.0
+offset_bottom = 544.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer"]
+layout_mode = 2
+
+[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+
+[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 40
+text = "X"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SlotContainer"]
+layout_mode = 2
+
+[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+
+[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 40
+text = "X"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="SlotContainer"]
+layout_mode = 2
+
+[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+
+[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 40
+text = "X"
+
+[node name="Button4" type="Button" parent="SlotContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+
+[node name="DeletePopup" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeletePopup"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -790.0
+offset_top = -130.5
+offset_right = 790.0
+offset_bottom = 130.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+
+[node name="Label" type="Label" parent="DeletePopup/VBoxContainer"]
+layout_mode = 2
+text = "This will delete your save forever, 
+continue ?"
+label_settings = SubResource("LabelSettings_nlkkf")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DeletePopup/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 200
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+text = "YES"
+
+[node name="CancelButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 50
+text = "NO"

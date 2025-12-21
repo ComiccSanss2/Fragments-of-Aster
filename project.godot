@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Platformer"
-run/main_scene="uid://bpmrvciu2q13f"
+run/main_scene="uid://bxtyfo1fbee7j"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Global="*res://scenes/global.gd"
+SaveManager="*res://save_manager.gd"
 
 [display]
 

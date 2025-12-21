@@ -6,10 +6,8 @@ extends CharacterBody2D
 const SPEED = 120.0
 const GRAVITY = 800.0
 
-# --- FEELING ---
-const ACCELERATION = 15.0 
-const FRICTION = 10.0     
-const SQUASH_SPEED = 15.0 
+# --- FEELING (VISUEL UNIQUEMENT) ---
+const SQUASH_SPEED = 15.0  
 
 # Saut
 const JUMP_FORCE = -300.0
@@ -83,9 +81,7 @@ var is_dying := false
 @onready var anim_player = get_node_or_null("AnimationPlayer")
 
 func _ready():
-	# --- CAPTURE DE LA TAILLE INITIALE ---
 	default_scale = sprite.scale 
-	# -------------------------------------
 	
 	grapple_line.visible = false
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
@@ -122,13 +118,10 @@ func _physics_process(delta):
 		return 
 	# ----------------------------------
 
-	# --- GESTION DU JUICE (SQUASH & STRETCH) ---
-	# Retour progressif à l'échelle PAR DÉFAUT (et non pas 1,1)
+	# --- GESTION DU JUICE (SQUASH & STRETCH VISUEL) ---
 	sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED)
 	
-	# Détection atterrissage "Boing"
 	if not was_on_floor and is_on_floor():
-		# On écrase par rapport à la taille de base
 		sprite.scale = Vector2(default_scale.x * 1.5, default_scale.y * 0.7)
 		spawn_dust()
 	
@@ -175,13 +168,10 @@ func _physics_process(delta):
 	if is_on_floor(): coyote_timer = COYOTE_TIME
 	else: coyote_timer -= delta
 
-	# --- MOUVEMENT FLUIDE (ACCEL/FRICTION) ---
-	var target_speed = input_dir * SPEED
-	if input_dir != 0:
-		velocity.x = lerp(velocity.x, target_speed, delta * ACCELERATION)
-	else:
-		velocity.x = lerp(velocity.x, 0.0, delta * FRICTION)
-	# -----------------------------------------
+	# --- MOUVEMENT INSTANTANÉ (SNAPPY) ---
+	# Retour à la base : Vitesse directe = Précision maximale
+	velocity.x = input_dir * SPEED
+	# -------------------------------------
 
 	# --- GESTION DU DASH ---
 	if is_on_floor() or is_on_wall():
@@ -206,13 +196,11 @@ func start_dash():
 	is_dashing = true
 	can_dash = false 
 	dash_timer = DASH_DURATION
-	
 	dash_adjust_timer = DASH_ADJUST_WINDOW
-	
 	wall_grabbing = false 
 	update_dash_direction()
 	
-	# Effet visuel : Étirement horizontal (Multiplicateur)
+	# Visuel Dash
 	sprite.scale = Vector2(default_scale.x * 1.4, default_scale.y * 0.6)
 	
 	if jump_sfx:
@@ -245,7 +233,7 @@ func handle_jump(delta):
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
 		velocity.y = JUMP_FORCE
 		
-		# Effet visuel : Étirement vertical (Multiplicateur)
+		# Visuel Saut
 		sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
 		
 		if jump_sfx:
@@ -294,18 +282,16 @@ func handle_wall_grab(delta):
 
 func handle_wall_jump():
 	var grabbing_button = Input.is_action_pressed("grab")
-	
 	if wall_coyote_timer > 0.0 and grabbing_button and not wall_exhausted and Input.is_action_just_pressed("ui_accept"):
 		wall_grabbing = false
 		jump_buffer_timer = 0
 		
-		# Effet visuel
+		# Visuel Wall Jump
 		sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
 		
 		if jump_sfx:
 			jump_sfx.pitch_scale = randf_range(1.1, 1.3)
 			jump_sfx.play()
-		
 		if is_on_wall_left(): velocity.x = WALL_JUMP_H
 		elif is_on_wall_right(): velocity.x = -WALL_JUMP_H
 		velocity.y = WALL_JUMP_V
@@ -369,22 +355,17 @@ func start_respawn_sequence():
 	can_move = true
 
 func play_anim(name: String):
-	# On évite de relancer l'animation si elle joue déjà
 	if sprite.animation != name:
 		sprite.play(name)
 
 func play_air_anim():
 	if velocity.y < 0:
-		play_anim("jump-fall") # On monte
-
+		play_anim("jump-fall") 
 
 func update_animation(input_dir):
-	# Priorité 1 : En l'air
 	if not is_on_floor():
 		play_air_anim()
 		return
-	
-	# Priorité 2 : Au sol
 	if input_dir != 0:
 		play_anim("walk")
 	else:
