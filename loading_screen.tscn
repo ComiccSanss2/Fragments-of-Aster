@@ -86,8 +86,8 @@ grow_vertical = 2
 color = Color(0.038397167, 0.038397167, 0.03839716, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(1818, 983)
-scale = Vector2(3.5, 3.5)
+position = Vector2(1796, 953)
+scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_rgwxq")
 animation = &"run"
-frame_progress = 0.1449409
+frame_progress = 0.23284142

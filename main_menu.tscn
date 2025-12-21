@@ -1,9 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://bxtyfo1fbee7j"]
+[gd_scene load_steps=12 format=3 uid="uid://bxtyfo1fbee7j"]
 
 [ext_resource type="Script" uid="uid://44ktlxkrq8la" path="res://main_menu.gd" id="1_jix8l"]
 [ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="2_glbon"]
 [ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_nlkkf"]
-[ext_resource type="FontFile" uid="uid://cdoacx33j31mo" path="res://assets/fonts/04B_30__.TTF" id="4_qe12f"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="5_glbon"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="6_nlkkf"]
 
@@ -17,8 +16,8 @@ shadow_size = 25
 shadow_color = Color(0.16917068, 0.1676555, 0.77984864, 0.5568628)
 
 [sub_resource type="LabelSettings" id="LabelSettings_dy7ct"]
-font = ExtResource("4_qe12f")
-font_size = 60
+font = ExtResource("3_nlkkf")
+font_size = 40
 font_color = Color(0.33333334, 1, 0.8901961, 0.8784314)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
