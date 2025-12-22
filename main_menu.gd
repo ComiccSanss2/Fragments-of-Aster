@@ -171,19 +171,30 @@ func update_slot_display(slot_id: int):
 
 func _on_slot_pressed(slot_id: int):
 	SaveManager.current_slot_id = slot_id
-	var level_to_load = "res://scenes/levels/level_1.tscn"
+	
+	# --- MODIFICATION ICI ---
+	# On ne définit pas level_to_load tout de suite pour une New Game
+	# On va décider de la cible (Jeu ou Intro)
+	var target_scene = ""
+	
 	var saved_data = SaveManager.load_data(slot_id)
 	
 	if saved_data:
-		level_to_load = saved_data["current_level"]
+		# Sauvegarde existante -> On va direct au jeu
+		target_scene = "res://scenes/main.tscn"
+		var level = saved_data["current_level"]
+		SaveManager.set_meta("level_to_load", level)
 	else:
+		# Nouvelle partie -> On crée la save MAIS on va à l'Intro
 		var new_data = SaveManager.get_default_data()
 		SaveManager.save_game(slot_id, new_data)
+		
+		# On pointe vers l'Intro au lieu du Main
+		target_scene = "res://intro.tscn" 
 	
-	SaveManager.set_meta("level_to_load", level_to_load)
-	
+	# Lancement du Loading Screen
 	var loading_screen = load("res://loading_screen.tscn").instantiate()
-	loading_screen.target_scene_path = "res://scenes/main.tscn"
+	loading_screen.target_scene_path = target_scene
 	get_tree().root.add_child(loading_screen)
 	queue_free()
 

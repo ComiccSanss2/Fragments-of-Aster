@@ -91,14 +91,25 @@ func _ready():
 		start_respawn_sequence()
 
 func _physics_process(delta):
-	# 1. Mort / Cinématique
 	if is_dying or not can_move:
-		velocity = Vector2.ZERO
-		if not is_dying: play_anim("idle")
-		move_and_slide()
-		return
+		if is_dying:
+			velocity = Vector2.ZERO
+		else:
 
-	# --- LOGIQUE DASH (Prioritaire) ---
+			velocity.x = 0
+			
+
+			if not is_on_floor():
+				velocity.y += GRAVITY * delta
+				velocity.y = min(velocity.y, 1000.0) 
+				play_air_anim()
+			else:
+				play_anim("idle")
+
+		move_and_slide()
+		return 
+
+	# --- LOGIQUE DASH  ---
 	if is_dashing:
 		dash_timer -= delta
 		dash_ghost_timer -= delta
@@ -169,7 +180,6 @@ func _physics_process(delta):
 	else: coyote_timer -= delta
 
 	# --- MOUVEMENT INSTANTANÉ (SNAPPY) ---
-	# Retour à la base : Vitesse directe = Précision maximale
 	velocity.x = input_dir * SPEED
 	# -------------------------------------
 

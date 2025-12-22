@@ -1,9 +1,9 @@
+Label
+ColorRect
 Control
 CanvasLayer
 VBoxContainer
-ColorRect
 CheckBox
-Label
 HSlider
 Button
 AnimatedSprite2D
