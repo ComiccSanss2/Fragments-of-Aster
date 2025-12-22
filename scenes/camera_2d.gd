@@ -5,13 +5,12 @@ extends Camera2D
 # ------------------------------------------------------------
 @export_group("Follow Settings")
 @export var follow_smoothness := 8.0
-# Offset Y = -40 pour regarder un peu vers le haut (voir les plateformes au dessus)
-# Offset X = 0 car le décalage horizontal est maintenant géré dynamiquement plus bas
-@export var cam_offset := Vector2(0, -40) 
+# Offset Y = -40 pour regarder un peu vers le haut
+@export var cam_offset := Vector2(0, 15) 
 
 @export_group("Look Ahead Settings")
-@export var look_ahead_x_dist := 60.0   # Distance du regard horizontal (Gauche/Droite)
-@export var look_ahead_y_dist := 150.0  # Distance du regard vertical (Chute)
+@export var look_ahead_x_dist := 60.0   # Distance du regard horizontal
+@export var look_ahead_y_dist := 150.0  # Distance du regard vertical
 @export var look_ahead_speed := 2.0     # Vitesse douce de la caméra
 @export var fall_threshold := 200.0     # Vitesse de chute pour activer le regard bas
 
@@ -31,6 +30,9 @@ var current_look_ahead_y := 0.0
 var is_cinematic := false
 var cinematic_target: Node2D = null
 
+# --- NOUVEAU : Variable de verrouillage ---
+var is_locked := false 
+
 # ------------------------------------------------------------
 # READY
 # ------------------------------------------------------------
@@ -47,7 +49,6 @@ func start_cinematic(target_node: Node2D):
 func end_cinematic():
 	is_cinematic = false
 	cinematic_target = null
-	# Reset progressif
 	current_look_ahead_x = 0.0
 	current_look_ahead_y = 0.0 
 
@@ -72,6 +73,11 @@ func set_bounds(bounds_node: Node):
 # PHYSICS PROCESS
 # ------------------------------------------------------------
 func _physics_process(delta):
+	# --- MODIFICATION ICI : Si verrouillé, on laisse le Main contrôler ---
+	if is_locked:
+		return 
+	# ---------------------------------------------------------------------
+
 	if not bounds_shape:
 		return
 
@@ -89,24 +95,20 @@ func _physics_process(delta):
 	# 3. Logique dynamique (Hors cinématique)
 	if not is_cinematic:
 		
-		# A. Offset Statique (ex: regarder un peu en haut)
+		# A. Offset Statique
 		desired += cam_offset
 		
 		var target_x_offset = 0.0
 		var target_y_offset = 0.0
 		
 		if follow_node is CharacterBody2D:
-			# --- B. LOOK AHEAD HORIZONTAL (Nouveau) ---
-			# Si on bouge horizontalement de manière significative
+			# --- B. LOOK AHEAD HORIZONTAL ---
 			if abs(follow_node.velocity.x) > 20.0:
-				# sign() renvoie 1 (droite) ou -1 (gauche)
 				target_x_offset = sign(follow_node.velocity.x) * look_ahead_x_dist
 			else:
-				# Si on est à l'arrêt, on garde le dernier offset ou on revient à 0
-				# Ici on revient à 0 pour recentrer quand Lyra s'arrête
 				target_x_offset = 0.0
 
-			# --- C. LOOK AHEAD VERTICAL (Chute) ---
+			# --- C. LOOK AHEAD VERTICAL ---
 			if follow_node.velocity.y > fall_threshold:
 				target_y_offset = look_ahead_y_dist
 
@@ -119,6 +121,7 @@ func _physics_process(delta):
 		desired.y += current_look_ahead_y
 
 	# 4. Mouvement fluide global
+	# C'est ici que 'follow_smoothness' est utilisé
 	global_position = global_position.lerp(desired, delta * follow_smoothness)
 
 	# 5. Contrainte des limites (Clamping)

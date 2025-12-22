@@ -74,23 +74,25 @@ func _on_options_back_pressed():
 	resume_btn.grab_focus()
 
 func _on_menu_pressed():
-	# 1. On remet le temps en marche (TRES IMPORTANT)
+	# 1. On remet le temps
 	get_tree().paused = false
 	
-	# 2. On charge l'écran de chargement
+	# 2. APPEL DU NETTOYAGE (C'est la nouveauté)
+	# On cherche le nœud Main (la racine actuelle)
+	var main = get_tree().current_scene
+	
+	# Sécurité : On vérifie si c'est bien Main et s'il a la fonction
+	if main.name == "Main" and main.has_method("cleanup_before_exit"):
+		main.cleanup_before_exit()
+	
+	# 3. On lance l'écran de chargement
 	var loading_screen = load("res://loading_screen.tscn").instantiate()
-	
-	# 3. On configure la destination (Le Menu Principal)
 	loading_screen.target_scene_path = "res://main_menu.tscn"
-	
-	# 4. ASTUCE : On réduit le temps d'attente pour que ce soit rapide !
-	loading_screen.min_load_time = 1.5 # Juste le temps du Fade In/Out
-	
-	# 5. On l'ajoute à la racine
+	loading_screen.min_load_time = 1.5
 	get_tree().root.add_child(loading_screen)
 	
-	# Le chargement de scène va détruire le niveau (Main) et le Menu Pause avec.
-	# Pas besoin de queue_free() ici car changer de scène nettoie tout l'arbre actuel.
+	# 4. On détruit le menu pause
+	queue_free()
 
 # --- LOGIQUE OPTIONS ---
 

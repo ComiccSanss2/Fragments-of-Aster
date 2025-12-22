@@ -225,6 +225,7 @@ position = Vector2(24, 296)
 [node name="GrapplePoint5" parent="." instance=ExtResource("5_sd2du")]
 position = Vector2(184, 89)
 rotation = 1.5707964
+max_distance = 120.0
 
 [node name="GrapplePoint6" parent="." instance=ExtResource("5_sd2du")]
 position = Vector2(456, -72)

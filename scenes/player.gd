@@ -157,7 +157,7 @@ func _physics_process(delta):
 
 	if grappling and grapple_target:
 		handle_grapple(delta)
-		play_anim("jump")
+		play_anim("jump-fall")
 		move_and_slide()
 		return
 

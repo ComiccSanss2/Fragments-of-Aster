@@ -3,10 +3,8 @@ extends Node2D
 var is_waiting_for_landing = false
 
 func _ready() -> void:
-	# On ne fait RIEN ici. C'est Main qui commande.
 	pass
 
-# Appelée par Main pour l'intro
 func start_intro_sequence():
 	var main = get_tree().root.get_node("Main")
 	var player = main.get_node("Player")
@@ -50,6 +48,13 @@ func _process(delta):
 
 func landing_impact():
 	var main = get_tree().root.get_node("Main")
-	main.trigger_shake(10.0)
-	await get_tree().create_timer(2.0).timeout
+	
+
+	main.camera.follow_smoothness = 8.0 
+
+	main.camera.cam_offset.y = 15.0
+	
+	main.trigger_shake(50.0)
+	
+	await get_tree().create_timer(2.5).timeout
 	start_tutorial_sequence()

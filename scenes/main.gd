@@ -8,8 +8,10 @@ extends Node2D
 @onready var dialogue_box := $UI/DialogueBox
 
 # --- AUDIO ---
-@onready var music_roots := $FragmentsOfRoots   
+@onready var music_roots := $FragmentsOfRoots    
 @onready var music_echoes := $FragmentsOfEchoes 
+@onready var ambiance_player := $AmbiancePlayer 
+@onready var wind_layer := $WindLayer         
 
 var current_level_path: String = ""
 var intro_played := false
@@ -22,7 +24,6 @@ var intro_camera_locked := false
 var intro_camera_pos := Vector2.ZERO
 
 func _ready():
-	# ... (Code Intro/Ecran Noir identique) ...
 	print("--- DEBUG: Main _ready start ---")
 	var is_intro = SaveManager.has_meta("intro_sequence")
 	if transition_screen:
@@ -34,10 +35,8 @@ func _ready():
 	if FileAccess.file_exists("res://pause_menu.tscn"):
 		ui_layer.add_child(load("res://pause_menu.tscn").instantiate())
 
-
 	# LOGIQUE
 	if is_intro:
-
 		check_music_progression() 
 		
 		SaveManager.remove_meta("intro_sequence")
@@ -47,10 +46,14 @@ func _ready():
 		player.global_position.y = -2500 
 		player.can_move = false 
 		player.velocity = Vector2.ZERO
+		
+		# --- SETUP CAMERA INTRO ---
 		intro_camera_pos = Vector2(player.global_position.x, -1200)
 		camera.global_position = intro_camera_pos
-		camera.reset_smoothing()
-		intro_camera_locked = true
+		
+		# On verrouille le script de la caméra (elle arrête de calculer)
+		camera.is_locked = true 
+		intro_camera_locked = true # On verrouille la logique Main
 		
 		var current_level_node = level_root.get_child(0)
 		if current_level_node.has_method("start_intro_sequence"):
@@ -100,13 +103,34 @@ func _ready():
 				current_level_node.start_tutorial_sequence()
 
 func _process(delta):
+	# --- 1. LOGIQUE CAMÉRA INTRO ---
 	if intro_camera_locked:
+		# On maintient la position fixe
 		camera.global_position = intro_camera_pos
-		if player.global_position.y >= camera.global_position.y:
-			intro_camera_locked = false
-			camera.position_smoothing_enabled = true
+		
+		# Seuil de déclenchement (basé sur la position FIXE de la caméra)
+		# Quand le joueur arrive 300px au dessus du centre
+		var catch_threshold = intro_camera_pos.y - 0
+		
+		if player.global_position.y >= catch_threshold:
+			print("DEBUG: Caméra attrape le joueur !")
+			
+			# 1. On libère le Main
+			intro_camera_locked = false 
+			
+			# 2. On libère le script de la caméra (elle reprend ses calculs)
+			camera.is_locked = false 
+			
+			# 3. BOOST DE VITESSE ET OFFSET
+			# On la rend très rapide pour rattraper le joueur (20.0 au lieu de 8.0)
+			camera.follow_smoothness = 20.0 
+			
+			# On décale le cadre vers le bas pour que le joueur soit plus haut à l'écran
+			camera.cam_offset.y = 100.0
+
+	# --- 2. SCREEN SHAKE ---
 	if shake_strength > 0:
-		shake_strength = lerp(shake_strength, 0.0, 5.0 * delta)
+		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
 		if shake_strength < 0.1: shake_strength = 0.0; camera.offset = Vector2.ZERO
 
@@ -184,3 +208,21 @@ func check_music_progression():
 	else:
 		if music_echoes and music_echoes.playing: music_echoes.stop()
 		if music_roots and not music_roots.playing: music_roots.play()
+		
+func cleanup_before_exit():
+	
+	# Musiques
+	if music_roots: music_roots.stop()
+	if music_echoes: music_echoes.stop()
+	
+	if ambiance_player: ambiance_player.stop()
+	
+	if wind_layer:
+		wind_layer.visible = false 
+		for child in wind_layer.get_children():
+			if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+				child.stop()
+
+	self.visible = false
+	if ui_layer: ui_layer.visible = false
+	_set_level_canvas_layers_visible(false)
