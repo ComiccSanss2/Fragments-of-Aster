@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bxtyfo1fbee7j"]
+[gd_scene load_steps=19 format=3 uid="uid://bxtyfo1fbee7j"]
 
 [ext_resource type="Script" uid="uid://44ktlxkrq8la" path="res://main_menu.gd" id="1_jix8l"]
 [ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="2_glbon"]
@@ -34,6 +34,26 @@ shader = ExtResource("5_glbon")
 shader_parameter/speed = 0.08
 shader_parameter/strength = 0.01
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_glbon"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nlkkf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe12f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8qtwp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glbon"]
+bg_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+border_width_top = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 10.0
+expand_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dy7ct"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0o4t1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_nlkkf"]
 font = ExtResource("3_nlkkf")
@@ -120,6 +140,70 @@ stream = ExtResource("6_nlkkf")
 volume_db = -4.208
 autoplay = true
 
+[node name="MenuContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="MenuContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 14
+text = "FRAGMENTS
+OF
+ASTER"
+label_settings = SubResource("LabelSettings_8qtwp")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="MenuContainer"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PlayButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
+text = "PLAY"
+flat = true
+
+[node name="OptionsButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
+text = "OPTIONS"
+flat = true
+
+[node name="ExitButton" type="Button" parent="MenuContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
+text = "EXIT"
+flat = true
+
 [node name="SlotContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 1
@@ -134,7 +218,7 @@ offset_right = 411.0
 offset_bottom = 544.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 50
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer"]
 layout_mode = 2
@@ -187,11 +271,80 @@ theme_override_fonts/font = ExtResource("3_nlkkf")
 theme_override_font_sizes/font_size = 40
 text = "X"
 
-[node name="Button4" type="Button" parent="SlotContainer"]
+[node name="SlotBackButton" type="Button" parent="SlotContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("3_nlkkf")
 theme_override_font_sizes/font_size = 50
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_qe12f")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8qtwp")
+text = "BACK"
+flat = true
+
+[node name="OptionsContainer" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -110.0
+offset_right = 112.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 50
+
+[node name="LabelAudio" type="Label" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "----- AUDIO -----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MasterVolumeSlider" type="HSlider" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxFlat_glbon")
+
+[node name="LabelVideo" type="Label" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "----- VIDEO -----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FullscreenCheck" type="CheckBox" parent="OptionsContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Fullscreen"
+alignment = 2
+icon_alignment = 1
+
+[node name="VSyncCheck" type="CheckBox" parent="OptionsContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "VSync"
+alignment = 2
+icon_alignment = 1
+
+[node name="OptionsBackButton" type="Button" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
+theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_dy7ct")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0o4t1")
+text = "BACK"
+flat = true
 
 [node name="DeletePopup" type="ColorRect" parent="."]
 visible = false
@@ -233,12 +386,16 @@ alignment = 1
 
 [node name="ConfirmButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("3_nlkkf")
 theme_override_font_sizes/font_size = 50
 text = "YES"
+flat = true
 
 [node name="CancelButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("3_nlkkf")
 theme_override_font_sizes/font_size = 50
 text = "NO"
+flat = true
