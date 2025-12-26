@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=16 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bs23qpjbpsg3y" path="res://dialogue_box.tscn" id="4_jyhfs"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="5_tbgi4"]
 [ext_resource type="AudioStream" uid="uid://dj8ylcrdheniw" path="res://assets/sfx/fragments of roots.mp3" id="6_tefeu"]
+[ext_resource type="AudioStream" uid="uid://bmr04gbcqlo47" path="res://assets/sfx/fragments of pulse.wav" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="7_o6xl0"]
 [ext_resource type="AudioStream" uid="uid://bs4v5sovofqu5" path="res://assets/sfx/fragments of echo.mp3" id="7_tipki"]
 
@@ -115,6 +116,11 @@ autoplay = true
 [node name="FragmentsOfRoots" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_tefeu")
 volume_db = -30.0
+autoplay = true
+
+[node name="FragmentsOfPulse" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_85g3d")
+volume_db = -11.527
 autoplay = true
 
 [node name="FragmentsOfEchoes" type="AudioStreamPlayer" parent="."]

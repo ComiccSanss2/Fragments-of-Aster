@@ -53,10 +53,14 @@ func _on_TriggerArea_body_entered(body):
 
 		var main = get_tree().root.get_node("Main")
 		var roots_music = main.get_node_or_null("FragmentsOfRoots")
+		var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
 		
-		if roots_music:
-			var t = create_tween()
+		# On baisse la musique active pour l'ambiance mystique
+		var t = create_tween()
+		if roots_music and roots_music.playing:
 			t.tween_property(roots_music, "volume_db", -30.0, 2.0)
+		elif echoes_music and echoes_music.playing:
+			t.tween_property(echoes_music, "volume_db", -30.0, 2.0)
 
 		anim.play("pickup")
 
@@ -97,7 +101,7 @@ func _on_collect_finished():
 	var flash = ColorRect.new()
 	flash.color = Color.WHITE
 	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
-	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE   
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE    
 	main_ui.add_child(flash)
 
 	var t_flash = create_tween()
@@ -131,16 +135,39 @@ func _on_collect_finished():
 	# --- TRANSITION MUSICALE ---
 	var roots_music = main.get_node_or_null("FragmentsOfRoots")
 	var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
+	var pulse_music = main.get_node_or_null("FragmentsOfPulse") # Récupération Pulse
 
-	if roots_music and echoes_music:
-		if not echoes_music.playing:
-			echoes_music.volume_db = -80.0
-			echoes_music.play()
-		
-		var t_music = main.create_tween()
-		t_music.tween_property(roots_music, "volume_db", -80.0, 4.0)
-		t_music.parallel().tween_property(echoes_music, "volume_db", -10.0, 4.0)
-		t_music.chain().tween_callback(roots_music.stop)
+	# CAS 1 : GRAPPIN (On passe de Roots -> Echoes)
+	if shard_type == ShardType.GRAPPLE:
+		if roots_music and echoes_music:
+			if not echoes_music.playing:
+				echoes_music.volume_db = -80.0
+				echoes_music.play()
+			
+			var t_music = main.create_tween()
+			t_music.tween_property(roots_music, "volume_db", -80.0, 4.0)
+			t_music.parallel().tween_property(echoes_music, "volume_db", -10.0, 4.0)
+			t_music.chain().tween_callback(roots_music.stop)
+
+	elif shard_type == ShardType.DASH:
+		if echoes_music and pulse_music:
+			if not pulse_music.playing:
+				pulse_music.volume_db = -80.0
+				pulse_music.play()
+			
+			var t_music = main.create_tween()
+			# On fade out Echoes (et Roots par sécurité)
+			if roots_music: t_music.parallel().tween_property(roots_music, "volume_db", -80.0, 4.0)
+			t_music.parallel().tween_property(echoes_music, "volume_db", -80.0, 4.0)
+			
+			# On fade in Pulse
+			t_music.parallel().tween_property(pulse_music, "volume_db", -10.0, 4.0)
+			
+			# On stop les autres à la fin
+			t_music.chain().tween_callback(func():
+				if roots_music: roots_music.stop()
+				echoes_music.stop()
+			)
 
 	# --- DIALOGUES LYRA ---
 	

@@ -1,5 +1,5 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1766430265
+::res://::1766720559
 background.tscn::PackedScene::7118553675040912326::1765049011::0::1::::<><><>0<>0<><>::uid://d0opw5p13hoqj::::res://assets/Parallax/1.png<>uid://dgdfs07xtnowr::::res://assets/Parallax/2.png<>uid://cb356o7yedki8::::res://assets/Parallax/3.png<>uid://dv1t2nvyryp4t::::res://assets/Parallax/4.png
 dash_ghost.gd::GDScript::6546962933225235292::1765362686::0::1::::<>Sprite2D<><>0<>0<><>::
 dash_ghost.tscn::PackedScene::3370018215260946256::1765362713::0::1::::<><><>0<>0<><>::uid://c0jnr1tqkp12g::::res://dash_ghost.gd
@@ -52,8 +52,9 @@ red-riding-hood_1.png::CompressedTexture2D::137537622294995840::1763776318::1763
 2.png::CompressedTexture2D::7586925339012225197::1765048489::1765048490::1::::<><><>0<>0<>d4a590c16eb03fb1fb3c1c9ab726dd37<>res://.godot/imported/2.png-3839b16e274f89fb92fdde551008ff1d.ctex::
 3.png::CompressedTexture2D::4902710443388522545::1765048489::1765048490::1::::<><><>0<>0<>4294a773aed7148979b72fa473003fac<>res://.godot/imported/3.png-26f19237081662f55907fdc78880f035.ctex::
 4.png::CompressedTexture2D::8688104144740106553::1765048489::1765048490::1::::<><><>0<>0<>b3af2083aac8cc00de3ff99681ff6c78<>res://.godot/imported/4.png-baa2db5af1303147d6e7a1e5a139f240.ctex::
-::res://assets/sfx/::1766402351
+::res://assets/sfx/::1766720579
 fragments of echo.mp3::AudioStreamMP3::3711016422731292846::1765312919::1765313542::1::::<><><>0<>0<>7dd2c38475503af5ecc3dbaa43e7481c<>res://.godot/imported/fragments of echo.mp3-932cda36e33fd8ee33933e6e60fb7e43.mp3str::
+fragments of pulse.wav::AudioStreamWAV::3265351258808516490::1766720579::1766720580::1::::<><><>0<>0<>0aeb9628f19c39c2997fb04ed2c041d1<>res://.godot/imported/fragments of pulse.wav-1703a684dcbf33f1a2333b2b2b698836.sample::
 fragments of roots.mp3::AudioStreamMP3::7860563092719124746::1765053604::1765053626::1::::<><><>0<>0<>c41bb26c551ca22c88398e1b8bce2d87<>res://.godot/imported/fragments of roots.mp3-e5157d2ff5cab589fdcf4734e0c3b461.mp3str::
 jump.wav::AudioStreamWAV::580367651347349846::1765061493::1765061493::1::::<><><>0<>0<>00e4e71c39d17b4abb357f0a1627df0d<>res://.godot/imported/jump.wav-9b35c1627efeb99d1d0472b32669fd3c.sample::
 talking.wav::AudioStreamWAV::6205755193139630068::1765051912::1765051912::1::::<><><>0<>0<>8b20725606f2afdcbca46b8e626ac71f<>res://.godot/imported/talking.wav-799f30474681db3f6ad757e2d77c5a2c.sample::

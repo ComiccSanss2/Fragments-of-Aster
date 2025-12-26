@@ -10,6 +10,7 @@ extends Node2D
 # --- AUDIO ---
 @onready var music_roots := $FragmentsOfRoots    
 @onready var music_echoes := $FragmentsOfEchoes 
+@onready var music_pulse := $FragmentsOfPulse   
 @onready var ambiance_player := $AmbiancePlayer 
 @onready var wind_layer := $WindLayer         
 
@@ -198,22 +199,30 @@ func hide_grapple_message(): $UI.visible = false
 
 # --- NOUVELLE FONCTION MUSIQUE ---
 func check_music_progression():
-	# Si on a le Grappin (ou Dash), on considère que le 1er Shard est pris
-	# Ajuste la condition selon ton gameplay !
-	var has_first_shard = grapple_collected
-	
-	if has_first_shard:
+	# PRIO 1 : Dash (Pulse)
+	if dash_collected:
 		if music_roots and music_roots.playing: music_roots.stop()
+		if music_echoes and music_echoes.playing: music_echoes.stop()
+		if music_pulse and not music_pulse.playing: music_pulse.play()
+	
+	# PRIO 2 : Grappin (Echoes)
+	elif grapple_collected:
+		if music_roots and music_roots.playing: music_roots.stop()
+		if music_pulse and music_pulse.playing: music_pulse.stop()
 		if music_echoes and not music_echoes.playing: music_echoes.play()
+	
+	# PRIO 3 : Début (Roots)
 	else:
 		if music_echoes and music_echoes.playing: music_echoes.stop()
+		if music_pulse and music_pulse.playing: music_pulse.stop()
 		if music_roots and not music_roots.playing: music_roots.play()
 		
 func cleanup_before_exit():
 	
-	# Musiques
+	# Musiques (On coupe tout)
 	if music_roots: music_roots.stop()
 	if music_echoes: music_echoes.stop()
+	if music_pulse: music_pulse.stop() # <--- AJOUT
 	
 	if ambiance_player: ambiance_player.stop()
 	

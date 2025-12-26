@@ -1,0 +1,6 @@
+res://scenes/main.tscn
+res://scenes/wind.gdshader
+res://scenes/shard.gdshader
+res://scenes/transition.gdshader
+res://scenes/main.gd
+res://scenes/shard.gd
