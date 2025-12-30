@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5x737fvmg2g5"]
+
+[ext_resource type="Texture2D" uid="uid://bf1pfd5hmm77b" path="res://assets/Enemy in the dark - Free Pack/Enemy 2/Idle Enemy2.png" id="1_rps5m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ls10i"]
+atlas = ExtResource("1_rps5m")
+region = Rect2(0, 0, 256, 255)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jsu0j"]
+atlas = ExtResource("1_rps5m")
+region = Rect2(0, 255, 256, 255)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r60s2"]
+atlas = ExtResource("1_rps5m")
+region = Rect2(0, 510, 256, 255)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ofba"]
+atlas = ExtResource("1_rps5m")
+region = Rect2(0, 765, 256, 255)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7v6xc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ls10i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jsu0j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r60s2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ofba")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 3.0
+}]
+
+[node name="MainEnemy" type="AnimatedSprite2D"]
+scale = Vector2(0.8, 0.8)
+sprite_frames = SubResource("SpriteFrames_7v6xc")
+animation = &"Idle"
+frame_progress = 0.6564881

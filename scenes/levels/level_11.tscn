@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://co6rsobboontg"]
+[gd_scene load_steps=17 format=3 uid="uid://co6rsobboontg"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_sewkk"]
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="2_5bask"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cybl4x8shcwxi" path="res://scenes/moving_platform.tscn" id="5_bk8ll"]
 [ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="6_ntgks"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="9_bk8ll"]
+[ext_resource type="Script" uid="uid://bpvdq8t5okfe2" path="res://scenes/levels/end_trigger_11.gd" id="10_4fty2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4fty2"]
 texture = ExtResource("1_sewkk")
@@ -39,6 +40,9 @@ sources/2 = SubResource("TileSetAtlasSource_bk8ll")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1nnno"]
 size = Vector2(3712, 1649.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5tmw6"]
+size = Vector2(30.75, 56.65625)
 
 [node name="Level11" type="Node2D"]
 
@@ -301,3 +305,13 @@ position = Vector2(26.323975, 216.62885)
 
 [node name="GrapplePoint" parent="." instance=ExtResource("9_bk8ll")]
 position = Vector2(1192, -72)
+
+[node name="EndTrigger10" type="Area2D" parent="."]
+position = Vector2(1510, -218)
+script = ExtResource("10_4fty2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger10"]
+position = Vector2(266.375, 190)
+shape = SubResource("RectangleShape2D_5tmw6")
+
+[connection signal="body_entered" from="EndTrigger10" to="EndTrigger10" method="_on_body_entered"]

@@ -1,3 +1,4 @@
+AnimatedSprite2D
 AudioStreamPlayer
 Label
 ColorRect
@@ -7,9 +8,7 @@ VBoxContainer
 CheckBox
 HSlider
 Button
-AnimatedSprite2D
 CenterContainer
 HBoxContainer
 Sprite2D
 ParallaxLayer
-ParallaxBackground
