@@ -1,5 +1,5 @@
 72322a848ab928aa5c89f0cb78209805
-::res://::1767137092
+::res://::1767306781
 background.tscn::PackedScene::7118553675040912326::1765049011::0::1::::<><><>0<>0<><>::uid://d0opw5p13hoqj::::res://assets/Parallax/1.png<>uid://dgdfs07xtnowr::::res://assets/Parallax/2.png<>uid://cb356o7yedki8::::res://assets/Parallax/3.png<>uid://dv1t2nvyryp4t::::res://assets/Parallax/4.png
 dash_ghost.gd::GDScript::6546962933225235292::1765362686::0::1::::<>Sprite2D<><>0<>0<><>::
 dash_ghost.tscn::PackedScene::3370018215260946256::1765362713::0::1::::<><><>0<>0<><>::uid://c0jnr1tqkp12g::::res://dash_ghost.gd
@@ -11,7 +11,7 @@ intro.gd::GDScript::7601187126662262441::1766363711::0::1::::<>Control<><>0<>0<>
 intro.tscn::PackedScene::4984861346223438615::1766363209::0::1::::<><><>0<>0<><>::uid://dgkcpaj6gh010::::res://intro.gd<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://bjo2dl7aycvi6::::res://assets/sfx/wind.wav
 loading_screen.gd::GDScript::6527065770695401504::1766360493::0::1::::<>CanvasLayer<><>0<>0<><>::
 loading_screen.tscn::PackedScene::903189261456360326::1766400663::0::1::::<><><>0<>0<><>::uid://cy8024qvhip17::::res://loading_screen.gd<>uid://c0tuesen7chfi::::res://Hana Caraka - Base Character [sample] 2/run.png
-main_enemy.tscn::PackedScene::4541561316616985254::1766856807::0::1::::<><><>0<>0<><>::uid://bf1pfd5hmm77b::::res://assets/Enemy in the dark - Free Pack/Enemy 2/Idle Enemy2.png
+main_enemy.tscn::PackedScene::4541561316616985254::1767138520::0::1::::<><><>0<>0<><>::uid://bf1pfd5hmm77b::::res://assets/Enemy in the dark - Free Pack/Enemy 2/Idle Enemy2.png
 main_menu.gd::GDScript::2095985134147622794::1766363177::0::1::::<>Control<><>0<>0<><>::
 main_menu.tscn::PackedScene::4041454177211394473::1766408746::0::1::::<><><>0<>0<><>::uid://44ktlxkrq8la::::res://main_menu.gd<>uid://d0opw5p13hoqj::::res://assets/Parallax/1.png<>uid://dgdfs07xtnowr::::res://assets/Parallax/2.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://cb356o7yedki8::::res://assets/Parallax/3.png<>uid://dv1t2nvyryp4t::::res://assets/Parallax/4.png<>uid://bgjsox6ujjsem::::res://scenes/wind.gdshader<>uid://bjo2dl7aycvi6::::res://assets/sfx/wind.wav
 movingplatform.gd::GDScript::5116649330378959286::1765277329::0::1::::<>AnimatableBody2D<><>0<>0<><>::
@@ -61,7 +61,8 @@ red-riding-hood_1.png::CompressedTexture2D::137537622294995840::1763776318::1763
 2.png::CompressedTexture2D::7586925339012225197::1765048489::1765048490::1::::<><><>0<>0<>d4a590c16eb03fb1fb3c1c9ab726dd37<>res://.godot/imported/2.png-3839b16e274f89fb92fdde551008ff1d.ctex::
 3.png::CompressedTexture2D::4902710443388522545::1765048489::1765048490::1::::<><><>0<>0<>4294a773aed7148979b72fa473003fac<>res://.godot/imported/3.png-26f19237081662f55907fdc78880f035.ctex::
 4.png::CompressedTexture2D::8688104144740106553::1765048489::1765048490::1::::<><><>0<>0<>b3af2083aac8cc00de3ff99681ff6c78<>res://.godot/imported/4.png-baa2db5af1303147d6e7a1e5a139f240.ctex::
-::res://assets/sfx/::1766759193
+::res://assets/sfx/::1767306814
+aster's dormancy.wav::AudioStreamWAV::5054118781077384972::1767306814::1767306832::1::::<><><>0<>0<>9330593ffddfae37c3726b2a407a5df1<>res://.godot/imported/aster's dormancy.wav-5e46c1fb7e1c7b958cfdd8ede205090a.sample::
 fragments of echo.mp3::AudioStreamMP3::3711016422731292846::1765312919::1765313542::1::::<><><>0<>0<>7dd2c38475503af5ecc3dbaa43e7481c<>res://.godot/imported/fragments of echo.mp3-932cda36e33fd8ee33933e6e60fb7e43.mp3str::
 fragments of pulse.wav::AudioStreamWAV::3265351258808516490::1766759193::1766720580::1::::<><><>0<>0<>0aeb9628f19c39c2997fb04ed2c041d1<>res://.godot/imported/fragments of pulse.wav-1703a684dcbf33f1a2333b2b2b698836.sample::
 fragments of roots.mp3::AudioStreamMP3::7860563092719124746::1765053604::1765053626::1::::<><><>0<>0<>c41bb26c551ca22c88398e1b8bce2d87<>res://.godot/imported/fragments of roots.mp3-e5157d2ff5cab589fdcf4734e0c3b461.mp3str::
@@ -77,7 +78,7 @@ jump.png::CompressedTexture2D::560828645297879622::1765553272::1765553273::1::::
 Read Me.txt::TextFile::-1::1765553272::0::1::::<><><>0<>0<><>::
 run.png::CompressedTexture2D::6568008070928126718::1765553272::1765553273::1::::<><><>0<>0<>a798eec7e9df33f5fd87ae06935457ac<>res://.godot/imported/run.png-0d6082b33b3bb5dc2fce33bc90209bb0.ctex::
 walk.png::CompressedTexture2D::6017258572853542588::1765553272::1765553273::1::::<><><>0<>0<>8372f9e64b871ec914d54b90e5dad7c1<>res://.godot/imported/walk.png-d713a893250fcd96f3970b935421a4da.ctex::
-::res://scenes/::1767095274
+::res://scenes/::1767150142
 camera_2d.gd::GDScript::6898031080620646080::1766411052::0::1::::<>Camera2D<><>0<>0<><>::
 cpu_particles_2d.gd::GDScript::6044288644677617967::1764414069::0::1::::<>CPUParticles2D<><>0<>0<><>::
 cpu_particles_2d.tscn::PackedScene::1935076646674217529::1765552979::0::1::::<><><>0<>0<><>::uid://bv1kq5mtqjagc::::res://assets/dustparticles.png<>uid://csd5sy3ophysd::::res://scenes/cpu_particles_2d.gd
@@ -88,19 +89,19 @@ moving_platform.tscn::PackedScene::6460158927239608046::1765277329::0::1::::<><>
 player.gd::GDScript::5355770098405654712::1766399919::0::1::::<>CharacterBody2D<><>0<>0<><>::
 player.tscn::PackedScene::1055651492602229366::1766399942::0::1::::<><><>0<>0<><>::uid://cikm0sgul6rns::::res://scenes/player.gd<>uid://by7h8aqvh3nka::::res://Hana Caraka - Base Character [sample] 2/hurt.png<>uid://qtdo6q3u2vck::::res://assets/fonts/Daydream DEMO.otf<>uid://drbggob66bj62::::res://Hana Caraka - Base Character [sample] 2/idle.png<>uid://be0kvkefnl330::::res://assets/light.png<>uid://h8w1bk7451a5::::res://Hana Caraka - Base Character [sample] 2/jump.png<>uid://c0tuesen7chfi::::res://Hana Caraka - Base Character [sample] 2/run.png<>uid://ijetnn8l564a::::res://assets/sfx/jump.wav
 shard.gd::GDScript::4646584074055192212::1766720684::0::1::::<>Area2D<><>0<>0<><>::
-shard.gdshader::Shader::6459931072961099706::1767095274::0::1::::<><><>0<>0<><>::
+shard.gdshader::Shader::6459931072961099706::1767150142::0::1::::<><><>0<>0<><>::
 shard.tscn::PackedScene::1675306163860772209::1765362773::0::1::::<><><>0<>0<><>::uid://3gs8bb7qu4dt::::res://assets/shard.png<>uid://b7g3tckw8p00w::::res://scenes/shard.gd<>uid://b1actdxei6f4::::res://assets/haloshard.png
 shard_impact_fx.tscn::PackedScene::2994184333911020809::1765552182::0::1::::<><><>0<>0<><>::
 spike.tscn::PackedScene::5905054295848571925::1764588914::0::1::::<><><>0<>0<><>::uid://cjegyvq7v51qg::::res://spike.gd<>uid://nkbfn1rorjwa::::res://assets/pic-right.png
-transition.gdshader::Shader::5486791043371375590::1767095274::0::1::::<><><>0<>0<><>::
-wind.gdshader::Shader::2827252309139398644::1767095274::0::1::::<><><>0<>0<><>::
+transition.gdshader::Shader::5486791043371375590::1767150142::0::1::::<><><>0<>0<><>::
+wind.gdshader::Shader::2827252309139398644::1767150142::0::1::::<><><>0<>0<><>::
 ::res://scenes/breakableplatform/::1764470097
 BreakablePlatform.gd::GDScript::77012771190186914::1764470096::0::1::::<>Node2D<><>0<>0<><>::
 breakable_platform.tscn::PackedScene::266786556211183561::1764470097::0::1::::<><><>0<>0<><>::uid://bdknh11x3uu1::::res://scenes/breakableplatform/BreakablePlatform.gd<>uid://brppyjhao8iw5::::res://assets/BreakablePlatform.png
 ::res://scenes/grapple/::1764448750
 grapple_point.gd::GDScript::191319388508722381::1764448750::0::1::::<>Area2D<><>0<>0<><>::
 grapple_point.tscn::PackedScene::1635221708565270098::1763762901::0::1::::<><><>0<>0<><>::uid://dml8bg2o5rhnd::::res://assets/GrappleReceiver.png<>uid://cyxac0n8au10::::res://scenes/grapple/grapple_point.gd
-::res://scenes/levels/::1767095886
+::res://scenes/levels/::1767150442
 end_trigger.gd::GDScript::5873405542796020238::1765198293::0::1::::<>Area2D<><>0<>0<><>::
 end_trigger_2.gd::GDScript::4020309253308358053::1765198330::0::1::::<>Area2D<><>0<>0<><>::
 end_trigger_3.gd::GDScript::4633191414101546579::1765198336::0::1::::<>Area2D<><>0<>0<><>::
@@ -124,7 +125,7 @@ level_8.tscn::PackedScene::5118491980366508189::1765358309::0::1::::<><><>0<>0<>
 level_9.tscn::PackedScene::1510642960911598065::1766409082::0::1::::<><><>0<>0<><>::uid://c8ojslcvmy5bm::::res://background.tscn<>uid://pemp4jeluyn5::::res://assets/GroundPlaceHolder.png<>uid://c17i5h1prm6ys::::res://scenes/levels/level_bounds.gd<>uid://drq43tifibmm3::::res://assets/basetiles.png<>uid://cam2wqvdowsct::::res://assets/tileset.png<>uid://cybl4x8shcwxi::::res://scenes/moving_platform.tscn<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn<>uid://baevhjj4dcbec::::res://assets/basetilesyellow.png<>uid://cqepm8bac6fx2::::res://scenes/spike.tscn<>uid://ctxvag6uk7srq::::res://assets/basetilesyellowmore.png<>uid://d2h62s6xwuld::::res://scenes/breakableplatform/breakable_platform.tscn<>uid://da2g2olg1us62::::res://scenes/levels/end_trigger_9.gd
 level_10.tscn::PackedScene::1335610390440369272::1765379875::0::1::::<><><>0<>0<><>::uid://c8ojslcvmy5bm::::res://background.tscn<>uid://baevhjj4dcbec::::res://assets/basetilesyellow.png<>uid://c17i5h1prm6ys::::res://scenes/levels/level_bounds.gd<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn<>uid://cqepm8bac6fx2::::res://scenes/spike.tscn<>uid://cybl4x8shcwxi::::res://scenes/moving_platform.tscn<>uid://x4sbvg5yhc06::::res://scenes/shard.tscn<>uid://vq7awrov7lie::::res://scenes/levels/end_trigger_10.gd
 level_11.tscn::PackedScene::5820545958798243056::1766884232::0::1::::<><><>0<>0<><>::uid://pemp4jeluyn5::::res://assets/GroundPlaceHolder.png<>uid://bh0l2ndp642mc::::res://assets/basetileswhite.png<>uid://c8ojslcvmy5bm::::res://background.tscn<>uid://c17i5h1prm6ys::::res://scenes/levels/level_bounds.gd<>uid://bk3vtxsrkld5v::::res://assets/basetilesmorewhite.png<>uid://d2h62s6xwuld::::res://scenes/breakableplatform/breakable_platform.tscn<>uid://cybl4x8shcwxi::::res://scenes/moving_platform.tscn<>uid://cqepm8bac6fx2::::res://scenes/spike.tscn<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn<>uid://bpvdq8t5okfe2::::res://scenes/levels/end_trigger_11.gd
-level_12.tscn::PackedScene::5842524092765559795::1767095886::0::1::::<><><>0<>0<><>::uid://bh0l2ndp642mc::::res://assets/basetileswhite.png<>uid://c8ojslcvmy5bm::::res://background.tscn<>uid://c17i5h1prm6ys::::res://scenes/levels/level_bounds.gd<>uid://bk3vtxsrkld5v::::res://assets/basetilesmorewhite.png<>uid://bv1kq5mtqjagc::::res://assets/dustparticles.png<>uid://cybl4x8shcwxi::::res://scenes/moving_platform.tscn<>uid://cqepm8bac6fx2::::res://scenes/spike.tscn<>uid://d2h62s6xwuld::::res://scenes/breakableplatform/breakable_platform.tscn<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn
+level_12.tscn::PackedScene::5842524092765559795::1767150442::0::1::::<><><>0<>0<><>::uid://bh0l2ndp642mc::::res://assets/basetileswhite.png<>uid://c8ojslcvmy5bm::::res://background.tscn<>uid://c17i5h1prm6ys::::res://scenes/levels/level_bounds.gd<>uid://bk3vtxsrkld5v::::res://assets/basetilesmorewhite.png<>uid://bv1kq5mtqjagc::::res://assets/dustparticles.png<>uid://cybl4x8shcwxi::::res://scenes/moving_platform.tscn<>uid://cqepm8bac6fx2::::res://scenes/spike.tscn<>uid://d2h62s6xwuld::::res://scenes/breakableplatform/breakable_platform.tscn<>uid://xkd4lg4d2jd7::::res://scenes/grapple/grapple_point.tscn
 level_13.tscn::PackedScene::2845404323439833365::1763758989::0::1::::<><><>0<>0<><>::
 level_14.tscn::PackedScene::4201334101178471468::1763758993::0::1::::<><><>0<>0<><>::
 level_15.tscn::PackedScene::7613893815328000599::1763758998::0::1::::<><><>0<>0<><>::

@@ -53,6 +53,7 @@ scale = Vector2(1.5, 1.5)
 transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
 
 [node name="LevelBounds" type="Node2D" parent="."]
+visible = false
 position = Vector2(-35, 433)
 script = ExtResource("2_r3i3p")
 
@@ -475,12 +476,6 @@ position = Vector2(1240, 148)
 
 [node name="Spike122" parent="." instance=ExtResource("6_fakti")]
 position = Vector2(1240, 156)
-
-[node name="Spike123" parent="." instance=ExtResource("6_fakti")]
-position = Vector2(1240, 164)
-
-[node name="Spike124" parent="." instance=ExtResource("6_fakti")]
-position = Vector2(1240, 172)
 
 [node name="Spike128" parent="." instance=ExtResource("6_fakti")]
 position = Vector2(1240, 284)

@@ -1,5 +1,4 @@
-res://scenes/levels/level_12.tscn
+res://main_menu.tscn
 res://scenes/wind.gdshader
 res://scenes/shard.gdshader
 res://scenes/transition.gdshader
-res://main_enemy.tscn
