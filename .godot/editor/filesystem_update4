@@ -1,4 +1,4 @@
-res://main_menu.tscn
+res://scenes/levels/level_13.tscn
 res://scenes/wind.gdshader
 res://scenes/shard.gdshader
 res://scenes/transition.gdshader

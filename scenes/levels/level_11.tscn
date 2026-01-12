@@ -306,12 +306,12 @@ position = Vector2(26.323975, 216.62885)
 [node name="GrapplePoint" parent="." instance=ExtResource("9_bk8ll")]
 position = Vector2(1192, -72)
 
-[node name="EndTrigger10" type="Area2D" parent="."]
+[node name="EndTrigger11" type="Area2D" parent="."]
 position = Vector2(1510, -218)
 script = ExtResource("10_4fty2")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger10"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger11"]
 position = Vector2(266.375, 190)
 shape = SubResource("RectangleShape2D_5tmw6")
 
-[connection signal="body_entered" from="EndTrigger10" to="EndTrigger10" method="_on_body_entered"]
+[connection signal="body_entered" from="EndTrigger11" to="EndTrigger11" method="_on_body_entered"]
