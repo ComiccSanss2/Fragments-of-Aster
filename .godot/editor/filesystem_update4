@@ -2,3 +2,10 @@ res://scenes/levels/level_13.tscn
 res://scenes/wind.gdshader
 res://scenes/shard.gdshader
 res://scenes/transition.gdshader
+res://scenes/levels/level_14.tscn
+res://scenes/shard.gd
+res://scenes/player.gd
+res://scenes/levels/end_trigger_13.gd
+res://scenes/main.gd
+res://scenes/breakableplatform/breakable_platform.tscn
+res://scenes/breakableplatform/BreakablePlatform.gd

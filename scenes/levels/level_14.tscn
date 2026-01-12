@@ -1,9 +1,246 @@
-[gd_scene load_steps=2 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=13 format=3 uid="uid://b04fmg2hggmns"]
+
+[ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
+[ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
+[ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="3_y3x6f"]
+[ext_resource type="PackedScene" uid="uid://x4sbvg5yhc06" path="res://scenes/shard.tscn" id="4_xf43s"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="5_y3x6f"]
+[ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="6_2j1nx"]
+[ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="7_wr6ej"]
+[ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_7yavk"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2j1nx"]
+texture = ExtResource("1_g3nt1")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wr6ej"]
+texture = ExtResource("2_xf43s")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_gkh53"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_2j1nx")
+sources/1 = SubResource("TileSetAtlasSource_wr6ej")
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2j1nx"]
+size = Vector2(4517, 3971)
+
+[node name="Level14" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gkh53")
 format = 2
+layer_0/tile_data = PackedInt32Array(1114112, 65536, 0, 1114113, 0, 0, 1114114, 0, 0, 1114115, 0, 0, 1114116, 0, 0, 1114117, 0, 0, 1114118, 0, 0, 1114119, 0, 0, 1114120, 0, 0, 1114121, 0, 0, 1114122, 0, 0, 1114123, 0, 0, 1114124, 0, 0, 1114125, 0, 0, 1114126, 0, 0, 1114127, 0, 0, 1114128, 0, 0, 1114129, 0, 0, 1114130, 0, 0, 1114131, 0, 0, 1114132, 0, 0, 1114133, 0, 0, 1114134, 0, 0, 1114135, 0, 0, 1114136, 0, 0, 1114137, 0, 0, 1114138, 0, 0, 1114139, 0, 0, 1114140, 0, 0, 1114141, 0, 0, 1114142, 0, 0, 786432, 65536, 1342177280, 1114143, 65536, 1610612736, 786463, 65536, 805306368, 786433, 0, 805306368, 786434, 0, 805306368, 786435, 0, 805306368, 786436, 0, 805306368, 786437, 0, 805306368, 786438, 0, 805306368, 786439, 0, 805306368, 786440, 0, 805306368, 786441, 0, 805306368, 786442, 0, 805306368, 786443, 0, 805306368, 786444, 0, 805306368, 786445, 0, 805306368, 786446, 0, 805306368, 786447, 0, 805306368, 786448, 0, 805306368, 786449, 0, 805306368, 786450, 0, 805306368, 786451, 0, 805306368, 786452, 0, 805306368, 786453, 0, 805306368, 786454, 0, 805306368, 786455, 0, 805306368, 786456, 0, 805306368, 786457, 0, 805306368, 786458, 0, 805306368, 786459, 0, 805306368, 786460, 0, 805306368, 786461, 0, 805306368, 786462, 0, 805306368, 851999, 0, 1610612736, 917535, 0, 1610612736, 983071, 0, 1610612736, 1048607, 0, 1610612736, 1048576, 0, 1342177280, 983040, 0, 1342177280, 917504, 0, 1342177280, 851968, 0, 1342177280, 851969, 0, 1, 917505, 0, 1, 983041, 0, 1, 1048577, 0, 1, 1048578, 0, 1, 1048579, 0, 1, 983043, 0, 1, 917507, 0, 1, 917506, 0, 1, 851970, 0, 1, 983042, 0, 1, 851971, 0, 1, 917511, 0, 1, 851975, 0, 1, 851974, 0, 1, 851973, 0, 1, 851972, 0, 1, 917508, 0, 1, 983044, 0, 1, 1048580, 0, 1, 1048581, 0, 1, 983045, 0, 1, 917509, 0, 1, 917510, 0, 1, 983046, 0, 1, 1048582, 0, 1, 1048583, 0, 1, 983047, 0, 1, 983048, 0, 1, 917512, 0, 1, 851976, 0, 1, 851977, 0, 1, 917513, 0, 1, 983049, 0, 1, 1048585, 0, 1, 1048584, 0, 1, 1048586, 0, 1, 983050, 0, 1, 917514, 0, 1, 851978, 0, 1, 851979, 0, 1, 917515, 0, 1, 983051, 0, 1, 1048587, 0, 1, 1048588, 0, 1, 983052, 0, 1, 917516, 0, 1, 851980, 0, 1, 851981, 0, 1, 917517, 0, 1, 983053, 0, 1, 1048589, 0, 1, 1048590, 0, 1, 983054, 0, 1, 917518, 0, 1, 851982, 0, 1, 851983, 0, 1, 917519, 0, 1, 983055, 0, 1, 1048591, 0, 1, 1048592, 0, 1, 983056, 0, 1, 917520, 0, 1, 851984, 0, 1, 851985, 0, 1, 917521, 0, 1, 983057, 0, 1, 1048593, 0, 1, 1048594, 0, 1, 983058, 0, 1, 917522, 0, 1, 851986, 0, 1, 851987, 0, 1, 917523, 0, 1, 983059, 0, 1, 1048595, 0, 1, 1048596, 0, 1, 983060, 0, 1, 917524, 0, 1, 851988, 0, 1, 851989, 0, 1, 917525, 0, 1, 983061, 0, 1, 1048597, 0, 1, 1048598, 0, 1, 983062, 0, 1, 917526, 0, 1, 851990, 0, 1, 851991, 0, 1, 917527, 0, 1, 983063, 0, 1, 1048599, 0, 1, 1048600, 0, 1, 983064, 0, 1, 917528, 0, 1, 851992, 0, 1, 851993, 0, 1, 917529, 0, 1, 983065, 0, 1, 1048601, 0, 1, 1048602, 0, 1, 983066, 0, 1, 917530, 0, 1, 851994, 0, 1, 851995, 0, 1, 917531, 0, 1, 983067, 0, 1, 1048603, 0, 1, 1048604, 0, 1, 983068, 0, 1, 917532, 0, 1, 851996, 0, 1, 851997, 0, 1, 917533, 0, 1, 983069, 0, 1, 1048605, 0, 1, 1048606, 0, 1, 983070, 0, 1, 917534, 0, 1, 851998, 0, 1, 196633, 65536, 0, 196634, 0, 0, 196635, 0, 0, 196636, 0, 0, 196637, 0, 0, 196638, 0, 0, 196639, 0, 0, 196640, 0, 0, 196641, 0, 0, 196642, 0, 0, 196643, 0, 0, 196644, 0, 0, 196645, 0, 0, 196646, 0, 0, 196647, 0, 0, 196648, 0, 0, 196649, 0, 0, 196650, 0, 0, 196651, 0, 0, 196652, 0, 0, 196653, 0, 0, 196654, 0, 0, 196655, 0, 0, 196656, 0, 0, 196657, 65536, 1610612736, -65511, 65536, 1342177280, -65487, 65536, 805306368, 131097, 0, 1342177280, 65561, 0, 1342177280, 25, 0, 1342177280, -65510, 0, 805306368, -65509, 0, 805306368, -65508, 0, 805306368, -65507, 0, 805306368, -65506, 0, 805306368, -65505, 0, 805306368, -65504, 0, 805306368, -65503, 0, 805306368, -65502, 0, 805306368, -65501, 0, 805306368, -65500, 0, 805306368, -65499, 0, 805306368, -65498, 0, 805306368, -65497, 0, 805306368, -65496, 0, 805306368, -65495, 0, 805306368, -65494, 0, 805306368, -65493, 0, 805306368, -65492, 0, 805306368, -65491, 0, 805306368, -65490, 0, 805306368, -65489, 0, 805306368, -65488, 0, 805306368, 49, 0, 1610612736, 65585, 0, 1610612736, 131121, 0, 1610612736, 131115, 0, 1, 65579, 0, 1, 43, 0, 1, 42, 0, 1, 41, 0, 1, 40, 0, 1, 39, 0, 1, 38, 0, 1, 37, 0, 1, 36, 0, 1, 35, 0, 1, 34, 0, 1, 33, 0, 1, 32, 0, 1, 31, 0, 1, 30, 0, 1, 29, 0, 1, 28, 0, 1, 27, 0, 1, 26, 0, 1, 65562, 0, 1, 131098, 0, 1, 131099, 0, 1, 65563, 0, 1, 65564, 0, 1, 131100, 0, 1, 131101, 0, 1, 65565, 0, 1, 65566, 0, 1, 131102, 0, 1, 131103, 0, 1, 65567, 0, 1, 65568, 0, 1, 131104, 0, 1, 131105, 0, 1, 65569, 0, 1, 65570, 0, 1, 131106, 0, 1, 131107, 0, 1, 65571, 0, 1, 65572, 0, 1, 131108, 0, 1, 131109, 0, 1, 65573, 0, 1, 65574, 0, 1, 131110, 0, 1, 131111, 0, 1, 65575, 0, 1, 65576, 0, 1, 131112, 0, 1, 131113, 0, 1, 65577, 0, 1, 65578, 0, 1, 131114, 0, 1, 44, 0, 1, 65580, 0, 1, 131116, 0, 1, 131117, 0, 1, 65581, 0, 1, 45, 0, 1, 46, 0, 1, 65582, 0, 1, 131118, 0, 1, 131119, 0, 1, 65583, 0, 1, 47, 0, 1, 48, 0, 1, 65584, 0, 1, 131120, 0, 1, 524337, 0, 1, 524338, 0, 1, 524339, 0, 1, 524340, 0, 1, 524341, 0, 1, 524342, 0, 1, 524343, 0, 1, 524344, 0, 1, 524345, 0, 1, 524346, 0, 1, 327751, 0, 1, 524368, 0, 1, 524369, 0, 1, 524370, 0, 1, 524371, 0, 1, 524372, 0, 1, 524373, 0, 1, 524374, 0, 1, 524375, 0, 1, 524376, 0, 1, 524377, 0, 1, 524378, 0, 1, 524379, 0, 1)
+
+[node name="Background" parent="." instance=ExtResource("3_y3x6f")]
+offset = Vector2(0, -50)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.36862746, 0.019607844, 0.02745098, 0.54901963)
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(19, 177)
+
+[node name="Shard" parent="." instance=ExtResource("4_xf43s")]
+position = Vector2(309, 123)
+shard_type = 2
+
+[node name="LevelBounds" type="Node2D" parent="."]
+position = Vector2(-35, 433)
+script = ExtResource("5_y3x6f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
+position = Vector2(2293.5, -832.5)
+shape = SubResource("RectangleShape2D_2j1nx")
+
+[node name="Spike" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(597, 72)
+rotation = 1.5707964
+
+[node name="Spike2" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(605, 72)
+rotation = 1.5707964
+
+[node name="Spike3" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(613, 72)
+rotation = 1.5707964
+
+[node name="Spike4" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(621, 72)
+rotation = 1.5707964
+
+[node name="Spike5" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(629, 72)
+rotation = 1.5707964
+
+[node name="Spike6" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(629, 72)
+rotation = 1.5707964
+
+[node name="Spike7" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(788, 120)
+rotation = 4.712389
+
+[node name="Spike8" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(796, 120)
+rotation = 4.712389
+
+[node name="Spike9" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(804, 120)
+rotation = 4.712389
+
+[node name="Spike10" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(812, 120)
+rotation = 4.712389
+
+[node name="Spike11" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(820, 120)
+rotation = 4.712389
+
+[node name="Spike12" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(820, 120)
+rotation = 4.712389
+
+[node name="Spike13" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(828, 120)
+rotation = 4.712389
+
+[node name="Spike14" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(836, 120)
+rotation = 4.712389
+
+[node name="Spike15" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(844, 120)
+rotation = 4.712389
+
+[node name="Spike16" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(852, 120)
+rotation = 4.712389
+
+[node name="Spike17" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(860, 120)
+rotation = 4.712389
+
+[node name="Spike18" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(860, 120)
+rotation = 4.712389
+
+[node name="Spike19" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(868, 120)
+rotation = 4.712389
+
+[node name="Spike20" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(876, 120)
+rotation = 4.712389
+
+[node name="Spike21" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(884, 120)
+rotation = 4.712389
+
+[node name="Spike22" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(892, 120)
+rotation = 4.712389
+
+[node name="Spike23" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(900, 120)
+rotation = 4.712389
+
+[node name="Spike24" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(900, 120)
+rotation = 4.712389
+
+[node name="Spike25" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1284, 120)
+rotation = 4.712389
+
+[node name="Spike26" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1292, 120)
+rotation = 4.712389
+
+[node name="Spike27" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1300, 120)
+rotation = 4.712389
+
+[node name="Spike28" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1308, 120)
+rotation = 4.712389
+
+[node name="Spike29" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1316, 120)
+rotation = 4.712389
+
+[node name="Spike30" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1316, 120)
+rotation = 4.712389
+
+[node name="Spike31" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1324, 120)
+rotation = 4.712389
+
+[node name="Spike32" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1332, 120)
+rotation = 4.712389
+
+[node name="Spike33" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1340, 120)
+rotation = 4.712389
+
+[node name="Spike34" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1348, 120)
+rotation = 4.712389
+
+[node name="Spike35" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1356, 120)
+rotation = 4.712389
+
+[node name="Spike36" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1356, 120)
+rotation = 4.712389
+
+[node name="Spike37" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1364, 120)
+rotation = 4.712389
+
+[node name="Spike38" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1372, 120)
+rotation = 4.712389
+
+[node name="Spike39" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1380, 120)
+rotation = 4.712389
+
+[node name="Spike40" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1388, 120)
+rotation = 4.712389
+
+[node name="Spike41" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1396, 120)
+rotation = 4.712389
+
+[node name="Spike42" parent="." instance=ExtResource("6_2j1nx")]
+position = Vector2(1396, 120)
+rotation = 4.712389
+
+[node name="BreakablePlatform" parent="." instance=ExtResource("7_wr6ej")]
+position = Vector2(1004, -8)
+fall_up = true
+
+[node name="GrapplePoint" parent="." instance=ExtResource("8_7yavk")]
+position = Vector2(1144, 72)
+rotation = 3.1415927

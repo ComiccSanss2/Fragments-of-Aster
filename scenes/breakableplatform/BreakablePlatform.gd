@@ -5,6 +5,10 @@ extends Node2D
 @export var shake_amount := 1.5
 @export var regen_delay := 3.0
 
+# --- NOUVEAU : Case à cocher dans l'éditeur ---
+@export var fall_up := false 
+# Si coché : la plateforme tombe vers le haut (gravité inversée)
+
 var breaking := false
 var falling := false
 var player_on := false
@@ -12,6 +16,12 @@ var origin_pos: Vector2
 
 func _ready():
 	origin_pos = global_position
+	
+	# Optionnel : Si tu veux que le sprite se retourne tout seul visuellement
+	if fall_up:
+		scale.y = -1 
+		# Attention : si cela inverse tes collisions bizarrement, 
+		# retire cette ligne et retourne le sprite manuellement dans l'éditeur.
 
 	$StaticBody2D/BreakTimer.wait_time = break_delay
 	$StaticBody2D/RegenTimer.wait_time = regen_delay
@@ -27,7 +37,12 @@ func _process(delta):
 
 	# Chute
 	if falling:
-		global_position.y += fall_speed * delta
+		if fall_up:
+			# Tombe vers le HAUT (Y négatif)
+			global_position.y -= fall_speed * delta
+		else:
+			# Tombe vers le BAS (Y positif - Standard)
+			global_position.y += fall_speed * delta
 
 
 # ------------------------------------------------------------

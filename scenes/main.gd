@@ -18,6 +18,7 @@ var current_level_path: String = ""
 var intro_played := false
 var grapple_collected := false
 var dash_collected := false
+var gravity_collected := false 
 var shake_strength: float = 0.0
 
 # --- VARIABLES CAMÉRA INTRO ---
@@ -80,6 +81,7 @@ func _ready():
 				# 1. On récupère les infos
 				grapple_collected = data.get("grapple_unlocked", false)
 				dash_collected = data.get("dash_unlocked", false)
+				gravity_collected = data.get("gravity_unlocked", false) # --- CHARGEMENT GRAVITÉ
 				intro_played = data.get("intro_played", false)
 		
 		# 2. IMPORTANT : On met à jour la musique MAINTENANT
@@ -156,6 +158,7 @@ func load_level(path: String):
 		player.is_dying = false
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
+		player.gravity_unlocked = gravity_collected # --- APPLICATION GRAVITÉ AU JOUEUR
 		
 		# Sécurité : On revérifie la musique à chaque niveau au cas où
 		check_music_progression()
@@ -165,7 +168,13 @@ func load_level(path: String):
 		camera.set_bounds(bounds)
 		
 	if SaveManager.current_slot_id != -1:
-		var data_to_save = { "current_level": current_level_path, "grapple_unlocked": grapple_collected, "dash_unlocked": dash_collected, "intro_played": intro_played }
+		var data_to_save = { 
+			"current_level": current_level_path, 
+			"grapple_unlocked": grapple_collected, 
+			"dash_unlocked": dash_collected, 
+			"gravity_unlocked": gravity_collected, # --- SAUVEGARDE GRAVITÉ
+			"intro_played": intro_played 
+		}
 		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 
 # ... (Le reste : change_level, play_death, popups reste identique) ...
@@ -222,7 +231,7 @@ func cleanup_before_exit():
 	# Musiques (On coupe tout)
 	if music_roots: music_roots.stop()
 	if music_echoes: music_echoes.stop()
-	if music_pulse: music_pulse.stop() # <--- AJOUT
+	if music_pulse: music_pulse.stop() 
 	
 	if ambiance_player: ambiance_player.stop()
 	

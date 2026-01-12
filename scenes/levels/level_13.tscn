@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bgslnm4ws3deb"]
+[gd_scene load_steps=17 format=3 uid="uid://bgslnm4ws3deb"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_2mki6"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_3diwa"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cybl4x8shcwxi" path="res://scenes/moving_platform.tscn" id="6_lj5c5"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="7_4habk"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_a8b8j"]
+[ext_resource type="Script" uid="uid://b2bexw277pnqa" path="res://scenes/levels/end_trigger_13.gd" id="10_tmfht"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pkyvj"]
 texture = ExtResource("1_2mki6")
@@ -40,6 +41,9 @@ sources/2 = SubResource("TileSetAtlasSource_tmfht")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a8b8j"]
 size = Vector2(4517, 3971)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5tf4"]
+size = Vector2(30.75, 34)
+
 [node name="Level13" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -51,14 +55,6 @@ layer_0/tile_data = PackedInt32Array(1507330, 0, 805306368, 1507331, 0, 80530636
 offset = Vector2(0, -50)
 scale = Vector2(1.5, 1.5)
 transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
-
-[node name="ColorRect" type="ColorRect" parent="Background"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.6, 0.05490196, 0.06666667, 0.3647059)
 
 [node name="BreakablePlatform" parent="." instance=ExtResource("4_pkyvj")]
 position = Vector2(259, 299)
@@ -436,6 +432,16 @@ shape = SubResource("RectangleShape2D_a8b8j")
 
 [node name="GrapplePoint" parent="." instance=ExtResource("8_a8b8j")]
 position = Vector2(1080, 8)
+
+[node name="EndTrigger13" type="Area2D" parent="."]
+position = Vector2(1510, -218)
+script = ExtResource("10_tmfht")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger13"]
+position = Vector2(346, 201)
+shape = SubResource("RectangleShape2D_g5tf4")
+
+[connection signal="body_entered" from="EndTrigger13" to="EndTrigger13" method="_on_body_entered"]
 
 [editable path="MovingPlatform"]
 [editable path="MovingPlatform2"]

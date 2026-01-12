@@ -1,6 +1,6 @@
 extends Area2D
 
-enum ShardType { GRAPPLE, DASH }
+enum ShardType { GRAPPLE, DASH, INVERSION }
 @export var shard_type: ShardType = ShardType.GRAPPLE
 
 @onready var sprite := $Sprite2D
@@ -20,16 +20,19 @@ const MOVE_SPEED := 100.0
 
 
 func _ready():
-	# --- AJOUT : VÉRIFICATION DE LA MÉMOIRE ---
+	# --- VÉRIFICATION DE LA MÉMOIRE ---
 	var main = get_tree().root.get_node("Main")
 	
 	if shard_type == ShardType.GRAPPLE and main.grapple_collected:
-		# Si on a déjà le grappin, ce shard n'existe plus
 		queue_free()
 		return
 		
 	if shard_type == ShardType.DASH and main.dash_collected:
-		# Si on a déjà le dash, ce shard n'existe plus
+		queue_free()
+		return
+		
+	# On vérifie si la variable existe dans main, sinon on assume false
+	if shard_type == ShardType.INVERSION and main.get("gravity_collected"):
 		queue_free()
 		return
 	# ------------------------------------------
@@ -54,6 +57,7 @@ func _on_TriggerArea_body_entered(body):
 		var main = get_tree().root.get_node("Main")
 		var roots_music = main.get_node_or_null("FragmentsOfRoots")
 		var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
+		var pulse_music = main.get_node_or_null("FragmentsOfPulse")
 		
 		# On baisse la musique active pour l'ambiance mystique
 		var t = create_tween()
@@ -61,6 +65,8 @@ func _on_TriggerArea_body_entered(body):
 			t.tween_property(roots_music, "volume_db", -30.0, 2.0)
 		elif echoes_music and echoes_music.playing:
 			t.tween_property(echoes_music, "volume_db", -30.0, 2.0)
+		elif pulse_music and pulse_music.playing:
+			t.tween_property(pulse_music, "volume_db", -30.0, 2.0)
 
 		anim.play("pickup")
 
@@ -83,7 +89,7 @@ func _process(delta):
 
 		if dist < 0.0:
 			moving_to_player = false
-			visible = false 
+			visible = false
 			_on_collect_finished()
 
 	if waiting_for_input:
@@ -101,15 +107,15 @@ func _on_collect_finished():
 	var flash = ColorRect.new()
 	flash.color = Color.WHITE
 	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
-	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE    
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	main_ui.add_child(flash)
 
 	var t_flash = create_tween()
-	t_flash.tween_interval(1.0) 
+	t_flash.tween_interval(1.0)
 	t_flash.tween_property(flash, "modulate:a", 0.0, 0.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	t_flash.tween_callback(flash.queue_free)
 
-	await t_flash.finished 
+	await t_flash.finished
 
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	var main = get_tree().root.get_node("Main")
@@ -117,17 +123,25 @@ func _on_collect_finished():
 	# --- SYSTEM MESSAGE & SAUVEGARDE ÉTAT ---
 	if shard_type == ShardType.GRAPPLE:
 		player.grapple_unlocked = true
-		main.grapple_collected = true # <--- ON SAUVEGARDE DANS MAIN
+		main.grapple_collected = true
 		
 		await dialog.show_dialog("Echo-Grapple Restored.")
 		await dialog.show_dialog("Press (E) to use when near a grapple point.")
 		
 	elif shard_type == ShardType.DASH:
-		player.dash_unlocked = true 
-		main.dash_collected = true # <--- ON SAUVEGARDE DANS MAIN
+		player.dash_unlocked = true
+		main.dash_collected = true
 		
 		await dialog.show_dialog("Pulse-Dash Restored.")
 		await dialog.show_dialog("Press (F) to Dash.")
+		
+	elif shard_type == ShardType.INVERSION:
+		player.gravity_unlocked = true
+		# On utilise set pour éviter une erreur si la variable n'existe pas encore dans main
+		main.set("gravity_collected", true) 
+		
+		await dialog.show_dialog("Reality Anchor Destabilized.")
+		await dialog.show_dialog("Press (R) to Invert Reality.")
 	# ----------------------------------------
 
 	player.hide_popup()
@@ -135,7 +149,7 @@ func _on_collect_finished():
 	# --- TRANSITION MUSICALE ---
 	var roots_music = main.get_node_or_null("FragmentsOfRoots")
 	var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
-	var pulse_music = main.get_node_or_null("FragmentsOfPulse") # Récupération Pulse
+	var pulse_music = main.get_node_or_null("FragmentsOfPulse")
 
 	# CAS 1 : GRAPPIN (On passe de Roots -> Echoes)
 	if shard_type == ShardType.GRAPPLE:
@@ -149,6 +163,7 @@ func _on_collect_finished():
 			t_music.parallel().tween_property(echoes_music, "volume_db", -10.0, 4.0)
 			t_music.chain().tween_callback(roots_music.stop)
 
+	# CAS 2 : DASH (On passe de Echoes -> Pulse)
 	elif shard_type == ShardType.DASH:
 		if echoes_music and pulse_music:
 			if not pulse_music.playing:
@@ -156,20 +171,16 @@ func _on_collect_finished():
 				pulse_music.play()
 			
 			var t_music = main.create_tween()
-			# On fade out Echoes (et Roots par sécurité)
 			if roots_music: t_music.parallel().tween_property(roots_music, "volume_db", -80.0, 4.0)
 			t_music.parallel().tween_property(echoes_music, "volume_db", -80.0, 4.0)
-			
-			# On fade in Pulse
 			t_music.parallel().tween_property(pulse_music, "volume_db", -10.0, 4.0)
 			
-			# On stop les autres à la fin
 			t_music.chain().tween_callback(func():
 				if roots_music: roots_music.stop()
 				echoes_music.stop()
 			)
 
-	# --- DIALOGUES LYRA ---
+	# --- DIALOGUES LYRA (LORE) ---
 	
 	if shard_type == ShardType.DASH:
 		await dialog.show_dialog(
@@ -186,6 +197,25 @@ func _on_collect_finished():
 		)
 		await dialog.show_dialog(
 			"Hmm... I have to keep going forward.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		
+	elif shard_type == ShardType.INVERSION:
+		# DIALOGUES MYSTÉRIEUX (Sans spoiler la mécanique)
+		await dialog.show_dialog(
+			"Ugh... a wave of nausea...",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"This one feels... heavy. Unstable.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"It's like the ground is trying to push me away.",
+			preload("res://assets/dialoguebox/portrait.png")
+		)
+		await dialog.show_dialog(
+			"I must be careful. Reality feels... thin here.",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 
