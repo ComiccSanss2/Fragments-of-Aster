@@ -1,9 +1,62 @@
-[gd_scene load_steps=2 format=3 uid="uid://bj4u8xkq4booc"]
+[gd_scene load_steps=9 format=3 uid="uid://bj4u8xkq4booc"]
+
+[ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_5bes1"]
+[ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_3ycd6"]
+[ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="3_2w147"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="4_3ycd6"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw7bu"]
+texture = ExtResource("1_5bes1")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jx4lj"]
+texture = ExtResource("2_3ycd6")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_gkh53"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_xw7bu")
+sources/1 = SubResource("TileSetAtlasSource_jx4lj")
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2w147"]
+size = Vector2(4517, 3971)
+
+[node name="Level16" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_gkh53")
 format = 2
+layer_0/tile_data = PackedInt32Array(1310726, 1, 0, 1310727, 1, 0, 1310728, 1, 0, 1179663, 1, 0, 1179664, 1, 0, 1179665, 1, 0, 1048599, 1, 0, 1048600, 1, 0, 1048601, 1, 0, 1048607, 1, 0, 1048613, 1, 0, 1310722, 1, 0)
+
+[node name="Background" parent="." instance=ExtResource("3_2w147")]
+offset = Vector2(0, -50)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.36862746, 0.019607844, 0.02745098, 0.54901963)
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(114, 308)
+
+[node name="LevelBounds" type="Node2D" parent="."]
+position = Vector2(-35, 433)
+script = ExtResource("4_3ycd6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
+position = Vector2(2290, -315)
+shape = SubResource("RectangleShape2D_2w147")

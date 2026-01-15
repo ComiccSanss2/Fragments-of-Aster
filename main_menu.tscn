@@ -358,6 +358,9 @@ vertical_alignment = 1
 [node name="MasterVolumeSlider" type="HSlider" parent="OptionsContainer"]
 layout_mode = 2
 theme_override_styles/slider = SubResource("StyleBoxFlat_glbon")
+max_value = 1.0
+step = 0.05
+value = 0.5
 
 [node name="LabelVideo" type="Label" parent="OptionsContainer"]
 layout_mode = 2

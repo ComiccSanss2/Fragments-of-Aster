@@ -12,7 +12,9 @@ extends Node2D
 @onready var music_echoes := $FragmentsOfEchoes 
 @onready var music_pulse := $FragmentsOfPulse   
 @onready var ambiance_player := $AmbiancePlayer 
-@onready var wind_layer := $WindLayer         
+@onready var wind_layer := $WindLayer        
+@onready var music_boss_intro := $MusicBossIntro
+@onready var music_boss_chase := $MusicBossChase 
 
 var current_level_path: String = ""
 var intro_played := false
@@ -24,6 +26,7 @@ var shake_strength: float = 0.0
 # --- VARIABLES CAMÉRA INTRO ---
 var intro_camera_locked := false
 var intro_camera_pos := Vector2.ZERO
+const DEFAULT_ZOOM = Vector2(4.0, 4.0)
 
 func _ready():
 	print("--- DEBUG: Main _ready start ---")
@@ -146,21 +149,51 @@ func _set_level_canvas_layers_visible(is_visible: bool):
 
 func load_level(path: String):
 	current_level_path = path
+	
+	# Nettoyage de l'ancien niveau
 	for c in level_root.get_children(): c.queue_free()
+	
+	# Chargement du nouveau
 	var level_scene = load(path).instantiate()
 	level_root.add_child(level_scene)
 	
 	if level_scene.has_node("PlayerStart"):
 		var spawn = level_scene.get_node("PlayerStart")
+		
+		# 1. SETUP JOUEUR
 		player.global_position = spawn.global_position
 		player.velocity = Vector2.ZERO
 		player.can_move = true
 		player.is_dying = false
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
-		player.gravity_unlocked = gravity_collected # --- APPLICATION GRAVITÉ AU JOUEUR
+		player.gravity_unlocked = gravity_collected 
 		
-		# Sécurité : On revérifie la musique à chaque niveau au cas où
+		# ---------------------------------------------------------
+		# 2. RESET TOTAL DE LA CAMÉRA (La partie importante)
+		# ---------------------------------------------------------
+		
+		# A. On la place sur le joueur
+		camera.global_position = player.global_position
+		
+		# B. On remet le zoom par défaut (défini en haut du script)
+		camera.zoom = DEFAULT_ZOOM
+		
+		# C. On réactive son cerveau (car Level 15 l'avait éteint)
+		camera.set_process(true)
+		camera.set_physics_process(true)
+		
+		# D. On réinitialise les variables internes de TON script caméra
+		camera.is_locked = false          # On déverrouille
+		camera.end_cinematic()            # On coupe le mode cinématique
+		camera.current_look_ahead_x = 0.0 # On reset le lissage horizontal
+		camera.current_look_ahead_y = 0.0 # On reset le lissage vertical
+		camera.offset = Vector2.ZERO      # On annule le shake résiduel
+		
+		# E. On s'assure qu'elle est bien active
+		camera.make_current()
+		# ---------------------------------------------------------
+		
 		check_music_progression()
 		
 	if level_scene.has_node("LevelBounds"):
@@ -208,30 +241,70 @@ func hide_grapple_message(): $UI.visible = false
 
 # --- NOUVELLE FONCTION MUSIQUE ---
 func check_music_progression():
-	# PRIO 1 : Dash (Pulse)
-	if dash_collected:
-		if music_roots and music_roots.playing: music_roots.stop()
-		if music_echoes and music_echoes.playing: music_echoes.stop()
-		if music_pulse and not music_pulse.playing: music_pulse.play()
-	
-	# PRIO 2 : Grappin (Echoes)
-	elif grapple_collected:
-		if music_roots and music_roots.playing: music_roots.stop()
-		if music_pulse and music_pulse.playing: music_pulse.stop()
-		if music_echoes and not music_echoes.playing: music_echoes.play()
-	
-	# PRIO 3 : Début (Roots)
-	else:
-		if music_echoes and music_echoes.playing: music_echoes.stop()
-		if music_pulse and music_pulse.playing: music_pulse.stop()
-		if music_roots and not music_roots.playing: music_roots.play()
+	# CAS A : NIVEAU 15 (La rencontre)
+	if "level15" in current_level_path or "level_15" in current_level_path:
+		_stop_exploration_music()
+		if music_boss_chase.playing: music_boss_chase.stop()
 		
-func cleanup_before_exit():
+		# MODIFICATION ICI : On ne lance PAS music_boss_intro automatiquement.
+		# On s'assure juste qu'elle est arrêtée au début du niveau.
+		if music_boss_intro.playing: music_boss_intro.stop()
+		
+		return # On laisse l'AmbiancePlayer tourner seul
+
+	# CAS B : NIVEAU 16 (La fuite / Drop)
+	elif "level16" in current_level_path or "level_16" in current_level_path:
+		_stop_exploration_music()
+		if music_boss_intro.playing: music_boss_intro.stop()
+		
+		# Là par contre, on lance le DROP direct !
+		if not music_boss_chase.playing:
+			music_boss_chase.play()
+		return
+
+	# CAS B : NIVEAU 16 (La fuite / Drop)
+	elif "level16" in current_level_path or "level_16" in current_level_path:
+		_stop_exploration_music()
+		if music_boss_intro.playing: music_boss_intro.stop()
+		
+		# On lance le DROP direct
+		if not music_boss_chase.playing:
+			music_boss_chase.play()
+		return
+
+	# 2. LOGIQUE NORMALE (Exploration)
+	# On s'assure que les musiques de boss sont coupées
+	if music_boss_intro.playing: music_boss_intro.stop()
+	if music_boss_chase.playing: music_boss_chase.stop()
+
+	# Logique des biomes (Dash/Grappin/Roots)
+	if dash_collected:
+		if music_roots.playing: music_roots.stop()
+		if music_echoes.playing: music_echoes.stop()
+		if not music_pulse.playing: music_pulse.play()
 	
-	# Musiques (On coupe tout)
-	if music_roots: music_roots.stop()
-	if music_echoes: music_echoes.stop()
-	if music_pulse: music_pulse.stop() 
+	elif grapple_collected:
+		if music_roots.playing: music_roots.stop()
+		if music_pulse.playing: music_pulse.stop()
+		if not music_echoes.playing: music_echoes.play()
+	
+	else:
+		if music_echoes.playing: music_echoes.stop()
+		if music_pulse.playing: music_pulse.stop()
+		if not music_roots.playing: music_roots.play()
+
+# Petite fonction helper pour éviter de répéter le code
+func _stop_exploration_music():
+	if music_roots.playing: music_roots.stop()
+	if music_echoes.playing: music_echoes.stop()
+	if music_pulse.playing: music_pulse.stop()
+
+func cleanup_before_exit():
+	# On coupe TOUT (Exploration + Boss)
+	_stop_exploration_music()
+	
+	if music_boss_intro: music_boss_intro.stop()
+	if music_boss_chase: music_boss_chase.stop()
 	
 	if ambiance_player: ambiance_player.stop()
 	

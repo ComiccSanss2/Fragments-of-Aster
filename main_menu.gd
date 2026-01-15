@@ -69,9 +69,14 @@ func _ready():
 	# 5. Connexions OPTIONS
 	if options_back_btn: options_back_btn.pressed.connect(_on_back_to_menu)
 	
-	# Audio setup (Master Bus)
+	# Audio setup (Master Bus) - FIX AUDIO ICI
 	var bus_index = AudioServer.get_bus_index("Master")
 	if volume_slider:
+		# Force les bornes pour éviter la saturation
+		volume_slider.min_value = 0.0
+		volume_slider.max_value = 1.0
+		volume_slider.step = 0.05
+		
 		volume_slider.value = db_to_linear(AudioServer.get_bus_volume_db(bus_index))
 		volume_slider.value_changed.connect(_on_volume_changed)
 	
@@ -138,8 +143,13 @@ func _on_exit_pressed():
 
 func _on_volume_changed(value: float):
 	var bus_index = AudioServer.get_bus_index("Master")
-	# Convertit la valeur linéaire (0 à 1) en décibels log
-	AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
+	
+	# FIX DU VOLUME : Gestion du mute et conversion linéaire -> dB
+	if value <= 0.0:
+		AudioServer.set_bus_mute(bus_index, true)
+	else:
+		AudioServer.set_bus_mute(bus_index, false)
+		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
 
 func _on_fullscreen_toggled(is_fullscreen: bool):
 	if is_fullscreen:
@@ -172,11 +182,7 @@ func update_slot_display(slot_id: int):
 func _on_slot_pressed(slot_id: int):
 	SaveManager.current_slot_id = slot_id
 	
-	# --- MODIFICATION ICI ---
-	# On ne définit pas level_to_load tout de suite pour une New Game
-	# On va décider de la cible (Jeu ou Intro)
 	var target_scene = ""
-	
 	var saved_data = SaveManager.load_data(slot_id)
 	
 	if saved_data:
@@ -185,11 +191,9 @@ func _on_slot_pressed(slot_id: int):
 		var level = saved_data["current_level"]
 		SaveManager.set_meta("level_to_load", level)
 	else:
-		# Nouvelle partie -> On crée la save MAIS on va à l'Intro
+		# Nouvelle partie -> On crée la save et on va à l'Intro
 		var new_data = SaveManager.get_default_data()
 		SaveManager.save_game(slot_id, new_data)
-		
-		# On pointe vers l'Intro au lieu du Main
 		target_scene = "res://intro.tscn" 
 	
 	# Lancement du Loading Screen
@@ -209,7 +213,6 @@ func _on_delete_request(slot_id: int):
 	delete_popup.visible = true
 	
 	# 2. IMPORTANT : On remet l'opacité (Alpha) à 1.0
-	# On peut faire un petit tween pour que ce soit joli
 	delete_popup.modulate.a = 0.0
 	var t = create_tween()
 	t.tween_property(delete_popup, "modulate:a", 1.0, 0.2)
@@ -224,14 +227,10 @@ func _on_cancel_delete():
 	_close_popup()
 
 func _close_popup():
-	# Animation de fermeture (Fade Out)
 	var t = create_tween()
 	t.tween_property(delete_popup, "modulate:a", 0.0, 0.2)
-	
-	# Une fois fini, on cache vraiment l'objet
 	await t.finished
 	delete_popup.visible = false
-	
 	current_state = State.SLOTS
 	slot_to_delete = -1
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=18 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
@@ -9,6 +9,8 @@
 [ext_resource type="AudioStream" uid="uid://bmr04gbcqlo47" path="res://assets/sfx/fragments of pulse.wav" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="7_o6xl0"]
 [ext_resource type="AudioStream" uid="uid://bs4v5sovofqu5" path="res://assets/sfx/fragments of echo.mp3" id="7_tipki"]
+[ext_resource type="AudioStream" uid="uid://bwvv1chl4y1h5" path="res://assets/sfx/intro.wav" id="10_ya4ey"]
+[ext_resource type="AudioStream" uid="uid://db47dgtuonhnr" path="res://assets/sfx/drop.wav" id="11_eb6dy"]
 
 [sub_resource type="Environment" id="Environment_tefeu"]
 background_mode = 3
@@ -140,3 +142,9 @@ offset_top = -33.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.79607844, 1, 1, 0.39215687)
+
+[node name="MusicBossIntro" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_ya4ey")
+
+[node name="MusicBossChase" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_eb6dy")

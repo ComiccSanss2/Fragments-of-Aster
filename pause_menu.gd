@@ -4,21 +4,18 @@ extends Control
 @onready var main_container = $MenuContainer
 @onready var options_container = $OptionsContainer
 
-# Boutons Principaux (Dans MainContainer)
+# Boutons Principaux
 @onready var resume_btn = $MenuContainer/ResumeButton
 @onready var options_btn = $MenuContainer/OptionsButton
 @onready var menu_btn = $MenuContainer/MenuButton
 
-# Options (Dans OptionsContainer)
+# Options
 @onready var volume_slider = $OptionsContainer/MasterVolumeSlider
 @onready var fullscreen_check = $OptionsContainer/FullscreenCheck
 @onready var vsync_check = $OptionsContainer/VSyncCheck
-
-# CORRECTION ICI : Le nom est OptionsBackButton
 @onready var options_back_btn = $OptionsContainer/OptionsBackButton
 
 func _ready():
-	# On s'assure que le menu est caché au lancement du jeu
 	visible = false
 	options_container.visible = false
 	main_container.visible = true
@@ -28,13 +25,19 @@ func _ready():
 	options_btn.pressed.connect(_on_options_pressed)
 	menu_btn.pressed.connect(_on_menu_pressed)
 	
-	# Connexions Options
 	if options_back_btn: 
 		options_back_btn.pressed.connect(_on_options_back_pressed)
 	
-	# --- SETUP OPTIONS ---
+	# --- SETUP OPTIONS (FIX AUDIO ICI) ---
 	var bus_index = AudioServer.get_bus_index("Master")
+	
 	if volume_slider:
+		# 1. SÉCURITÉ : On force le slider entre 0 et 1
+		volume_slider.min_value = 0.0
+		volume_slider.max_value = 1.0 
+		volume_slider.step = 0.05
+		
+		# 2. On récupère le volume actuel et on le convertit
 		volume_slider.value = db_to_linear(AudioServer.get_bus_volume_db(bus_index))
 		volume_slider.value_changed.connect(_on_volume_changed)
 	
@@ -74,31 +77,28 @@ func _on_options_back_pressed():
 	resume_btn.grab_focus()
 
 func _on_menu_pressed():
-	# 1. On remet le temps
 	get_tree().paused = false
-	
-	# 2. APPEL DU NETTOYAGE (C'est la nouveauté)
-	# On cherche le nœud Main (la racine actuelle)
 	var main = get_tree().current_scene
-	
-	# Sécurité : On vérifie si c'est bien Main et s'il a la fonction
 	if main.name == "Main" and main.has_method("cleanup_before_exit"):
 		main.cleanup_before_exit()
 	
-	# 3. On lance l'écran de chargement
 	var loading_screen = load("res://loading_screen.tscn").instantiate()
 	loading_screen.target_scene_path = "res://main_menu.tscn"
 	loading_screen.min_load_time = 1.5
 	get_tree().root.add_child(loading_screen)
-	
-	# 4. On détruit le menu pause
 	queue_free()
 
 # --- LOGIQUE OPTIONS ---
 
 func _on_volume_changed(value: float):
 	var bus_index = AudioServer.get_bus_index("Master")
-	AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
+	
+	# FIX DU VOLUME : Gestion du mute et conversion linéaire -> dB
+	if value <= 0.0:
+		AudioServer.set_bus_mute(bus_index, true)
+	else:
+		AudioServer.set_bus_mute(bus_index, false)
+		AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
 
 func _on_fullscreen_toggled(is_fullscreen: bool):
 	if is_fullscreen:

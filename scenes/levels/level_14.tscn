@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=15 format=3 uid="uid://b04fmg2hggmns"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="6_2j1nx"]
 [ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="7_wr6ej"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_7yavk"]
+[ext_resource type="Script" uid="uid://kss8ed3sprka" path="res://scenes/levels/end_trigger_14.gd" id="9_hfkb1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2j1nx"]
 texture = ExtResource("1_g3nt1")
@@ -32,6 +33,9 @@ sources/1 = SubResource("TileSetAtlasSource_wr6ej")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2j1nx"]
 size = Vector2(4517, 3971)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vi0f2"]
+size = Vector2(30.75, 34)
 
 [node name="Level14" type="Node2D"]
 
@@ -244,3 +248,13 @@ fall_up = true
 [node name="GrapplePoint" parent="." instance=ExtResource("8_7yavk")]
 position = Vector2(1144, 72)
 rotation = 3.1415927
+
+[node name="EndTrigger14" type="Area2D" parent="."]
+position = Vector2(1110, -90)
+script = ExtResource("9_hfkb1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger14"]
+position = Vector2(346, 201)
+shape = SubResource("RectangleShape2D_vi0f2")
+
+[connection signal="body_entered" from="EndTrigger14" to="EndTrigger14" method="_on_body_entered"]

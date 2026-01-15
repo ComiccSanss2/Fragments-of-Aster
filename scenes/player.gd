@@ -100,6 +100,21 @@ func _ready():
 	if has_node("AnimationPlayer") and anim_player.has_animation("spawn"):
 		start_respawn_sequence()
 
+# ------------------------------------------------------------
+# PROCESS (VISUEL / FRAMERATE ÉCRAN)
+# C'est ici qu'on gère le Ghost Trail pour qu'il soit fluide !
+# ------------------------------------------------------------
+func _process(delta):
+	# Gestion du Ghost Trail (Séparé de la physique pour l'interpolation)
+	if is_dashing:
+		dash_ghost_timer -= delta
+		if dash_ghost_timer <= 0:
+			spawn_dash_ghost()
+			dash_ghost_timer = 0.03 # Intervalle d'apparition
+
+# ------------------------------------------------------------
+# PHYSICS PROCESS (LOGIQUE DE JEU / 60 FPS)
+# ------------------------------------------------------------
 func _physics_process(delta):
 	if is_dying or not can_move:
 		if is_dying: velocity = Vector2.ZERO
@@ -117,16 +132,17 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# --- LOGIQUE DASH ---
+	# --- LOGIQUE DASH (Gameplay uniquement) ---
 	if is_dashing:
 		dash_timer -= delta
-		dash_ghost_timer -= delta
+		# NOTE : J'ai enlevé dash_ghost_timer d'ici pour le mettre dans _process
+		
 		if dash_adjust_timer > 0:
 			dash_adjust_timer -= delta
 			update_dash_direction()
-		if dash_ghost_timer <= 0:
-			spawn_dash_ghost()
-			dash_ghost_timer = 0.03
+		
+		# NOTE : J'ai enlevé spawn_dash_ghost() d'ici
+		
 		if dash_timer <= 0:
 			end_dash()
 		move_and_slide()
@@ -263,6 +279,10 @@ func spawn_dash_ghost():
 	# Le fantôme doit aussi être à l'envers si la gravité est inversée
 	ghost.flip_v = sprite.flip_v
 	ghost.scale = sprite.scale
+	
+	# FIX INTERPOLATION: Si le ghost a la fonction reset, on l'appelle
+	if ghost.has_method("reset_physics_interpolation"):
+		ghost.reset_physics_interpolation()
 
 # ------------------------------------------------------------
 # SAUT & WALL & GRAPPIN

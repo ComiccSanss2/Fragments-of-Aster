@@ -8,55 +8,54 @@ extends Control
 
 var waiting_for_space := false
 
-# REGLAGES
-# Plus le pitch est haut, plus le son est court et aigu (Chipmunk).
-# 1.0 = Son normal (0.24s) -> Texte très lent
-# 2.0 = Son 2x plus rapide (0.12s) -> Texte moyen (Recommandé)
-const VOICE_PITCH = 2.5
+# Pitch par défaut (Lyra)
+const DEFAULT_PITCH = 2.5
 
 func _ready():
 	visible = false
 	modulate.a = 1.0
 
-func show_dialog(text: String, portrait_tex: Texture2D = null) -> void:
+# AJOUT : paramètre 'custom_pitch' (0.0 = par défaut)
+func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: float = -2.0) -> void:
 	visible = true
 	modulate.a = 1.0
 
-	var is_lyra_talking = false
+	# Gestion du portrait
 	if portrait_tex != null:
 		portrait.texture = portrait_tex
 		portrait.visible = true
-		is_lyra_talking = true
 	else:
 		portrait.visible = false
-		is_lyra_talking = false
 
 	text_label.text = ""
 	space_hint.visible = false
 	waiting_for_space = false
 
-	# Calcul du temps d'attente exact
-	var wait_time = 0.02 # Vitesse par défaut (rapide pour le système)
+	# --- CONFIGURATION DE LA VOIX ---
+	var current_pitch = DEFAULT_PITCH
+	if custom_pitch > 0.0:
+		current_pitch = custom_pitch
 	
-	if is_lyra_talking:
-		# Si le son fait 0.24s et le pitch est 2.0, le nouveau temps est 0.12s
-		# On récupère la durée du fichier audio directement
-		if voice_player.stream:
-			wait_time = voice_player.stream.get_length() / VOICE_PITCH
-		else:
-			wait_time = 0.1
+	# Calcul du temps d'attente (Vitesse d'écriture)
+	# Note : Une voix grave (pitch bas) prend plus de temps à jouer, donc le texte s'écrira plus lentement,
+	# ce qui donne un effet "imposant" au Boss.
+	var wait_time = 0.05 
+	if voice_player.stream:
+		wait_time = voice_player.stream.get_length() / current_pitch
+	
+	# Pour éviter que le boss parle trop lentement si le son est long, on cap le wait_time
+	wait_time = clamp(wait_time, 0.02, 0.1)
 
-	# --- Boucle d'écriture ---
+	# --- BOUCLE D'ÉCRITURE ---
 	for i in text.length():
 		text_label.text = text.substr(0, i + 1)
 		var current_char = text[i]
 		
 		# On joue le son à chaque lettre (sauf espace)
-		if is_lyra_talking and current_char != " ":
-			voice_player.pitch_scale = randf_range(VOICE_PITCH - 0.1, VOICE_PITCH + 0.1)
+		if current_char != " ":
+			voice_player.pitch_scale = randf_range(current_pitch - 0.1, current_pitch + 0.1)
 			voice_player.play()
 		
-		# On attend exactement la durée du son avant d'afficher la lettre suivante
 		await get_tree().create_timer(wait_time).timeout
 
 	# Fin

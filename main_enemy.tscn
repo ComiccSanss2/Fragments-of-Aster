@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5x737fvmg2g5"]
+[gd_scene load_steps=8 format=3 uid="uid://b5x737fvmg2g5"]
 
 [ext_resource type="Texture2D" uid="uid://bf1pfd5hmm77b" path="res://assets/Enemy in the dark - Free Pack/Enemy 2/Idle Enemy2.png" id="1_rps5m"]
+[ext_resource type="Script" uid="uid://ca2avrkuxvepn" path="res://main_enemy.gd" id="2_ls10i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ls10i"]
 atlas = ExtResource("1_rps5m")
@@ -43,3 +44,5 @@ scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_7v6xc")
 animation = &"Idle"
 frame_progress = 0.6564881
+flip_h = true
+script = ExtResource("2_ls10i")

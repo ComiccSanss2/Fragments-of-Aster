@@ -1,7 +1,11 @@
-# dash_ghost.gd
 extends Sprite2D
 
 func _ready():
+
+	if has_method("reset_physics_interpolation"):
+		reset_physics_interpolation()
+	# --------------------------------------
+
 	# On devient un peu transparent et bleuté/violet
 	modulate = Color(0.888, 0.656, 1.0, 0.6)
 	
