@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bif8ki3e41lef"]
+
+[ext_resource type="Script" uid="uid://cav5eciyj2t68" path="res://glitch_wall.gd" id="1_ag2xm"]
+[ext_resource type="Shader" uid="uid://8krk45hejcvb" path="res://glitch_wall.gdshader" id="1_n2t0i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3t1ol"]
+size = Vector2(235, 1128)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2t0i"]
+shader = ExtResource("1_n2t0i")
+shader_parameter/shake_power = 0.03
+shader_parameter/scanline_count = 50.0
+
+[node name="GlitchWall" type="Area2D"]
+script = ExtResource("1_ag2xm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(107.5, 554)
+shape = SubResource("RectangleShape2D_3t1ol")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_n2t0i")
+offset_left = -1846.0
+offset_top = -5422.0
+offset_right = 222.0
+offset_bottom = 5288.0
+color = Color(0.7842223, 0.0044881925, 0.6262038, 1)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
