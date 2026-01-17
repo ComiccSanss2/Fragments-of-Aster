@@ -74,6 +74,7 @@ position = Vector2(1227, 115)
 position = Vector2(1350, 87)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
 
 [node name="DialogueBox" parent="CanvasLayer" instance=ExtResource("6_ak4l1")]
 
