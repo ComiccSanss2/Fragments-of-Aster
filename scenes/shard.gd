@@ -31,7 +31,6 @@ func _ready():
 		queue_free()
 		return
 		
-	# On vérifie si la variable existe dans main, sinon on assume false
 	if shard_type == ShardType.INVERSION and main.get("gravity_collected"):
 		queue_free()
 		return
@@ -59,7 +58,6 @@ func _on_TriggerArea_body_entered(body):
 		var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
 		var pulse_music = main.get_node_or_null("FragmentsOfPulse")
 		
-		# On baisse la musique active pour l'ambiance mystique
 		var t = create_tween()
 		if roots_music and roots_music.playing:
 			t.tween_property(roots_music, "volume_db", -30.0, 2.0)
@@ -120,7 +118,7 @@ func _on_collect_finished():
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	var main = get_tree().root.get_node("Main")
 
-	# --- SYSTEM MESSAGE & SAUVEGARDE ÉTAT ---
+	# --- SYSTEM MESSAGE (Restent Blancs car c'est le jeu qui parle) ---
 	if shard_type == ShardType.GRAPPLE:
 		player.grapple_unlocked = true
 		main.grapple_collected = true
@@ -137,7 +135,6 @@ func _on_collect_finished():
 		
 	elif shard_type == ShardType.INVERSION:
 		player.gravity_unlocked = true
-		# On utilise set pour éviter une erreur si la variable n'existe pas encore dans main
 		main.set("gravity_collected", true) 
 		
 		await dialog.show_dialog("Reality Anchor Destabilized.")
@@ -151,7 +148,6 @@ func _on_collect_finished():
 	var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
 	var pulse_music = main.get_node_or_null("FragmentsOfPulse")
 
-	# CAS 1 : GRAPPIN (On passe de Roots -> Echoes)
 	if shard_type == ShardType.GRAPPLE:
 		if roots_music and echoes_music:
 			if not echoes_music.playing:
@@ -163,7 +159,6 @@ func _on_collect_finished():
 			t_music.parallel().tween_property(echoes_music, "volume_db", -10.0, 4.0)
 			t_music.chain().tween_callback(roots_music.stop)
 
-	# CAS 2 : DASH (On passe de Echoes -> Pulse)
 	elif shard_type == ShardType.DASH:
 		if echoes_music and pulse_music:
 			if not pulse_music.playing:
@@ -180,56 +175,55 @@ func _on_collect_finished():
 				echoes_music.stop()
 			)
 
-	# --- DIALOGUES LYRA (LORE) ---
+	# --- DIALOGUES LYRA (EN CYAN MAINTENANT) ---
 	
 	if shard_type == ShardType.DASH:
 		await dialog.show_dialog(
-			"I feel lighter... quicker...",
+			"[color=#33d9ff]I feel lighter... quicker...[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"What is going on here in this place ?",
+			"[color=#33d9ff]What is going on here in this place ?[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"What are these strange objects ?",
+			"[color=#33d9ff]What are these strange objects ?[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"Hmm... I have to keep going forward.",
+			"[color=#33d9ff]Hmm... I have to keep going forward.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		
 	elif shard_type == ShardType.INVERSION:
-		# DIALOGUES MYSTÉRIEUX (Sans spoiler la mécanique)
 		await dialog.show_dialog(
-			"Ugh... a wave of nausea...",
+			"[color=#33d9ff]Ugh... a wave of nausea...[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"This one feels... heavy. Unstable.",
+			"[color=#33d9ff]This one feels... heavy. Unstable.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"It's like the ground is trying to push me away.",
+			"[color=#33d9ff]It's like the ground is trying to push me away.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"I must be careful. Reality feels... thin here.",
+			"[color=#33d9ff]I must be careful. Reality feels... thin here.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 
-	else:
+	else: # GRAPPLE
 		await dialog.show_dialog(
-			"Hm... this might be useful.",
+			"[color=#33d9ff]Hm... this might be useful.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"I felt a strange power in that object.",
+			"[color=#33d9ff]I felt a strange power in that object.[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 		await dialog.show_dialog(
-			"Even though it was weird...",
+			"[color=#33d9ff]Even though it was weird...[/color]",
 			preload("res://assets/dialoguebox/portrait.png")
 		)
 	

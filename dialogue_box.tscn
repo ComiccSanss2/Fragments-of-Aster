@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bs23qpjbpsg3y"]
+[gd_scene load_steps=7 format=3 uid="uid://bs23qpjbpsg3y"]
 
 [ext_resource type="Script" uid="uid://bbded0u4v4uja" path="res://dialogue_box.gd" id="1_0nste"]
 [ext_resource type="Texture2D" uid="uid://dncl6yb44sner" path="res://assets/dialoguebox/background.png" id="2_if77y"]
@@ -6,14 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://1k8wa8y7ty3v" path="res://assets/dialoguebox/portrait.png" id="4_if77y"]
 [ext_resource type="Texture2D" uid="uid://bdgrhkl2o2tqw" path="res://assets/dialoguebox/spacebarpixel.png" id="5_351bv"]
 [ext_resource type="AudioStream" uid="uid://cuod4736sddge" path="res://assets/sfx/talking.wav" id="6_85jfh"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_85jfh"]
-line_spacing = 8.0
-font = ExtResource("3_351bv")
-font_size = 32
-font_color = Color(0.126628, 0.817157, 0.742593, 1)
-outline_size = 6
-outline_color = Color(0, 0, 0, 1)
 
 [node name="DialogueBox" type="Control"]
 z_index = 500
@@ -58,21 +50,6 @@ texture = ExtResource("4_if77y")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="Label" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 300.0
-offset_top = 40.0
-offset_right = -40.0
-offset_bottom = -40.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Texte de test..."
-label_settings = SubResource("LabelSettings_85jfh")
-autowrap_mode = 3
-
 [node name="SpaceHint" type="TextureRect" parent="Panel"]
 layout_mode = 1
 anchors_preset = 3
@@ -88,6 +65,17 @@ grow_horizontal = 0
 grow_vertical = 0
 texture = ExtResource("5_351bv")
 expand_mode = 1
+
+[node name="Text" type="RichTextLabel" parent="Panel"]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 40.0
+offset_right = 1360.0
+offset_bottom = 260.0
+theme_override_fonts/normal_font = ExtResource("3_351bv")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+scroll_active = false
 
 [node name="VoicePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_85jfh")

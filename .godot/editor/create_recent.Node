@@ -1,3 +1,4 @@
+RichTextLabel
 GPUParticles2D
 ColorRect
 CollisionShape2D
@@ -12,4 +13,3 @@ Control
 VBoxContainer
 CheckBox
 HSlider
-Button

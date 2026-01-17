@@ -1,64 +1,65 @@
 extends Control
 
 @onready var panel := $Panel
-@onready var text_label := $Panel/Text
+# Assure-toi que "Text" est bien un RichTextLabel dans ta scène !
+@onready var text_label := $Panel/Text 
 @onready var portrait := $Panel/Portrait
 @onready var space_hint := $Panel/SpaceHint
 @onready var voice_player := $VoicePlayer 
 
 var waiting_for_space := false
-
-# Pitch par défaut (Lyra)
 const DEFAULT_PITCH = 2.5
 
 func _ready():
 	visible = false
 	modulate.a = 1.0
 
-# AJOUT : paramètre 'custom_pitch' (0.0 = par défaut)
 func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: float = -2.0) -> void:
 	visible = true
 	modulate.a = 1.0
 
-	# Gestion du portrait
 	if portrait_tex != null:
 		portrait.texture = portrait_tex
 		portrait.visible = true
 	else:
 		portrait.visible = false
 
-	text_label.text = ""
+	# 1. PRÉPARATION DU TEXTE
 	space_hint.visible = false
 	waiting_for_space = false
-
-	# --- CONFIGURATION DE LA VOIX ---
+	
+	# On injecte le texte complet avec les balises BBCode
+	text_label.text = text
+	# On cache tout pour commencer
+	text_label.visible_characters = 0
+	
+	# 2. CONFIGURATION VOIX
 	var current_pitch = DEFAULT_PITCH
 	if custom_pitch > 0.0:
 		current_pitch = custom_pitch
 	
-	# Calcul du temps d'attente (Vitesse d'écriture)
-	# Note : Une voix grave (pitch bas) prend plus de temps à jouer, donc le texte s'écrira plus lentement,
-	# ce qui donne un effet "imposant" au Boss.
 	var wait_time = 0.05 
 	if voice_player.stream:
 		wait_time = voice_player.stream.get_length() / current_pitch
-	
-	# Pour éviter que le boss parle trop lentement si le son est long, on cap le wait_time
 	wait_time = clamp(wait_time, 0.02, 0.1)
 
-	# --- BOUCLE D'ÉCRITURE ---
-	for i in text.length():
-		text_label.text = text.substr(0, i + 1)
-		var current_char = text[i]
+	# 3. BOUCLE D'ÉCRITURE
+	# get_total_character_count() compte les lettres visibles sans les balises [color]
+	var total_chars = text_label.get_total_character_count()
+	
+	for i in range(total_chars):
+		text_label.visible_characters = i + 1
 		
-		# On joue le son à chaque lettre (sauf espace)
-		if current_char != " ":
-			voice_player.pitch_scale = randf_range(current_pitch - 0.1, current_pitch + 0.1)
-			voice_player.play()
+		# On joue le son (variation légère pour le naturel)
+		voice_player.pitch_scale = randf_range(current_pitch - 0.1, current_pitch + 0.1)
+		voice_player.play()
 		
 		await get_tree().create_timer(wait_time).timeout
 
-	# Fin
+	# Sécurité : on affiche tout à la fin
+	text_label.visible_ratio = 1.0
+	
+	# 4. ATTENTE DU JOUEUR
 	space_hint.visible = true
 	waiting_for_space = true
 
