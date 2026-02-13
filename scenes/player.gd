@@ -1,25 +1,27 @@
 extends CharacterBody2D
 
 # ------------------------------------------------------------
-# CONFIGURATION ET CONSTANTES
+# CONFIGURATION ET CONSTANTES (VERSION 32x32)
 # ------------------------------------------------------------
-const SPEED = 120.0
-const GRAVITY = 800.0
+# On a augmenté les valeurs pour s'adapter à la taille x2, 
+# mais on a légèrement calmé le jeu par rapport au x2 strict pour le contrôle.
+const SPEED = 170.0
+const GRAVITY = 1200.0
 
 # --- FEELING (VISUEL UNIQUEMENT) ---
 const SQUASH_SPEED = 15.0
 
 # Saut
-const JUMP_FORCE = -300.0
-const JUMP_HOLD_FORCE = -250.0
+const JUMP_FORCE = -400.0
+const JUMP_HOLD_FORCE = -300.0
 const MAX_JUMP_HOLD_TIME = 0.18
 
 # Wall
 const WALL_GRAB_DURATION = 8.0
-const WALL_CLIMB_SPEED = 80.0
-const WALL_SLIDE_SPEED = 40.0
-const WALL_JUMP_H = 280.0
-const WALL_JUMP_V = -220.0
+const WALL_CLIMB_SPEED = 110.0
+const WALL_SLIDE_SPEED = 70.0
+const WALL_JUMP_H = 480.0
+const WALL_JUMP_V = -400.0
 const WALL_COYOTE_TIME := 0.12
 
 # Timers
@@ -27,10 +29,10 @@ const COYOTE_TIME = 0.12
 const JUMP_BUFFER_TIME = 0.12
 
 # Grappin
-var grapple_speed := 500.0
+var grapple_speed := 900.0
 
 # Dash
-const DASH_SPEED = 400.0
+const DASH_SPEED = 700.0
 const DASH_DURATION = 0.2
 const DASH_ADJUST_WINDOW = 0.08
 var dash_ghost_scene = preload("res://dash_ghost.tscn")
@@ -63,7 +65,7 @@ var dash_timer: float = 0.0
 var dash_ghost_timer: float = 0.0
 var dash_adjust_timer: float = 0.0
 
-# --- NOUVEAU : GRAVITÉ ---
+# --- GRAVITÉ ---
 var gravity_unlocked: bool = false
 var gravity_dir: int = 1 # 1 = Normal (Bas), -1 = Inversé (Haut)
 var gravity_cooldown: float = 0.0
@@ -101,19 +103,17 @@ func _ready():
 		start_respawn_sequence()
 
 # ------------------------------------------------------------
-# PROCESS (VISUEL / FRAMERATE ÉCRAN)
-# C'est ici qu'on gère le Ghost Trail pour qu'il soit fluide !
+# PROCESS
 # ------------------------------------------------------------
 func _process(delta):
-	# Gestion du Ghost Trail (Séparé de la physique pour l'interpolation)
 	if is_dashing:
 		dash_ghost_timer -= delta
 		if dash_ghost_timer <= 0:
 			spawn_dash_ghost()
-			dash_ghost_timer = 0.03 # Intervalle d'apparition
+			dash_ghost_timer = 0.03
 
 # ------------------------------------------------------------
-# PHYSICS PROCESS (LOGIQUE DE JEU / 60 FPS)
+# PHYSICS PROCESS
 # ------------------------------------------------------------
 func _physics_process(delta):
 	if is_dying or not can_move:
@@ -121,60 +121,47 @@ func _physics_process(delta):
 		else:
 			velocity.x = 0
 			if not is_on_floor():
-				# Applique la gravité selon la direction
 				velocity.y += GRAVITY * gravity_dir * delta
-				# Clamp la vitesse
-				if gravity_dir == 1: velocity.y = min(velocity.y, 1000.0)
-				else: velocity.y = max(velocity.y, -1000.0)
+				# Clamp augmenté pour la nouvelle échelle
+				if gravity_dir == 1: velocity.y = min(velocity.y, 2000.0)
+				else: velocity.y = max(velocity.y, -2000.0)
 				play_air_anim()
 			else:
 				play_anim("idle")
 		move_and_slide()
 		return
 
-	# --- LOGIQUE DASH (Gameplay uniquement) ---
+	# --- DASH ---
 	if is_dashing:
 		dash_timer -= delta
-		# NOTE : J'ai enlevé dash_ghost_timer d'ici pour le mettre dans _process
-		
 		if dash_adjust_timer > 0:
 			dash_adjust_timer -= delta
 			update_dash_direction()
-		
-		# NOTE : J'ai enlevé spawn_dash_ghost() d'ici
-		
 		if dash_timer <= 0:
 			end_dash()
 		move_and_slide()
 		return
-	# --------------------
 
-	# --- INPUT GRAVITÉ (Touche R) ---
+	# --- GRAVITÉ (R) ---
 	if gravity_unlocked:
-		if gravity_cooldown > 0:
-			gravity_cooldown -= delta
-		
+		if gravity_cooldown > 0: gravity_cooldown -= delta
 		if Input.is_action_just_pressed("gravity") and gravity_cooldown <= 0:
 			invert_gravity()
-	# --------------------------------
 
 	# --- SQUASH & STRETCH ---
 	sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED)
-	
 	if not was_on_floor and is_on_floor():
 		sprite.scale = Vector2(default_scale.x * 1.5, default_scale.y * 0.7)
 		spawn_dust()
-	
 	was_on_floor = is_on_floor()
-	# ------------------------
 
-	# 2. Inputs & Direction
+	# Inputs
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 	if input_dir != 0:
 		facing_dir = input_dir
 		sprite.flip_h = facing_dir < 0
 
-	# 3. Grappin
+	# Grappin
 	if grapple_unlocked and Input.is_action_just_pressed("grapple") and not grappling and grapple_launch_timer <= 0:
 		grapple_target = find_grapple_point()
 		if grapple_target:
@@ -192,31 +179,28 @@ func _physics_process(delta):
 
 	if grapple_launch_timer > 0:
 		grapple_launch_timer -= delta
-		# Gravité post-grappin dépend aussi de la direction
 		velocity.y += GRAVITY * gravity_dir * (0.12 if grapple_launch_timer > 0.05 else 0.6) * delta
 		play_air_anim()
 		move_and_slide()
 		return
 
-	# 4. Physique (Gravité)
+	# Physique Standard
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * gravity_dir * delta
 
 	# Timers
 	if Input.is_action_just_pressed("ui_accept"): jump_buffer_timer = JUMP_BUFFER_TIME
 	if jump_buffer_timer > 0: jump_buffer_timer -= delta
-	
 	if is_on_floor(): coyote_timer = COYOTE_TIME
 	else: coyote_timer -= delta
 
-	# --- MOUVEMENT ---
+	# Mouvement
 	velocity.x = input_dir * SPEED
 
-	# --- DASH CHECK ---
+	# Dash Check
 	if is_on_floor() or is_on_wall(): can_dash = true
 	if dash_unlocked and Input.is_action_just_pressed("dash") and can_dash: start_dash()
 
-	# Actions
 	handle_jump(delta)
 	handle_wall_grab(delta)
 	handle_wall_jump()
@@ -225,28 +209,18 @@ func _physics_process(delta):
 	move_and_slide()
 
 # ------------------------------------------------------------
-# FONCTION INVERSION
+# FONCTIONS ACTIONS
 # ------------------------------------------------------------
 func invert_gravity():
 	gravity_dir *= -1
 	gravity_cooldown = 0.5
-	
-	# Indique à Godot où est le "Haut" pour les collisions au sol
 	up_direction = Vector2.UP * gravity_dir
-	
-	# Inverse le sprite verticalement
 	sprite.flip_v = (gravity_dir == -1)
-	
-	# Petit feedback visuel
 	sprite.scale = Vector2(default_scale.x * 0.5, default_scale.y * 1.5)
-	
 	if jump_sfx:
-		jump_sfx.pitch_scale = 0.5 # Son plus grave pour l'inversion
+		jump_sfx.pitch_scale = 0.5
 		jump_sfx.play()
 
-# ------------------------------------------------------------
-# FONCTIONS DASH
-# ------------------------------------------------------------
 func start_dash():
 	is_dashing = true
 	can_dash = false
@@ -276,22 +250,14 @@ func spawn_dash_ghost():
 	ghost.global_position = global_position
 	ghost.texture = sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
 	ghost.flip_h = sprite.flip_h
-	# Le fantôme doit aussi être à l'envers si la gravité est inversée
 	ghost.flip_v = sprite.flip_v
 	ghost.scale = sprite.scale
-	
-	# FIX INTERPOLATION: Si le ghost a la fonction reset, on l'appelle
 	if ghost.has_method("reset_physics_interpolation"):
 		ghost.reset_physics_interpolation()
 
-# ------------------------------------------------------------
-# SAUT & WALL & GRAPPIN
-# ------------------------------------------------------------
 func handle_jump(delta):
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
-		# Le saut propulse à l'opposé de la gravité
 		velocity.y = JUMP_FORCE * gravity_dir
-		
 		sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
 		if jump_sfx:
 			jump_sfx.pitch_scale = randf_range(0.9, 1.1)
@@ -303,20 +269,17 @@ func handle_jump(delta):
 	
 	if is_jump_held:
 		if Input.is_action_pressed("ui_accept") and jump_held_time < MAX_JUMP_HOLD_TIME:
-			# Hold force aussi inversée
 			velocity.y += JUMP_HOLD_FORCE * gravity_dir * delta
 			jump_held_time += delta
 		else:
 			is_jump_held = false
 
-	# Cut jump
 	if Input.is_action_just_released("ui_accept"):
 		if (gravity_dir == 1 and velocity.y < 0) or (gravity_dir == -1 and velocity.y > 0):
 			velocity.y *= 0.45
 			is_jump_held = false
 
 func handle_wall_grab(delta):
-	# Désactivé en mode inversé pour simplifier le gameplay
 	if gravity_dir == -1: return
 
 	var grabbing_button = Input.is_action_pressed("grab")
@@ -345,7 +308,6 @@ func handle_wall_grab(delta):
 
 func handle_wall_jump():
 	if gravity_dir == -1: return
-
 	var grabbing_button = Input.is_action_pressed("grab")
 	if wall_coyote_timer > 0.0 and grabbing_button and not wall_exhausted and Input.is_action_just_pressed("ui_accept"):
 		wall_grabbing = false
@@ -380,15 +342,14 @@ func handle_grapple(delta):
 	collision_mask = 0
 	velocity = grapple_direction * grapple_speed
 	grapple_line.points = [Vector2.ZERO, grapple_target.global_position - global_position]
-	if global_position.distance_to(grapple_target.global_position) < 12: finish_grapple()
+	if global_position.distance_to(grapple_target.global_position) < 24: finish_grapple()
 
 func finish_grapple():
 	grappling = false
 	collision_layer = 1
 	collision_mask = 1
-	velocity.x = facing_dir * 320
-	# Jump sortie grappin inversé si besoin
-	velocity.y = -280 * gravity_dir
+	velocity.x = facing_dir * 640
+	velocity.y = -560 * gravity_dir
 	grapple_launch_timer = 0.25
 	grapple_target = null
 	grapple_line.visible = false
@@ -411,12 +372,9 @@ func start_respawn_sequence():
 	velocity = Vector2.ZERO
 	play_anim("idle")
 	sprite.visible = true
-	
-	# RESET GRAVITÉ
 	gravity_dir = 1
 	up_direction = Vector2.UP
 	sprite.flip_v = false
-	
 	if anim_player and anim_player.has_animation("spawn"):
 		anim_player.play("spawn")
 		await anim_player.animation_finished

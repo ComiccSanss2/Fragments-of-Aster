@@ -53,7 +53,6 @@ script = ExtResource("1_tbgi4")
 physics_interpolation_mode = 1
 position = Vector2(-1, 0)
 offset = Vector2(0, 15)
-zoom = Vector2(4, 4)
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 drag_horizontal_enabled = true
@@ -98,6 +97,7 @@ offset_top = -152.0
 offset_bottom = -152.0
 
 [node name="TransitionScreen" type="ColorRect" parent="UI"]
+visible = false
 modulate = Color(0, 0, 0, 1)
 z_index = 500
 anchors_preset = 15

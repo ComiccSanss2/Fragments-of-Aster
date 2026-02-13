@@ -1,16 +1,21 @@
 [gd_scene load_steps=4 format=3 uid="uid://xkd4lg4d2jd7"]
 
-[ext_resource type="Texture2D" uid="uid://dml8bg2o5rhnd" path="res://assets/GrappleReceiver.png" id="1_08247"]
 [ext_resource type="Script" uid="uid://cyxac0n8au10" path="res://scenes/grapple/grapple_point.gd" id="1_hdcm2"]
+[ext_resource type="Texture2D" uid="uid://dipahv4qnx26i" path="res://assets/Attache_grappin.png" id="2_fdy1v"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fdy1v"]
-radius = 4.1231055
+radius = 5.5226803
 
 [node name="GrapplePoint" type="Area2D" groups=["grapple_points"]]
+scale = Vector2(0.7, 0.7)
 script = ExtResource("1_hdcm2")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_08247")
+rotation = 3.1415927
+scale = Vector2(2, 2)
+texture = ExtResource("2_fdy1v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+scale = Vector2(2, 2)
 shape = SubResource("CircleShape2D_fdy1v")

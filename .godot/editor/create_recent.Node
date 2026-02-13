@@ -1,3 +1,4 @@
+AnimatedSprite2D
 RichTextLabel
 GPUParticles2D
 ColorRect
@@ -8,8 +9,6 @@ Camera2D
 CanvasLayer
 Label
 Marker2D
-AnimatedSprite2D
 Control
 VBoxContainer
 CheckBox
-HSlider

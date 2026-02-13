@@ -1,9 +1,7 @@
-res://dialogue_box.tscn
+res://scenes/levels/level_6.tscn
 res://scenes/wind.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
 res://scenes/transition.gdshader
-res://dialogue_box.gd
-res://scenes/levels/level_15.gd
 res://scenes/shard.tscn
 res://scenes/shard.gd

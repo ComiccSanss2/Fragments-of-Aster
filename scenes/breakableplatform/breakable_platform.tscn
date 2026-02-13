@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://d2h62s6xwuld"]
 
 [ext_resource type="Script" uid="uid://bdknh11x3uu1" path="res://scenes/breakableplatform/BreakablePlatform.gd" id="1_gk0wa"]
-[ext_resource type="Texture2D" uid="uid://brppyjhao8iw5" path="res://assets/BreakablePlatform.png" id="2_vegg3"]
+[ext_resource type="Texture2D" uid="uid://1xj11rwm6o6" path="res://assets/Rocher_fragile.png" id="2_gk0wa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4px8n"]
-size = Vector2(16, 16)
+size = Vector2(31, 18)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2aexv"]
-size = Vector2(16, 16)
+size = Vector2(31, 17)
 
 [node name="BreakablePlatform" type="Node2D"]
 visibility_layer = 128
@@ -16,15 +16,16 @@ script = ExtResource("1_gk0wa")
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
-texture = ExtResource("2_vegg3")
+texture = ExtResource("2_gk0wa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0.5, 1)
 shape = SubResource("RectangleShape2D_4px8n")
 
 [node name="Area2D" type="Area2D" parent="StaticBody2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D"]
-position = Vector2(0, -2)
+position = Vector2(0.5, -2.5)
 shape = SubResource("RectangleShape2D_2aexv")
 
 [node name="BreakTimer" type="Timer" parent="StaticBody2D"]

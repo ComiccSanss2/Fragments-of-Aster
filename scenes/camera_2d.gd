@@ -4,15 +4,16 @@ extends Camera2D
 # CONFIGURATION
 # ------------------------------------------------------------
 @export_group("Follow Settings")
-@export var follow_smoothness := 8.0
-# Offset Y = -40 pour regarder un peu vers le haut
-@export var cam_offset := Vector2(0, 15) 
+# Plus la valeur est basse, plus c'est fluide (et lent). 5.0 est bien pour du 32x32.
+@export var follow_smoothness := 5.0 
+@export var cam_offset := Vector2(0, -30) # On remonte un peu le regard par défaut
 
 @export_group("Look Ahead Settings")
-@export var look_ahead_x_dist := 60.0   # Distance du regard horizontal
-@export var look_ahead_y_dist := 150.0  # Distance du regard vertical
-@export var look_ahead_speed := 2.0     # Vitesse douce de la caméra
-@export var fall_threshold := 200.0     # Vitesse de chute pour activer le regard bas
+# On augmente ces distances car le champ de vision est plus large
+@export var look_ahead_x_dist := 120.0  
+@export var look_ahead_y_dist := 100.0  
+@export var look_ahead_speed := 1.5     # Transition douce
+@export var fall_threshold := 250.0
 
 # ------------------------------------------------------------
 # VARIABLES INTERNES
@@ -22,7 +23,7 @@ var bounds_global_pos: Vector2
 
 var target: Node2D
 
-# On stocke les offsets dynamiques actuels pour le lissage
+# Offsets dynamiques
 var current_look_ahead_x := 0.0 
 var current_look_ahead_y := 0.0 
 
@@ -30,7 +31,7 @@ var current_look_ahead_y := 0.0
 var is_cinematic := false
 var cinematic_target: Node2D = null
 
-# --- NOUVEAU : Variable de verrouillage ---
+# Variable de verrouillage (pour le Main/Boss Fight)
 var is_locked := false 
 
 # ------------------------------------------------------------
@@ -38,6 +39,14 @@ var is_locked := false
 # ------------------------------------------------------------
 func _ready():
 	target = get_node("../Player")
+	
+	# --- RÉGLAGE IMPORTANT DU ZOOM ---
+	# 2.5 est un bon compromis pour du pixel art 32x32
+	# Si tu trouves ça encore trop près, mets 2.0
+	zoom = Vector2(1.0, 1.0)
+	
+	# On désactive le lissage natif car on le gère manuellement dans _physics_process
+	position_smoothing_enabled = false 
 
 # ------------------------------------------------------------
 # CINEMATIC METHODS
@@ -52,7 +61,7 @@ func end_cinematic():
 	current_look_ahead_x = 0.0
 	current_look_ahead_y = 0.0 
 
-func zoom_to(value: float, time: float = 3.0):
+func zoom_to(value: float, time: float = 2.0):
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "zoom", Vector2(value, value), time)\
 		.set_trans(Tween.TRANS_SINE)\
@@ -73,10 +82,9 @@ func set_bounds(bounds_node: Node):
 # PHYSICS PROCESS
 # ------------------------------------------------------------
 func _physics_process(delta):
-	# --- MODIFICATION ICI : Si verrouillé, on laisse le Main contrôler ---
+	# Si verrouillé, on ne fait rien
 	if is_locked:
 		return 
-	# ---------------------------------------------------------------------
 
 	if not bounds_shape:
 		return
@@ -94,7 +102,6 @@ func _physics_process(delta):
 
 	# 3. Logique dynamique (Hors cinématique)
 	if not is_cinematic:
-		
 		# A. Offset Statique
 		desired += cam_offset
 		
@@ -121,7 +128,6 @@ func _physics_process(delta):
 		desired.y += current_look_ahead_y
 
 	# 4. Mouvement fluide global
-	# C'est ici que 'follow_smoothness' est utilisé
 	global_position = global_position.lerp(desired, delta * follow_smoothness)
 
 	# 5. Contrainte des limites (Clamping)

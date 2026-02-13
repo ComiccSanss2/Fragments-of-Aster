@@ -3,7 +3,8 @@ extends Area2D
 enum ShardType { GRAPPLE, DASH, INVERSION }
 @export var shard_type: ShardType = ShardType.GRAPPLE
 
-@onready var sprite := $Sprite2D
+# CHANGEMENT ICI : On précise que c'est un AnimatedSprite2D
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var light := $PointLight2D
 @onready var anim := $AnimationPlayer
 @onready var trigger := $TriggerArea
@@ -36,7 +37,14 @@ func _ready():
 		return
 	# ------------------------------------------
 
-	anim.play("breath")
+	# CHANGEMENT ICI : On lance l'animation du sprite (Vérifie que le nom est "idle" ou "default")
+	sprite.play("idle")
+	
+	# Si ton AnimationPlayer gère le flottement (haut/bas), garde cette ligne.
+	# Si il ne gérait que les frames, tu peux l'enlever.
+	if anim.has_animation("breath"):
+		anim.play("breath")
+		
 	camera = get_tree().root.get_node("Main/Camera2D")
 
 
@@ -135,6 +143,7 @@ func _on_collect_finished():
 		
 	elif shard_type == ShardType.INVERSION:
 		player.gravity_unlocked = true
+		# Utilisation de set pour éviter erreur si variable inexistante
 		main.set("gravity_collected", true) 
 		
 		await dialog.show_dialog("Reality Anchor Destabilized.")
@@ -175,7 +184,7 @@ func _on_collect_finished():
 				echoes_music.stop()
 			)
 
-	# --- DIALOGUES LYRA (EN CYAN MAINTENANT) ---
+	# --- DIALOGUES LYRA (EN CYAN) ---
 	
 	if shard_type == ShardType.DASH:
 		await dialog.show_dialog(
