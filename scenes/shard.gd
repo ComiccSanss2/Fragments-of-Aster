@@ -246,7 +246,7 @@ func end_cutscene():
 	waiting_for_input = false
 	cutscene_running = false
 
-	camera.zoom_to(4.0, 1.2)
+	camera.zoom_to(2.6, 1.2)
 	camera.end_cinematic()
 
 	player.can_move = true

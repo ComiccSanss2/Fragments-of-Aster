@@ -1,9 +1,11 @@
-res://scenes/levels/level_6.tscn
+res://scenes/levels/level_8.tscn
 res://scenes/wind.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
 res://scenes/transition.gdshader
-res://scenes/levels/end_trigger_6.gd
 res://scenes/main.tscn
-res://scenes/camera_2d.gd
 res://scenes/main.gd
+res://scenes/shard.tscn
+res://scenes/shard.gd
+res://scenes/camera_2d.gd
+res://scenes/player.tscn

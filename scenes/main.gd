@@ -28,7 +28,7 @@ var intro_camera_locked := false
 var intro_camera_pos := Vector2.ZERO
 
 # --- CORRECTION 1 : LE ZOOM PAR DÉFAUT EST MAINTENANT 2.5 ---
-const DEFAULT_ZOOM = Vector2(3.0, 3.0) 
+const DEFAULT_ZOOM = Vector2(2.6, 2.6) 
 
 func _ready():
 	var is_intro = SaveManager.has_meta("intro_sequence")
