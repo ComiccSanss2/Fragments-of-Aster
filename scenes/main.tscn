@@ -53,6 +53,7 @@ script = ExtResource("1_tbgi4")
 physics_interpolation_mode = 1
 position = Vector2(-1, 0)
 offset = Vector2(0, 15)
+zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 drag_horizontal_enabled = true

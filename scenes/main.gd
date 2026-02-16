@@ -8,13 +8,13 @@ extends Node2D
 @onready var dialogue_box := $UI/DialogueBox
 
 # --- AUDIO ---
-@onready var music_roots := $FragmentsOfRoots    
-@onready var music_echoes := $FragmentsOfEchoes 
-@onready var music_pulse := $FragmentsOfPulse   
-@onready var ambiance_player := $AmbiancePlayer 
-@onready var wind_layer := $WindLayer        
+@onready var music_roots := $FragmentsOfRoots
+@onready var music_echoes := $FragmentsOfEchoes
+@onready var music_pulse := $FragmentsOfPulse
+@onready var ambiance_player := $AmbiancePlayer
+@onready var wind_layer := $WindLayer
 @onready var music_boss_intro := $MusicBossIntro
-@onready var music_boss_chase := $MusicBossChase 
+@onready var music_boss_chase := $MusicBossChase
 
 var current_level_path: String = ""
 var intro_played := false
@@ -26,10 +26,11 @@ var shake_strength: float = 0.0
 # --- VARIABLES CAMÉRA INTRO ---
 var intro_camera_locked := false
 var intro_camera_pos := Vector2.ZERO
-const DEFAULT_ZOOM = Vector2(4.0, 4.0)
+
+# --- CORRECTION 1 : LE ZOOM PAR DÉFAUT EST MAINTENANT 2.5 ---
+const DEFAULT_ZOOM = Vector2(3.0, 3.0) 
 
 func _ready():
-	print("--- DEBUG: Main _ready start ---")
 	var is_intro = SaveManager.has_meta("intro_sequence")
 	if transition_screen:
 		transition_screen.visible = true
@@ -42,23 +43,22 @@ func _ready():
 
 	# LOGIQUE
 	if is_intro:
-		check_music_progression() 
+		check_music_progression()
 		
 		SaveManager.remove_meta("intro_sequence")
 		load_level("res://scenes/levels/level_1.tscn")
 		_set_level_canvas_layers_visible(false)
 		
-		player.global_position.y = -2500 
-		player.can_move = false 
+		player.global_position.y = -2500
+		player.can_move = false
 		player.velocity = Vector2.ZERO
 		
 		# --- SETUP CAMERA INTRO ---
 		intro_camera_pos = Vector2(player.global_position.x, -1200)
 		camera.global_position = intro_camera_pos
 		
-		# On verrouille le script de la caméra (elle arrête de calculer)
-		camera.is_locked = true 
-		intro_camera_locked = true # On verrouille la logique Main
+		camera.is_locked = true
+		intro_camera_locked = true
 		
 		var current_level_node = level_root.get_child(0)
 		if current_level_node.has_method("start_intro_sequence"):
@@ -81,13 +81,11 @@ func _ready():
 		if SaveManager.current_slot_id != -1:
 			var data = SaveManager.load_data(SaveManager.current_slot_id)
 			if data:
-				# 1. On récupère les infos
 				grapple_collected = data.get("grapple_unlocked", false)
 				dash_collected = data.get("dash_unlocked", false)
-				gravity_collected = data.get("gravity_unlocked", false) # --- CHARGEMENT GRAVITÉ
+				gravity_collected = data.get("gravity_unlocked", false)
 				intro_played = data.get("intro_played", false)
 		
-		# 2. IMPORTANT : On met à jour la musique MAINTENANT
 		check_music_progression()
 		
 		load_level(target_level)
@@ -96,9 +94,7 @@ func _ready():
 		player.visible = true
 		
 	else:
-		# Démarrage standard
-		check_music_progression() # Vérification par défaut
-		
+		check_music_progression()
 		load_level("res://scenes/levels/level_1.tscn")
 		self.visible = true
 		level_root.visible = true
@@ -109,32 +105,18 @@ func _ready():
 				current_level_node.start_tutorial_sequence()
 
 func _process(delta):
-	# --- 1. LOGIQUE CAMÉRA INTRO ---
+	# --- LOGIQUE CAMÉRA INTRO ---
 	if intro_camera_locked:
-		# On maintient la position fixe
 		camera.global_position = intro_camera_pos
-		
-		# Seuil de déclenchement (basé sur la position FIXE de la caméra)
-		# Quand le joueur arrive 300px au dessus du centre
-		var catch_threshold = intro_camera_pos.y - 0
+		var catch_threshold = intro_camera_pos.y
 		
 		if player.global_position.y >= catch_threshold:
-			print("DEBUG: Caméra attrape le joueur !")
-			
-			# 1. On libère le Main
-			intro_camera_locked = false 
-			
-			# 2. On libère le script de la caméra (elle reprend ses calculs)
-			camera.is_locked = false 
-			
-			# 3. BOOST DE VITESSE ET OFFSET
-			# On la rend très rapide pour rattraper le joueur (20.0 au lieu de 8.0)
-			camera.follow_smoothness = 20.0 
-			
-			# On décale le cadre vers le bas pour que le joueur soit plus haut à l'écran
+			intro_camera_locked = false
+			camera.is_locked = false
+			camera.follow_smoothness = 20.0
 			camera.cam_offset.y = 100.0
 
-	# --- 2. SCREEN SHAKE ---
+	# --- SCREEN SHAKE ---
 	if shake_strength > 0:
 		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
@@ -150,49 +132,38 @@ func _set_level_canvas_layers_visible(is_visible: bool):
 func load_level(path: String):
 	current_level_path = path
 	
-	# Nettoyage de l'ancien niveau
 	for c in level_root.get_children(): c.queue_free()
 	
-	# Chargement du nouveau
 	var level_scene = load(path).instantiate()
 	level_root.add_child(level_scene)
 	
 	if level_scene.has_node("PlayerStart"):
 		var spawn = level_scene.get_node("PlayerStart")
 		
-		# 1. SETUP JOUEUR
 		player.global_position = spawn.global_position
 		player.velocity = Vector2.ZERO
 		player.can_move = true
 		player.is_dying = false
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
-		player.gravity_unlocked = gravity_collected 
+		player.gravity_unlocked = gravity_collected
 		
-		# ---------------------------------------------------------
-		# 2. RESET TOTAL DE LA CAMÉRA (La partie importante)
-		# ---------------------------------------------------------
-		
-		# A. On la place sur le joueur
+		# --- CORRECTION 2 : RESET TOTAL DE LA CAMÉRA ---
 		camera.global_position = player.global_position
+		camera.zoom = DEFAULT_ZOOM  # Applique le 2.5
 		
-		# B. On remet le zoom par défaut (défini en haut du script)
-		camera.zoom = DEFAULT_ZOOM
+		# On remet les valeurs par défaut du script caméra pour éviter les bugs
+		if camera.get("follow_smoothness"): camera.follow_smoothness = 5.0
+		if camera.get("cam_offset"): camera.cam_offset = Vector2(0, -30)
 		
-		# C. On réactive son cerveau (car Level 15 l'avait éteint)
 		camera.set_process(true)
 		camera.set_physics_process(true)
-		
-		# D. On réinitialise les variables internes de TON script caméra
-		camera.is_locked = false          # On déverrouille
-		camera.end_cinematic()            # On coupe le mode cinématique
-		camera.current_look_ahead_x = 0.0 # On reset le lissage horizontal
-		camera.current_look_ahead_y = 0.0 # On reset le lissage vertical
-		camera.offset = Vector2.ZERO      # On annule le shake résiduel
-		
-		# E. On s'assure qu'elle est bien active
+		camera.is_locked = false
+		camera.end_cinematic()
+		camera.current_look_ahead_x = 0.0
+		camera.current_look_ahead_y = 0.0
+		camera.offset = Vector2.ZERO
 		camera.make_current()
-		# ---------------------------------------------------------
 		
 		check_music_progression()
 		
@@ -201,16 +172,15 @@ func load_level(path: String):
 		camera.set_bounds(bounds)
 		
 	if SaveManager.current_slot_id != -1:
-		var data_to_save = { 
-			"current_level": current_level_path, 
-			"grapple_unlocked": grapple_collected, 
-			"dash_unlocked": dash_collected, 
-			"gravity_unlocked": gravity_collected, # --- SAUVEGARDE GRAVITÉ
-			"intro_played": intro_played 
+		var data_to_save = {
+			"current_level": current_level_path,
+			"grapple_unlocked": grapple_collected,
+			"dash_unlocked": dash_collected,
+			"gravity_unlocked": gravity_collected,
+			"intro_played": intro_played
 		}
 		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 
-# ... (Le reste : change_level, play_death, popups reste identique) ...
 func change_level_with_transition(next_level_path: String):
 	player.can_move = false; player.velocity = Vector2.ZERO
 	var t = create_tween(); t.tween_property(transition_screen, "modulate:a", 1.0, 0.5); await t.finished
@@ -224,7 +194,7 @@ func play_death_sequence():
 	player.can_move = false; player.velocity = Vector2.ZERO
 	await get_tree().create_timer(0.5).timeout
 	var t = create_tween(); t.tween_property(transition_screen, "modulate:a", 1.0, 0.5); await t.finished
-	if current_level_path != "": 
+	if current_level_path != "":
 		level_root.visible = false; player.visible = false
 		load_level(current_level_path)
 		await get_tree().process_frame
@@ -239,77 +209,49 @@ func show_grapple_message(msg: String):
 	if label: label.text = msg; $UI.visible = true
 func hide_grapple_message(): $UI.visible = false
 
-# --- NOUVELLE FONCTION MUSIQUE ---
 func check_music_progression():
-	# CAS A : NIVEAU 15 (La rencontre)
 	if "level15" in current_level_path or "level_15" in current_level_path:
 		_stop_exploration_music()
 		if music_boss_chase.playing: music_boss_chase.stop()
-		
-		# MODIFICATION ICI : On ne lance PAS music_boss_intro automatiquement.
-		# On s'assure juste qu'elle est arrêtée au début du niveau.
 		if music_boss_intro.playing: music_boss_intro.stop()
-		
-		return # On laisse l'AmbiancePlayer tourner seul
+		return
 
-	# CAS B : NIVEAU 16 (La fuite / Drop)
+	# --- CORRECTION 3 : suppression du doublon level16 ---
 	elif "level16" in current_level_path or "level_16" in current_level_path:
 		_stop_exploration_music()
 		if music_boss_intro.playing: music_boss_intro.stop()
-		
-		# Là par contre, on lance le DROP direct !
 		if not music_boss_chase.playing:
 			music_boss_chase.play()
 		return
 
-	# CAS B : NIVEAU 16 (La fuite / Drop)
-	elif "level16" in current_level_path or "level_16" in current_level_path:
-		_stop_exploration_music()
-		if music_boss_intro.playing: music_boss_intro.stop()
-		
-		# On lance le DROP direct
-		if not music_boss_chase.playing:
-			music_boss_chase.play()
-		return
-
-	# 2. LOGIQUE NORMALE (Exploration)
-	# On s'assure que les musiques de boss sont coupées
 	if music_boss_intro.playing: music_boss_intro.stop()
 	if music_boss_chase.playing: music_boss_chase.stop()
 
-	# Logique des biomes (Dash/Grappin/Roots)
 	if dash_collected:
 		if music_roots.playing: music_roots.stop()
 		if music_echoes.playing: music_echoes.stop()
 		if not music_pulse.playing: music_pulse.play()
-	
 	elif grapple_collected:
 		if music_roots.playing: music_roots.stop()
 		if music_pulse.playing: music_pulse.stop()
 		if not music_echoes.playing: music_echoes.play()
-	
 	else:
 		if music_echoes.playing: music_echoes.stop()
 		if music_pulse.playing: music_pulse.stop()
 		if not music_roots.playing: music_roots.play()
 
-# Petite fonction helper pour éviter de répéter le code
 func _stop_exploration_music():
 	if music_roots.playing: music_roots.stop()
 	if music_echoes.playing: music_echoes.stop()
 	if music_pulse.playing: music_pulse.stop()
 
 func cleanup_before_exit():
-	# On coupe TOUT (Exploration + Boss)
 	_stop_exploration_music()
-	
 	if music_boss_intro: music_boss_intro.stop()
 	if music_boss_chase: music_boss_chase.stop()
-	
 	if ambiance_player: ambiance_player.stop()
-	
 	if wind_layer:
-		wind_layer.visible = false 
+		wind_layer.visible = false
 		for child in wind_layer.get_children():
 			if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
 				child.stop()

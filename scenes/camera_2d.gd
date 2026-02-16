@@ -43,7 +43,7 @@ func _ready():
 	# --- RÉGLAGE IMPORTANT DU ZOOM ---
 	# 2.5 est un bon compromis pour du pixel art 32x32
 	# Si tu trouves ça encore trop près, mets 2.0
-	zoom = Vector2(1.0, 1.0)
+	zoom = Vector2(3.0, 3.0)
 	
 	# On désactive le lissage natif car on le gère manuellement dans _physics_process
 	position_smoothing_enabled = false 

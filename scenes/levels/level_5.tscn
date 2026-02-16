@@ -193,6 +193,6 @@ shape = SubResource("RectangleShape2D_hldbq")
 
 [node name="Shard" parent="." instance=ExtResource("5_hldbq")]
 texture_filter = 1
-position = Vector2(702, -40)
+position = Vector2(734, -64)
 
 [connection signal="body_entered" from="EndTrigger5" to="EndTrigger5" method="_on_body_entered"]

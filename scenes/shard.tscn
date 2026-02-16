@@ -141,6 +141,7 @@ _data = {
 size = Vector2(14.199999, 20.05)
 
 [node name="Shard" type="Area2D" groups=["shards"]]
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_x0ayr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

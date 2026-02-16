@@ -3,8 +3,6 @@ extends CharacterBody2D
 # ------------------------------------------------------------
 # CONFIGURATION ET CONSTANTES (VERSION 32x32)
 # ------------------------------------------------------------
-# On a augmenté les valeurs pour s'adapter à la taille x2, 
-# mais on a légèrement calmé le jeu par rapport au x2 strict pour le contrôle.
 const SPEED = 170.0
 const GRAVITY = 1200.0
 
@@ -122,7 +120,7 @@ func _physics_process(delta):
 			velocity.x = 0
 			if not is_on_floor():
 				velocity.y += GRAVITY * gravity_dir * delta
-				# Clamp augmenté pour la nouvelle échelle
+				# Clamp
 				if gravity_dir == 1: velocity.y = min(velocity.y, 2000.0)
 				else: velocity.y = max(velocity.y, -2000.0)
 				play_air_anim()
@@ -173,7 +171,8 @@ func _physics_process(delta):
 
 	if grappling and grapple_target:
 		handle_grapple(delta)
-		play_anim("jump-fall")
+		# ICI : On joue l'animation spécifique GRAPPLE
+		play_anim("grapple")
 		move_and_slide()
 		return
 
@@ -381,17 +380,36 @@ func start_respawn_sequence():
 	can_move = true
 
 func play_anim(name: String):
-	if sprite.animation != name: sprite.play(name)
+	# Sécurité pour éviter les erreurs si l'anim manque
+	if sprite.sprite_frames.has_animation(name):
+		if sprite.animation != name: sprite.play(name)
 
+# ICI : NOUVELLE LOGIQUE POUR JUMP / FALL
 func play_air_anim():
-	play_anim("jump-fall")
+	# Si on utilise le grappin, cette fonction ne devrait pas override l'anim grapple
+	if grappling: return
+	
+	# Logique standard (Gravité normale 1)
+	# Vel Y négatif = on monte (JUMP)
+	# Vel Y positif = on descend (FALL)
+	
+	# Si Gravité inversée (-1), c'est l'inverse.
+	# L'astuce : velocity.y * gravity_dir < 0 veut dire "On va à l'opposé de la gravité" (donc saut)
+	
+	if velocity.y * gravity_dir < 0:
+		play_anim("jump")
+	else:
+		play_anim("fall")
 
 func update_animation(input_dir):
 	if not is_on_floor():
 		play_air_anim()
 		return
-	if input_dir != 0: play_anim("walk")
-	else: play_anim("idle")
+	
+	if input_dir != 0: 
+		play_anim("walk")
+	else: 
+		play_anim("idle")
 
 func spawn_dust():
 	var dust_scene = load("res://scenes/cpu_particles_2d.tscn")
