@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://ce6o2yirue6a8"]
+[gd_scene load_steps=32 format=3 uid="uid://ce6o2yirue6a8"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_7snfr"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="2_ene4w"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://2qlnbqfx8a2q" path="res://assets/Pic_mono.png" id="8_40qa3"]
 [ext_resource type="Texture2D" uid="uid://b1gdpu8664xir" path="res://assets/Pic.png" id="9_e7lui"]
 [ext_resource type="Script" uid="uid://dursjgdl6337l" path="res://scenes/levels/end_trigger_8.gd" id="9_w2i51"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="15_6to6e"]
+[ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="15_kk2ik"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5umh1"]
 texture = ExtResource("1_7snfr")
@@ -241,6 +243,22 @@ size = Vector2(7517, 3502.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xsrpe"]
 size = Vector2(46, 71.25)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_40qa3"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e7lui"]
+noise = SubResource("FastNoiseLite_40qa3")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_acgl5"]
+shader = ExtResource("15_6to6e")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_e7lui")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
+
 [node name="Level8" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -310,5 +328,156 @@ script = ExtResource("9_w2i51")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger8"]
 position = Vector2(1708, 86)
 shape = SubResource("RectangleShape2D_xsrpe")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger8/CollisionShape2D"]
+material = SubResource("ShaderMaterial_acgl5")
+offset_left = -43.0
+offset_top = -30.0
+offset_right = -5.0
+offset_bottom = 34.0
+
+[node name="Spike" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1095, -33)
+rotation = 1.5707964
+
+[node name="Spike2" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1104, -33)
+rotation = 1.5707964
+
+[node name="Spike3" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1112, -33)
+rotation = 1.5707964
+
+[node name="Spike4" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1799, 107)
+rotation = 1.5707964
+
+[node name="Spike5" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1807, 107)
+rotation = 1.5707964
+
+[node name="Spike6" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(1815, 107)
+rotation = 1.5707964
+
+[node name="Spike7" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2247, -64)
+rotation = 1.5707964
+
+[node name="Spike8" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2255, -64)
+rotation = 1.5707964
+
+[node name="Spike9" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2264, -64)
+rotation = 1.5707964
+
+[node name="Spike10" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2247, 139)
+rotation = 1.5707964
+
+[node name="Spike11" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2256, 139)
+rotation = 1.5707964
+
+[node name="Spike12" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(2263, 139)
+rotation = 1.5707964
+
+[node name="Spike13" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 519)
+
+[node name="Spike14" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 527)
+
+[node name="Spike15" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 535)
+
+[node name="Spike16" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 543)
+
+[node name="Spike17" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 551)
+
+[node name="Spike18" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 560)
+
+[node name="Spike19" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 569)
+
+[node name="Spike20" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 578)
+
+[node name="Spike21" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 587)
+
+[node name="Spike22" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 595)
+
+[node name="Spike23" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 606)
+
+[node name="Spike24" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 616)
+
+[node name="Spike25" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 628)
+
+[node name="Spike26" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 640)
+
+[node name="Spike27" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 652)
+
+[node name="Spike28" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 664)
+
+[node name="Spike29" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 676)
+
+[node name="Spike30" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 686)
+
+[node name="Spike31" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 697)
+
+[node name="Spike32" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 708)
+
+[node name="Spike33" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 720)
+
+[node name="Spike34" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 731)
+
+[node name="Spike35" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 744)
+
+[node name="Spike36" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 755)
+
+[node name="Spike37" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 766)
+
+[node name="Spike38" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 779)
+
+[node name="Spike39" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 791)
+
+[node name="Spike40" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 804)
+
+[node name="Spike41" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 816)
+
+[node name="Spike42" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 828)
+
+[node name="Spike43" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 840)
+
+[node name="Spike44" parent="." instance=ExtResource("15_kk2ik")]
+position = Vector2(3328, 853)
 
 [connection signal="body_entered" from="EndTrigger8" to="EndTrigger8" method="_on_body_entered"]

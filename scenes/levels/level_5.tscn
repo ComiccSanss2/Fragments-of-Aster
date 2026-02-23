@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dmfysmau2te23"]
+[gd_scene load_steps=25 format=3 uid="uid://dmfysmau2te23"]
 
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_fsnos"]
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_r1vs7"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://x4sbvg5yhc06" path="res://scenes/shard.tscn" id="5_hldbq"]
 [ext_resource type="Texture2D" uid="uid://b4a14wq0oldp1" path="res://assets/Bloc_Ruine_Variante32x32.png" id="6_6xwso"]
 [ext_resource type="Texture2D" uid="uid://c8durq5lsr6il" path="res://assets/Attache_grappin_V1.png" id="7_dwyms"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="11_6xwso"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_845dy"]
 texture = ExtResource("1_r1vs7")
@@ -156,7 +157,23 @@ sources/6 = SubResource("TileSetAtlasSource_6xwso")
 size = Vector2(3355, 1404)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hldbq"]
-size = Vector2(14.875, 33)
+size = Vector2(21, 50)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_5ke18"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j14br"]
+noise = SubResource("FastNoiseLite_5ke18")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0y7y4"]
+shader = ExtResource("11_6xwso")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_j14br")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
 
 [node name="Level5" type="Node2D"]
 
@@ -188,8 +205,15 @@ position = Vector2(776, 13)
 script = ExtResource("5_fi56y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger5"]
-position = Vector2(776.5625, 0)
+position = Vector2(780.5, -5)
 shape = SubResource("RectangleShape2D_hldbq")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger5/CollisionShape2D"]
+material = SubResource("ShaderMaterial_0y7y4")
+offset_left = -21.5
+offset_top = -35.0
+offset_right = 16.5
+offset_bottom = 29.0
 
 [node name="Shard" parent="." instance=ExtResource("5_hldbq")]
 texture_filter = 1

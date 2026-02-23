@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://chtjrs308nwph"]
+[gd_scene load_steps=34 format=3 uid="uid://chtjrs308nwph"]
 
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_e18e5"]
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_y2agi"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://b4a14wq0oldp1" path="res://assets/Bloc_Ruine_Variante32x32.png" id="8_ppjov"]
 [ext_resource type="Texture2D" uid="uid://bxumfjfquwg71" path="res://assets/angles_mur.png" id="9_pafwe"]
 [ext_resource type="Texture2D" uid="uid://b1gdpu8664xir" path="res://assets/Pic.png" id="11_pafwe"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="17_gf2l7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_741xk"]
 texture = ExtResource("1_y2agi")
@@ -266,6 +267,22 @@ size = Vector2(2753.5, 2046)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7x7cx"]
 size = Vector2(50.21875, 68.25)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_glmj6"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cfbu6"]
+noise = SubResource("FastNoiseLite_glmj6")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bvftm"]
+shader = ExtResource("17_gf2l7")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_cfbu6")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
+
 [node name="Level6" type="Node2D"]
 position = Vector2(-9, 15)
 
@@ -512,5 +529,12 @@ script = ExtResource("6_5wshb")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger6"]
 position = Vector2(1252.1094, -194.875)
 shape = SubResource("RectangleShape2D_7x7cx")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger6/CollisionShape2D"]
+material = SubResource("ShaderMaterial_bvftm")
+offset_left = -40.109375
+offset_top = -40.125
+offset_right = 16.78125
+offset_bottom = 39.0
 
 [connection signal="body_entered" from="EndTrigger6" to="EndTrigger6" method="_on_body_entered"]

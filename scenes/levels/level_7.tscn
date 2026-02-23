@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://demb82f0h2ojt"]
+[gd_scene load_steps=34 format=3 uid="uid://demb82f0h2ojt"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_bl61q"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_posk4"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://dyc7vlvr3nqah" path="res://scenes/levels/end_trigger_7.gd" id="9_sjq8i"]
 [ext_resource type="Texture2D" uid="uid://b1gdpu8664xir" path="res://assets/Pic.png" id="10_bntht"]
 [ext_resource type="Texture2D" uid="uid://bxumfjfquwg71" path="res://assets/angles_mur.png" id="11_7co51"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="16_c64tk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hq5i0"]
 texture = ExtResource("1_bl61q")
@@ -252,6 +253,22 @@ size = Vector2(4497, 3450)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q0wsq"]
 size = Vector2(39, 78.25)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bntht"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_7co51"]
+noise = SubResource("FastNoiseLite_bntht")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rctaj"]
+shader = ExtResource("16_c64tk")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_7co51")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
+
 [node name="Level7" type="Node2D"]
 
 [node name="Background" parent="." instance=ExtResource("1_posk4")]
@@ -402,6 +419,13 @@ script = ExtResource("9_sjq8i")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger7"]
 position = Vector2(398.5, -358.875)
 shape = SubResource("RectangleShape2D_q0wsq")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger7/CollisionShape2D"]
+material = SubResource("ShaderMaterial_rctaj")
+offset_left = -32.5
+offset_top = -26.125
+offset_right = 5.5
+offset_bottom = 37.875
 
 [node name="Spike" parent="." instance=ExtResource("4_d06uk")]
 position = Vector2(10, 45)

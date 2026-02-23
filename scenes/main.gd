@@ -27,7 +27,7 @@ var shake_strength: float = 0.0
 var intro_camera_locked := false
 var intro_camera_pos := Vector2.ZERO
 
-# --- CORRECTION 1 : LE ZOOM PAR DÉFAUT EST MAINTENANT 2.5 ---
+# --- ZOOM PAR DÉFAUT ---
 const DEFAULT_ZOOM = Vector2(2.6, 2.6) 
 
 func _ready():
@@ -37,11 +37,9 @@ func _ready():
 		transition_screen.modulate.a = 1.0 if is_intro else 0.0
 		transition_screen.color = Color.BLACK
 
-	# Menu Pause
 	if FileAccess.file_exists("res://pause_menu.tscn"):
 		ui_layer.add_child(load("res://pause_menu.tscn").instantiate())
 
-	# LOGIQUE
 	if is_intro:
 		check_music_progression()
 		
@@ -53,7 +51,6 @@ func _ready():
 		player.can_move = false
 		player.velocity = Vector2.ZERO
 		
-		# --- SETUP CAMERA INTRO ---
 		intro_camera_pos = Vector2(player.global_position.x, -1200)
 		camera.global_position = intro_camera_pos
 		
@@ -87,7 +84,6 @@ func _ready():
 				intro_played = data.get("intro_played", false)
 		
 		check_music_progression()
-		
 		load_level(target_level)
 		self.visible = true
 		level_root.visible = true
@@ -113,8 +109,12 @@ func _process(delta):
 		if player.global_position.y >= catch_threshold:
 			intro_camera_locked = false
 			camera.is_locked = false
-			camera.follow_smoothness = 20.0
-			camera.cam_offset.y = 100.0
+			
+			# --- CORRECTION ICI : lerp_speed AU LIEU DE follow_smoothness ---
+			if "lerp_speed" in camera: camera.lerp_speed = 20.0
+			
+			# --- CORRECTION ICI : default_offset AU LIEU DE cam_offset ---
+			if "default_offset" in camera: camera.default_offset.y = 100.0
 
 	# --- SCREEN SHAKE ---
 	if shake_strength > 0:
@@ -148,20 +148,21 @@ func load_level(path: String):
 		player.dash_unlocked = dash_collected
 		player.gravity_unlocked = gravity_collected
 		
-		# --- CORRECTION 2 : RESET TOTAL DE LA CAMÉRA ---
 		camera.global_position = player.global_position
-		camera.zoom = DEFAULT_ZOOM  # Applique le 2.5
+		camera.zoom = DEFAULT_ZOOM 
 		
-		# On remet les valeurs par défaut du script caméra pour éviter les bugs
-		if camera.get("follow_smoothness"): camera.follow_smoothness = 5.0
-		if camera.get("cam_offset"): camera.cam_offset = Vector2(0, -30)
+		# --- CORRECTION ICI : ON RESET AVEC LES BONS NOMS DE VARIABLES ---
+		if "lerp_speed" in camera: camera.lerp_speed = 5.0
+		if "default_offset" in camera: camera.default_offset = Vector2(0, -20)
 		
 		camera.set_process(true)
 		camera.set_physics_process(true)
 		camera.is_locked = false
 		camera.end_cinematic()
-		camera.current_look_ahead_x = 0.0
-		camera.current_look_ahead_y = 0.0
+		
+		if "current_look_ahead_x" in camera: camera.current_look_ahead_x = 0.0
+		if "current_look_ahead_y" in camera: camera.current_look_ahead_y = 0.0
+		
 		camera.offset = Vector2.ZERO
 		camera.make_current()
 		
@@ -216,7 +217,6 @@ func check_music_progression():
 		if music_boss_intro.playing: music_boss_intro.stop()
 		return
 
-	# --- CORRECTION 3 : suppression du doublon level16 ---
 	elif "level16" in current_level_path or "level_16" in current_level_path:
 		_stop_exploration_music()
 		if music_boss_intro.playing: music_boss_intro.stop()

@@ -5,7 +5,6 @@ extends CharacterBody2D
 # ------------------------------------------------------------
 const SPEED = 170.0
 const GRAVITY = 1200.0
-
 # --- FEELING (VISUEL UNIQUEMENT) ---
 const SQUASH_SPEED = 15.0
 
@@ -85,6 +84,9 @@ var is_dying := false
 @onready var jump_sfx = $JumpSFX
 @onready var anim_player = get_node_or_null("AnimationPlayer")
 
+# --- NOUVEAU NOEUD : Le détecteur de mains ---
+@onready var hand_check = get_node_or_null("HandCheck")
+
 func _ready():
 	default_scale = sprite.scale
 	
@@ -158,6 +160,10 @@ func _physics_process(delta):
 	if input_dir != 0:
 		facing_dir = input_dir
 		sprite.flip_h = facing_dir < 0
+		
+		# --- NOUVEAU : On retourne le rayon de la main selon la direction ---
+		if hand_check:
+			hand_check.target_position.x = facing_dir * 15.0
 
 	# Grappin
 	if grapple_unlocked and Input.is_action_just_pressed("grapple") and not grappling and grapple_launch_timer <= 0:
@@ -284,6 +290,8 @@ func handle_wall_grab(delta):
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
 
+	# (J'ai enlevé la ligne qui forçait à lâcher le mur ici)
+
 	if on_wall: wall_coyote_timer = WALL_COYOTE_TIME
 	else: wall_coyote_timer -= delta
 
@@ -298,9 +306,19 @@ func handle_wall_grab(delta):
 			wall_exhausted = true
 			wall_grabbing = false
 			return
+		
 		velocity.y = 0
-		if Input.is_action_pressed("ui_up"): velocity.y = -WALL_CLIMB_SPEED
-		elif Input.is_action_pressed("ui_down"): velocity.y = WALL_CLIMB_SPEED
+		
+		if Input.is_action_pressed("ui_up"):
+			# --- LA MAGIE EST ICI ---
+			# Si on veut monter, mais que la main est dans le vide (au-dessus du mur)
+			if hand_check and not hand_check.is_colliding():
+				velocity.y = 0 # On bloque le joueur au sommet !
+			else:
+				velocity.y = -WALL_CLIMB_SPEED # Sinon on monte normalement
+				
+		elif Input.is_action_pressed("ui_down"):
+			velocity.y = WALL_CLIMB_SPEED
 	else:
 		wall_grabbing = false
 		if wall_exhausted and on_wall: velocity.y = WALL_SLIDE_SPEED
@@ -402,6 +420,17 @@ func play_air_anim():
 		play_anim("fall")
 
 func update_animation(input_dir):
+	# --- GESTION DU MUR ---
+	if wall_grabbing:
+		# Si on bouge sur l'axe Y (monter/descendre/glisser), on joue "climb"
+		if abs(velocity.y) > 0:
+			play_anim("climb")
+		else:
+			# Sinon, on est immobile sur le mur, on joue "grab"
+			play_anim("grab")
+		return
+	# ----------------------
+		
 	if not is_on_floor():
 		play_air_anim()
 		return

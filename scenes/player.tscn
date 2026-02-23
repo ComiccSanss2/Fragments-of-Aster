@@ -1,8 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=30 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
+[ext_resource type="Texture2D" uid="uid://d0lbwlc6bdtx1" path="res://assets/Escalade-Sheet.png" id="2_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://f12hw5b7md6d" path="res://assets/Fall.png" id="2_ur7pv"]
 [ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://dptoj340uprdd" path="res://assets/grab-up.png" id="3_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://ci3t2qw3a8cjl" path="res://assets/Grapple.png" id="3_y4r1p"]
 [ext_resource type="Texture2D" uid="uid://cmhcsejwu6hgm" path="res://assets/Iddle-Sheet.png" id="4_d2wvv"]
 [ext_resource type="Texture2D" uid="uid://be0kvkefnl330" path="res://assets/light.png" id="4_dqkch"]
@@ -10,8 +12,20 @@
 [ext_resource type="AudioStream" uid="uid://ijetnn8l564a" path="res://assets/sfx/jump.wav" id="5_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cyp8u03jgu3xa" path="res://assets/run-Sheet.png" id="6_jej6c"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
+atlas = ExtResource("2_d2wvv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a38lo"]
+atlas = ExtResource("2_d2wvv")
+region = Rect2(32, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_f1ej7"]
 atlas = ExtResource("2_ur7pv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jej6c"]
+atlas = ExtResource("3_ur7pv")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oprun"]
@@ -38,30 +52,49 @@ region = Rect2(96, 0, 32, 32)
 atlas = ExtResource("5_3v2ag")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
 atlas = ExtResource("6_jej6c")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_a38lo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4r1p"]
 atlas = ExtResource("6_jej6c")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ni07"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2wvv"]
 atlas = ExtResource("6_jej6c")
 region = Rect2(64, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ur7pv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3v2ag"]
 atlas = ExtResource("6_jej6c")
-region = Rect2(32, 0, 32, 32)
+region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vxglm"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i4ail")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a38lo")
+}],
+"loop": true,
+"name": &"climb",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_f1ej7")
 }],
 "loop": true,
 "name": &"fall",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jej6c")
+}],
+"loop": true,
+"name": &"grab",
 "speed": 5.0
 }, {
 "frames": [{
@@ -99,24 +132,24 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i4ail")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a38lo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4ni07")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_ur7pv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4r1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2wvv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3v2ag")
 }],
 "loop": true,
 "name": &"walk",
-"speed": 9.0
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sugp2"]
-size = Vector2(7, 14)
+size = Vector2(11, 14)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qhqgy"]
 blend_mode = 1
@@ -130,16 +163,18 @@ outline_color = Color(0.48499095, 0.0041363565, 0.5882436, 1)
 shadow_size = 8
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+z_index = 2
 scale = Vector2(2, 2)
 script = ExtResource("1_g2els")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_vxglm")
-animation = &"walk"
+animation = &"grab"
+frame_progress = 0.59177256
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 1)
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_sugp2")
 
 [node name="GrappleLine" type="Line2D" parent="."]
@@ -177,3 +212,7 @@ texture = ExtResource("4_dqkch")
 [node name="JumpSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_qlg0r")
 volume_db = -15.0
+
+[node name="HandCheck" type="RayCast2D" parent="."]
+position = Vector2(5, -2.5)
+target_position = Vector2(1.5, 0)

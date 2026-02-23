@@ -13,7 +13,6 @@ func start_intro_sequence():
 	player.can_move = false
 	player.velocity = Vector2.ZERO
 
-# Appelée par Main (ou fallback) pour le tuto standard
 func start_tutorial_sequence():
 	var main = get_tree().root.get_node("Main")
 	var player = main.get_node("Player")
@@ -49,10 +48,13 @@ func _process(delta):
 func landing_impact():
 	var main = get_tree().root.get_node("Main")
 	
-
-	main.camera.follow_smoothness = 8.0 
-
-	main.camera.cam_offset.y = 15.0
+	# --- CORRECTION ICI : lerp_speed AU LIEU DE follow_smoothness ---
+	if "lerp_speed" in main.camera:
+		main.camera.lerp_speed = 8.0 
+		
+	# --- CORRECTION ICI : default_offset AU LIEU DE cam_offset ---
+	if "default_offset" in main.camera:
+		main.camera.default_offset.y = 15.0
 	
 	main.trigger_shake(50.0)
 	

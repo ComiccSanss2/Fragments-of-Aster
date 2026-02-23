@@ -1,7 +1,8 @@
+ColorRect
 AnimatedSprite2D
+RayCast2D
 RichTextLabel
 GPUParticles2D
-ColorRect
 CollisionShape2D
 Area2D
 AudioStreamPlayer
@@ -11,4 +12,3 @@ Label
 Marker2D
 Control
 VBoxContainer
-CheckBox

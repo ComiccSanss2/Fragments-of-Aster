@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dx4nivxq7c3s3"]
+[gd_scene load_steps=28 format=3 uid="uid://dx4nivxq7c3s3"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_0ljxa"]
 [ext_resource type="Texture2D" uid="uid://drq43tifibmm3" path="res://assets/basetiles.png" id="2_fmg3e"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://2qlnbqfx8a2q" path="res://assets/Pic_mono.png" id="7_t4txi"]
 [ext_resource type="Texture2D" uid="uid://bxumfjfquwg71" path="res://assets/angles_mur.png" id="8_apo5x"]
 [ext_resource type="Texture2D" uid="uid://b1gdpu8664xir" path="res://assets/Pic.png" id="9_josfm"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="12_f6egh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ftfob"]
 texture = ExtResource("1_0ljxa")
@@ -300,7 +301,23 @@ sources/7 = SubResource("TileSetAtlasSource_5f5xw")
 size = Vector2(2913, 2304)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fmg3e"]
-size = Vector2(37, 29.5)
+size = Vector2(37, 46.75)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_t4txi"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_apo5x"]
+noise = SubResource("FastNoiseLite_t4txi")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_josfm"]
+shader = ExtResource("12_f6egh")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_apo5x")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
 
 [node name="Level3" type="Node2D"]
 position = Vector2(-1, -1)
@@ -328,8 +345,15 @@ shape = SubResource("RectangleShape2D_fkk1g")
 script = ExtResource("4_0qepi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger3"]
-position = Vector2(1130, 272)
+position = Vector2(1130, 263.375)
 shape = SubResource("RectangleShape2D_fmg3e")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger3/CollisionShape2D"]
+material = SubResource("ShaderMaterial_josfm")
+offset_left = -19.0
+offset_top = -34.375
+offset_right = 19.0
+offset_bottom = 29.625
 
 [node name="Spike" parent="." instance=ExtResource("4_fmg3e")]
 position = Vector2(442, -10)
