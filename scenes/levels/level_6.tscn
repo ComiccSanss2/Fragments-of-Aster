@@ -262,7 +262,7 @@ sources/5 = SubResource("TileSetAtlasSource_pafwe")
 sources/9 = SubResource("TileSetAtlasSource_bvftm")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5wshb"]
-size = Vector2(2753.5, 2046)
+size = Vector2(2753.5, 4397)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7x7cx"]
 size = Vector2(50.21875, 68.25)
@@ -324,11 +324,10 @@ position = Vector2(808, -163)
 position = Vector2(840, -163)
 
 [node name="LevelBounds" type="Node2D" parent="."]
-visible = false
 script = ExtResource("5_i0fhw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(1392.25, -632)
+position = Vector2(1392.25, 543.5)
 shape = SubResource("RectangleShape2D_5wshb")
 
 [node name="Spike" parent="." instance=ExtResource("5_5wshb")]

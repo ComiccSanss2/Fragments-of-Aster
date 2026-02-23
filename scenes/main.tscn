@@ -1,10 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=22 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://c5jptgcyika05" path="res://scenes/camera_2d.gd" id="2_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://bs23qpjbpsg3y" path="res://dialogue_box.tscn" id="4_jyhfs"]
+[ext_resource type="Shader" uid="uid://xgkypn75mghj" path="res://scenes/deathtransition.gdshader" id="5_eb6dy"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="5_tbgi4"]
+[ext_resource type="Shader" uid="uid://ckf3v807pljna" path="res://scenes/transition.gdshader" id="5_trceg"]
 [ext_resource type="AudioStream" uid="uid://dj8ylcrdheniw" path="res://assets/sfx/fragments of roots.mp3" id="6_tefeu"]
 [ext_resource type="AudioStream" uid="uid://bmr04gbcqlo47" path="res://assets/sfx/fragments of pulse.wav" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="7_o6xl0"]
@@ -30,6 +32,21 @@ width = 256
 height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8y0u"]
+shader = ExtResource("5_trceg")
+shader_parameter/cutoff = 0.0
+shader_parameter/smooth_size = 0.0
+shader_parameter/transition_color = Color(0, 0, 0.2235, 1)
+shader_parameter/is_opening = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trceg"]
+shader = ExtResource("5_eb6dy")
+shader_parameter/transition_color = Color(0, 0, 0.2235, 1)
+shader_parameter/cutoff = 0.0
+shader_parameter/smooth_size = 0.05
+shader_parameter/aspect_ratio = 1.777
+shader_parameter/center = Vector2(0.5, 0.5)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_o6xl0"]
 frequency = 0.0139
@@ -98,10 +115,11 @@ anchor_bottom = 0.5
 offset_top = -152.0
 offset_bottom = -152.0
 
-[node name="TransitionScreen" type="ColorRect" parent="UI"]
+[node name="LevelTransition" type="ColorRect" parent="UI"]
 visible = false
 modulate = Color(0, 0, 0, 1)
 z_index = 500
+material = SubResource("ShaderMaterial_a8y0u")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -110,7 +128,22 @@ offset_top = -32.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(2.7073547e-08, 0, 0.1352405, 1)
+color = Color(0, 0, 0.22352941, 1)
+
+[node name="DeathTransition" type="ColorRect" parent="UI"]
+visible = false
+modulate = Color(0, 0, 0, 1)
+z_index = 500
+material = SubResource("ShaderMaterial_trceg")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.0
+offset_top = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(2.1658838e-07, 0, 0.22171634, 1)
 
 [node name="AmbiancePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_tbgi4")

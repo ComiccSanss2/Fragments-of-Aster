@@ -12,6 +12,8 @@ func start_intro_sequence():
 	is_waiting_for_landing = true
 	player.can_move = false
 	player.velocity = Vector2.ZERO
+	
+	# Transition complètement retirée d'ici !
 
 func start_tutorial_sequence():
 	var main = get_tree().root.get_node("Main")

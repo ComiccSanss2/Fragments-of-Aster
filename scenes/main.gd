@@ -3,7 +3,11 @@ extends Node2D
 @onready var player := $Player
 @onready var level_root := $LevelRoot
 @onready var camera := $Camera2D
-@onready var transition_screen := $UI/TransitionScreen
+
+# --- NOUVEAUX ÉCRANS DE TRANSITION ---
+@onready var level_transition := $UI/LevelTransition
+@onready var death_transition := $UI/DeathTransition
+
 @onready var ui_layer := $UI
 @onready var dialogue_box := $UI/DialogueBox
 
@@ -32,17 +36,21 @@ const DEFAULT_ZOOM = Vector2(2.6, 2.6)
 
 func _ready():
 	var is_intro = SaveManager.has_meta("intro_sequence")
-	if transition_screen:
-		transition_screen.visible = true
-		transition_screen.modulate.a = 1.0 if is_intro else 0.0
-		transition_screen.color = Color.BLACK
+	
+	# Initialisation des deux écrans
+	if level_transition:
+		level_transition.visible = true
+		level_transition.material.set_shader_parameter("is_opening", false)
+		level_transition.material.set_shader_parameter("cutoff", 1.0 if is_intro else 0.0)
+	if death_transition:
+		death_transition.visible = true
+		death_transition.material.set_shader_parameter("cutoff", 0.0)
 
 	if FileAccess.file_exists("res://pause_menu.tscn"):
 		ui_layer.add_child(load("res://pause_menu.tscn").instantiate())
 
 	if is_intro:
 		check_music_progression()
-		
 		SaveManager.remove_meta("intro_sequence")
 		load_level("res://scenes/levels/level_1.tscn")
 		_set_level_canvas_layers_visible(false)
@@ -53,7 +61,6 @@ func _ready():
 		
 		intro_camera_pos = Vector2(player.global_position.x, -1200)
 		camera.global_position = intro_camera_pos
-		
 		camera.is_locked = true
 		intro_camera_locked = true
 		
@@ -69,8 +76,16 @@ func _ready():
 		player.visible = true
 		_set_level_canvas_layers_visible(true)
 		
+		# --- CORRECTION DE L'OUVERTURE D'INTRO ---
+		level_transition.material.set_shader_parameter("is_opening", true)
+		level_transition.material.set_shader_parameter("cutoff", 0.0)
 		var t = create_tween()
-		t.tween_property(transition_screen, "modulate:a", 0.0, 4.0)
+		t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 4.0)
+		await t.finished
+		
+		level_transition.material.set_shader_parameter("is_opening", false)
+		level_transition.material.set_shader_parameter("cutoff", 0.0)
+		# ----------------------------------------
 		
 	elif SaveManager.has_meta("level_to_load"):
 		var target_level = SaveManager.get_meta("level_to_load")
@@ -109,11 +124,7 @@ func _process(delta):
 		if player.global_position.y >= catch_threshold:
 			intro_camera_locked = false
 			camera.is_locked = false
-			
-			# --- CORRECTION ICI : lerp_speed AU LIEU DE follow_smoothness ---
 			if "lerp_speed" in camera: camera.lerp_speed = 20.0
-			
-			# --- CORRECTION ICI : default_offset AU LIEU DE cam_offset ---
 			if "default_offset" in camera: camera.default_offset.y = 100.0
 
 	# --- SCREEN SHAKE ---
@@ -144,14 +155,15 @@ func load_level(path: String):
 		player.velocity = Vector2.ZERO
 		player.can_move = true
 		player.is_dying = false
+		player.collision_layer = 1
+		player.collision_mask = 1
+		
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
 		player.gravity_unlocked = gravity_collected
 		
 		camera.global_position = player.global_position
 		camera.zoom = DEFAULT_ZOOM 
-		
-		# --- CORRECTION ICI : ON RESET AVEC LES BONS NOMS DE VARIABLES ---
 		if "lerp_speed" in camera: camera.lerp_speed = 5.0
 		if "default_offset" in camera: camera.default_offset = Vector2(0, -20)
 		
@@ -182,29 +194,83 @@ func load_level(path: String):
 		}
 		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 
+# --- TRANSITION DE NIVEAU (Utilise level_transition) ---
 func change_level_with_transition(next_level_path: String):
-	player.can_move = false; player.velocity = Vector2.ZERO
-	var t = create_tween(); t.tween_property(transition_screen, "modulate:a", 1.0, 0.5); await t.finished
+	player.can_move = false
+	player.velocity = Vector2.ZERO
+	
+	# --- PHASE 1 : FERMETURE (De gauche à droite) ---
+	level_transition.material.set_shader_parameter("is_opening", false)
+	level_transition.material.set_shader_parameter("cutoff", 0.0)
+	
+	var t = create_tween()
+	t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 0.5)
+	await t.finished
+	
+	# --- CHARGEMENT ET PAUSE ---
 	load_level(next_level_path)
 	_show_game_content()
-	await get_tree().process_frame; player.can_move = false; player.velocity = Vector2.ZERO
-	var t2 = create_tween(); t2.tween_property(transition_screen, "modulate:a", 0.0, 0.5); await t2.finished
+	
+	await get_tree().process_frame
+	player.can_move = false
+	player.velocity = Vector2.ZERO
+	
+	# Pause d'une seconde sur l'écran bleu
+	await get_tree().create_timer(1.0).timeout
+	
+	# --- PHASE 2 : OUVERTURE (Continue de gauche à droite) ---
+	level_transition.material.set_shader_parameter("is_opening", true)
+	level_transition.material.set_shader_parameter("cutoff", 0.0)
+	
+	var t2 = create_tween()
+	t2.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 0.5)
+	await t2.finished
+	
+	level_transition.material.set_shader_parameter("is_opening", false)
+	level_transition.material.set_shader_parameter("cutoff", 0.0)
+	
 	player.can_move = true
 
+# --- TRANSITION DE MORT (Utilise death_transition avec le cercle) ---
 func play_death_sequence():
-	player.can_move = false; player.velocity = Vector2.ZERO
-	await get_tree().create_timer(0.5).timeout
-	var t = create_tween(); t.tween_property(transition_screen, "modulate:a", 1.0, 0.5); await t.finished
+	player.can_move = false
+	
+	var screen_size = get_viewport().get_visible_rect().size
+	
+	# Configuration de l'Iris Wipe
+	death_transition.material.set_shader_parameter("aspect_ratio", screen_size.x / screen_size.y)
+	var player_screen_pos = player.get_global_transform_with_canvas().origin / screen_size
+	death_transition.material.set_shader_parameter("center", player_screen_pos)
+	
+	var t = create_tween()
+	t.tween_property(death_transition, "material:shader_parameter/cutoff", 1.0, 0.5)
+	await t.finished
+	
 	if current_level_path != "":
-		level_root.visible = false; player.visible = false
+		level_root.visible = false
+		player.visible = false
 		load_level(current_level_path)
 		await get_tree().process_frame
 		_show_game_content()
-	await get_tree().process_frame; player.can_move = false; player.velocity = Vector2.ZERO
-	await get_tree().create_timer(0.5).timeout
-	var t2 = create_tween(); t2.tween_property(transition_screen, "modulate:a", 0.0, 0.5); await t2.finished
-	player.can_move = true; player.is_dying = false
+		
+	await get_tree().process_frame
+	player.can_move = false
+	player.velocity = Vector2.ZERO
+	
+	await get_tree().create_timer(0.3).timeout 
+	
+	# On recentre le cercle sur la nouvelle position de spawn avant de l'ouvrir !
+	player_screen_pos = player.get_global_transform_with_canvas().origin / screen_size
+	death_transition.material.set_shader_parameter("center", player_screen_pos)
+	
+	var t2 = create_tween()
+	t2.tween_property(death_transition, "material:shader_parameter/cutoff", 0.0, 0.4)
+	await t2.finished
+	
+	player.can_move = true
+	player.is_dying = false
 
+# (Le reste des fonctions est inchangé)
 func show_grapple_message(msg: String):
 	var label = $UI/CenterContainer/EchoText
 	if label: label.text = msg; $UI.visible = true

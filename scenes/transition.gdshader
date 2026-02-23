@@ -1,22 +1,34 @@
 shader_type canvas_item;
 
-// La progression de la transition : 0.0 = Transparent, 1.0 = Tout Noir
+// La progression de la transition : 0.0 -> 1.0
 uniform float cutoff : hint_range(0.0, 1.0) = 0.0;
 
-// La douceur des bords (0.0 = Pixel Art dur, 0.5 = Flou)
-uniform float smooth_size : hint_range(0.0, 1.0) = 0.0;
+// La douceur des bords
+uniform float smooth_size : hint_range(0.0, 1.0) = 0.15;
 
-// La texture qui définit la forme (Noir et Blanc)
-uniform sampler2D mask : source_color;
+// La couleur bleu foncé
+uniform vec4 transition_color : source_color = vec4(0.0, 0.0, 0.2235, 1.0);
+
+// "false" pour fermer l'écran, "true" pour l'ouvrir
+uniform bool is_opening = false;
 
 void fragment() {
-	// On lit la valeur de la texture de masque (entre 0 et 1)
-	float value = texture(mask, UV).r;
+	// PLUS BESOIN DE MASQUE ! On utilise la position X de l'écran (UV.x)
+	// On décale un peu pour que le flou soit totalement invisible quand cutoff = 0 ou 1
+	float sweep = cutoff * (1.0 + smooth_size) - smooth_size;
 	
-	// Si 'value' est plus petit que 'cutoff', on affiche le noir.
-	// smoothstep permet de gérer la douceur des bords.
-	float alpha = smoothstep(cutoff, cutoff + smooth_size, value * (1.0 - smooth_size) + smooth_size);
+	// Calcul du balayage
+	float step_val = smoothstep(sweep, sweep + smooth_size + 0.001, UV.x);
 	
-	// On inverse : on veut que ce soit NOIR quand le cutoff augmente
-	COLOR = vec4(0.0, 0.0, 0.0, 1.0 - alpha);
+	float final_alpha;
+	
+	if (is_opening) {
+		// En ouverture, on laisse la couleur derrière le balayage
+		final_alpha = step_val;
+	} else {
+		// En fermeture, on met la couleur devant le balayage
+		final_alpha = 1.0 - step_val;
+	}
+	
+	COLOR = vec4(transition_color.rgb, final_alpha);
 }

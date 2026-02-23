@@ -238,7 +238,7 @@ sources/8 = SubResource("TileSetAtlasSource_mnqm8")
 sources/9 = SubResource("TileSetAtlasSource_pdbfg")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v7ucw"]
-size = Vector2(7517, 3502.5)
+size = Vector2(7517, 5287.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xsrpe"]
 size = Vector2(46, 71.25)
@@ -272,12 +272,11 @@ scale = Vector2(1.5, 1.5)
 transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
 
 [node name="LevelBounds" type="Node2D" parent="."]
-visible = false
 position = Vector2(-35, 433)
 script = ExtResource("3_h6r4t")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(3739.5, -106.25)
+position = Vector2(3739.5, 786.25)
 shape = SubResource("RectangleShape2D_v7ucw")
 
 [node name="BreakablePlatform32" parent="." instance=ExtResource("4_w2i51")]

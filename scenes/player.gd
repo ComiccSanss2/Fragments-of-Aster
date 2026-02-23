@@ -117,12 +117,13 @@ func _process(delta):
 # ------------------------------------------------------------
 func _physics_process(delta):
 	if is_dying or not can_move:
-		if is_dying: velocity = Vector2.ZERO
+		if is_dying: 
+			velocity = velocity.move_toward(Vector2.ZERO, 600.0 * delta)
 		else:
 			velocity.x = 0
+			
 			if not is_on_floor():
 				velocity.y += GRAVITY * gravity_dir * delta
-				# Clamp
 				if gravity_dir == 1: velocity.y = min(velocity.y, 2000.0)
 				else: velocity.y = max(velocity.y, -2000.0)
 				play_air_anim()
@@ -155,13 +156,12 @@ func _physics_process(delta):
 		spawn_dust()
 	was_on_floor = is_on_floor()
 
-	# Inputs
+	# --- INPUTS ---
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 	if input_dir != 0:
 		facing_dir = input_dir
 		sprite.flip_h = facing_dir < 0
 		
-		# --- NOUVEAU : On retourne le rayon de la main selon la direction ---
 		if hand_check:
 			hand_check.target_position.x = facing_dir * 15.0
 
@@ -177,7 +177,6 @@ func _physics_process(delta):
 
 	if grappling and grapple_target:
 		handle_grapple(delta)
-		# ICI : On joue l'animation spécifique GRAPPLE
 		play_anim("grapple")
 		move_and_slide()
 		return
@@ -290,8 +289,6 @@ func handle_wall_grab(delta):
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
 
-	# (J'ai enlevé la ligne qui forçait à lâcher le mur ici)
-
 	if on_wall: wall_coyote_timer = WALL_COYOTE_TIME
 	else: wall_coyote_timer -= delta
 
@@ -310,12 +307,10 @@ func handle_wall_grab(delta):
 		velocity.y = 0
 		
 		if Input.is_action_pressed("ui_up"):
-			# --- LA MAGIE EST ICI ---
-			# Si on veut monter, mais que la main est dans le vide (au-dessus du mur)
 			if hand_check and not hand_check.is_colliding():
-				velocity.y = 0 # On bloque le joueur au sommet !
+				velocity.y = 0 
 			else:
-				velocity.y = -WALL_CLIMB_SPEED # Sinon on monte normalement
+				velocity.y = -WALL_CLIMB_SPEED 
 				
 		elif Input.is_action_pressed("ui_down"):
 			velocity.y = WALL_CLIMB_SPEED
@@ -373,20 +368,47 @@ func finish_grapple():
 	grapple_line.points = []
 	can_dash = true
 
-func die():
+func die(hazard_pos := Vector2.ZERO):
 	if is_dying: return
 	is_dying = true
 	can_move = false
-	velocity = Vector2.ZERO
-	if anim_player and anim_player.has_animation("death"): anim_player.play("death")
-	var main = get_tree().root.get_node("Main")
-	if main and main.has_method("play_death_sequence"): main.play_death_sequence()
-	else: get_tree().reload_current_scene()
+	wall_grabbing = false 
+	
+	sprite.scale = default_scale
+	
+	# --- 1. LE KNOCKBACK FLUIDE ---
+	velocity.y = -170.0 * gravity_dir
+	if hazard_pos != Vector2.ZERO:
+		var dir = sign(global_position.x - hazard_pos.x)
+		if dir == 0: dir = -facing_dir
+		velocity.x = dir * 200.0
+	else:
+		velocity.x = -facing_dir * 200.0
+		
+	collision_mask = 0
+
+	# --- 2. L'ANIMATION DE DÉSINTÉGRATION ---
+	if anim_player and anim_player.has_animation("death"):
+		anim_player.play("death")
+		await anim_player.animation_finished
+	elif sprite.sprite_frames.has_animation("death"):
+		sprite.play("death")
+		await sprite.animation_finished
+	else:
+		await get_tree().create_timer(0.5).timeout
+
+	# --- 3. LA TRANSITION ---
+	var main = get_tree().root.get_node_or_null("Main")
+	if main and main.has_method("play_death_sequence"): 
+		main.play_death_sequence()
+	else: 
+		get_tree().reload_current_scene()
 
 func start_respawn_sequence():
 	can_move = false
 	is_dying = false
 	velocity = Vector2.ZERO
+	collision_mask = 1 
 	play_anim("idle")
 	sprite.visible = true
 	gravity_dir = 1
@@ -398,21 +420,11 @@ func start_respawn_sequence():
 	can_move = true
 
 func play_anim(name: String):
-	# Sécurité pour éviter les erreurs si l'anim manque
 	if sprite.sprite_frames.has_animation(name):
 		if sprite.animation != name: sprite.play(name)
 
-# ICI : NOUVELLE LOGIQUE POUR JUMP / FALL
 func play_air_anim():
-	# Si on utilise le grappin, cette fonction ne devrait pas override l'anim grapple
 	if grappling: return
-	
-	# Logique standard (Gravité normale 1)
-	# Vel Y négatif = on monte (JUMP)
-	# Vel Y positif = on descend (FALL)
-	
-	# Si Gravité inversée (-1), c'est l'inverse.
-	# L'astuce : velocity.y * gravity_dir < 0 veut dire "On va à l'opposé de la gravité" (donc saut)
 	
 	if velocity.y * gravity_dir < 0:
 		play_anim("jump")
@@ -420,16 +432,12 @@ func play_air_anim():
 		play_anim("fall")
 
 func update_animation(input_dir):
-	# --- GESTION DU MUR ---
 	if wall_grabbing:
-		# Si on bouge sur l'axe Y (monter/descendre/glisser), on joue "climb"
 		if abs(velocity.y) > 0:
 			play_anim("climb")
 		else:
-			# Sinon, on est immobile sur le mur, on joue "grab"
 			play_anim("grab")
 		return
-	# ----------------------
 		
 	if not is_on_floor():
 		play_air_anim()

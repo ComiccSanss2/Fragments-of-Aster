@@ -347,7 +347,7 @@ sources/5 = SubResource("TileSetAtlasSource_nt80m")
 sources/6 = SubResource("TileSetAtlasSource_brxtv")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra442"]
-size = Vector2(2053, 1812)
+size = Vector2(2053, 2065)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l37oo"]
 size = Vector2(32, 29.5)
@@ -385,12 +385,11 @@ layer_0/tile_data = PackedInt32Array(0, 3, 0, 65536, 3, 1, 131072, 3, 1, 196608,
 position = Vector2(12, -22)
 
 [node name="LevelBounds" type="Node2D" parent="."]
-visible = false
 position = Vector2(2, 0)
 script = ExtResource("2_l37oo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(973.5, 592)
+position = Vector2(973.5, 718.5)
 shape = SubResource("RectangleShape2D_ra442")
 
 [node name="EndTrigger2" type="Area2D" parent="."]

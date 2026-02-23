@@ -239,7 +239,7 @@ sources/7 = SubResource("TileSetAtlasSource_xex4j")
 sources/8 = SubResource("TileSetAtlasSource_rj4iy")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m2cpo"]
-size = Vector2(6974, 2646)
+size = Vector2(6974, 4599)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_v1y24"]
 size = Vector2(41, 67.3125)
@@ -277,7 +277,7 @@ position = Vector2(-35, 433)
 script = ExtResource("3_6v45j")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(3353, 57)
+position = Vector2(3353, 1033.5)
 shape = SubResource("RectangleShape2D_m2cpo")
 
 [node name="MovingPlatform" parent="." instance=ExtResource("4_ltlq2")]

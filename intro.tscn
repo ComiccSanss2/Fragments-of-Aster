@@ -1,12 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cdax65odk1bb8"]
+[gd_scene load_steps=4 format=3 uid="uid://cdax65odk1bb8"]
 
 [ext_resource type="Script" uid="uid://dgkcpaj6gh010" path="res://intro.gd" id="1_7a8ye"]
-[ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="2_0a7ni"]
+[ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="2_7a8ye"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="3_y72e6"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_u2rf6"]
-font = ExtResource("2_0a7ni")
-font_size = 25
 
 [node name="Intro" type="Control"]
 layout_mode = 3
@@ -26,20 +22,22 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -0.5
-offset_top = -11.5
-offset_right = 0.5
-offset_bottom = 11.5
+offset_left = -529.0
+offset_top = -61.0
+offset_right = 529.0
+offset_bottom = 75.0
 grow_horizontal = 2
 grow_vertical = 2
-label_settings = SubResource("LabelSettings_u2rf6")
+theme_override_fonts/normal_font = ExtResource("2_7a8ye")
+theme_override_font_sizes/normal_font_size = 35
+bbcode_enabled = true
 horizontal_alignment = 1
 vertical_alignment = 1
 

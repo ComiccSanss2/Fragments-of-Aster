@@ -188,7 +188,7 @@ shader_parameter/glitch_speed = 5.762000226195
 shader_parameter/block_size = 18.962000663195
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6iamk"]
-size = Vector2(4440, 8403.25)
+size = Vector2(4440, 7896)
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_x42e6")
@@ -223,12 +223,11 @@ offset_bottom = 33.125
 position = Vector2(-258, -3237)
 
 [node name="LevelBounds" type="Node2D" parent="."]
-visible = false
 position = Vector2(-311, 0)
 script = ExtResource("3_6761a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(1660, -3704)
+position = Vector2(1660, -3619)
 shape = SubResource("RectangleShape2D_6iamk")
 
 [connection signal="body_entered" from="EndTrigger" to="EndTrigger" method="_on_body_entered"]

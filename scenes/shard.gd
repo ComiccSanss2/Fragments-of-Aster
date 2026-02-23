@@ -3,7 +3,6 @@ extends Area2D
 enum ShardType { GRAPPLE, DASH, INVERSION }
 @export var shard_type: ShardType = ShardType.GRAPPLE
 
-# CHANGEMENT ICI : On précise que c'est un AnimatedSprite2D
 @onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var light := $PointLight2D
 @onready var anim := $AnimationPlayer
@@ -37,11 +36,8 @@ func _ready():
 		return
 	# ------------------------------------------
 
-	# CHANGEMENT ICI : On lance l'animation du sprite (Vérifie que le nom est "idle" ou "default")
 	sprite.play("idle")
 	
-	# Si ton AnimationPlayer gère le flottement (haut/bas), garde cette ligne.
-	# Si il ne gérait que les frames, tu peux l'enlever.
 	if anim.has_animation("breath"):
 		anim.play("breath")
 		
@@ -54,12 +50,23 @@ func _on_TriggerArea_body_entered(body):
 		cutscene_running = true
 		player = body
 
-		player.velocity = Vector2.ZERO
+		# --- NETTOYAGE COMPLET DES ÉTATS DU JOUEUR ---
 		player.can_move = false
-		player.play_anim("idle")
+		player.is_dashing = false
+		player.wall_grabbing = false
+		if player.grappling:
+			player.grappling = false
+			player.grapple_line.visible = false
+			
+		player.velocity.x = 0
+		# Si le joueur montait, on tue son élan pour qu'il retombe de suite. 
+		# S'il tombait déjà, on le laisse finir sa chute.
+		if player.velocity.y * player.gravity_dir < 0:
+			player.velocity.y = 0 
+		# ----------------------------------------------
 
 		camera.start_cinematic(self)
-		camera.zoom_to(7.0, 1.2)
+		camera.zoom_to(5.0, 1.2)
 
 		var main = get_tree().root.get_node("Main")
 		var roots_music = main.get_node_or_null("FragmentsOfRoots")
@@ -126,7 +133,7 @@ func _on_collect_finished():
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	var main = get_tree().root.get_node("Main")
 
-	# --- SYSTEM MESSAGE (Restent Blancs car c'est le jeu qui parle) ---
+	# --- SYSTEM MESSAGE ---
 	if shard_type == ShardType.GRAPPLE:
 		player.grapple_unlocked = true
 		main.grapple_collected = true
@@ -143,7 +150,6 @@ func _on_collect_finished():
 		
 	elif shard_type == ShardType.INVERSION:
 		player.gravity_unlocked = true
-		# Utilisation de set pour éviter erreur si variable inexistante
 		main.set("gravity_collected", true) 
 		
 		await dialog.show_dialog("Reality Anchor Destabilized.")
@@ -185,7 +191,6 @@ func _on_collect_finished():
 			)
 
 	# --- DIALOGUES LYRA (EN CYAN) ---
-	
 	if shard_type == ShardType.DASH:
 		await dialog.show_dialog(
 			"[color=#33d9ff]I feel lighter... quicker...[/color]",
@@ -250,6 +255,5 @@ func end_cutscene():
 	camera.end_cinematic()
 
 	player.can_move = true
-	player.play_anim("idle")
 
 	queue_free()

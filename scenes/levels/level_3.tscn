@@ -298,7 +298,7 @@ sources/6 = SubResource("TileSetAtlasSource_1nwmf")
 sources/7 = SubResource("TileSetAtlasSource_5f5xw")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fkk1g"]
-size = Vector2(2913, 2304)
+size = Vector2(3164, 2622)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fmg3e"]
 size = Vector2(37, 46.75)
@@ -338,7 +338,7 @@ position = Vector2(-7, 333)
 script = ExtResource("3_fmg3e")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(1207.5, 617)
+position = Vector2(1312, 776)
 shape = SubResource("RectangleShape2D_fkk1g")
 
 [node name="EndTrigger3" type="Area2D" parent="."]
