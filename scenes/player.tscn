@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=47 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d0lbwlc6bdtx1" path="res://assets/Escalade-Sheet.png" id="2_d2wvv"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cyp8u03jgu3xa" path="res://assets/run-Sheet.png" id="6_jej6c"]
 [ext_resource type="AudioStream" uid="uid://caedqwmh2w7qi" path="res://assets/sfx/hitHurt.wav" id="13_f1ej7"]
 [ext_resource type="AudioStream" uid="uid://bxf7wsejawk4e" path="res://assets/sfx/decading.wav" id="14_oprun"]
+[ext_resource type="AudioStream" uid="uid://jbl7evhke65g" path="res://assets/sfx/laserShoot (1).wav" id="15_oprun"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
 atlas = ExtResource("2_d2wvv")
@@ -254,6 +255,10 @@ outline_size = 5
 outline_color = Color(0.48499095, 0.0041363565, 0.5882436, 1)
 shadow_size = 8
 
+[sub_resource type="Curve" id="Curve_f1ej7"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 2
 scale = Vector2(2, 2)
@@ -262,9 +267,7 @@ script = ExtResource("1_g2els")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_vxglm")
-animation = &"death"
-frame = 11
-frame_progress = 0.3819187
+animation = &"fall"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
@@ -318,3 +321,16 @@ volume_db = -6.158
 stream = ExtResource("14_oprun")
 volume_db = -9.579
 pitch_scale = 0.95
+
+[node name="GrappleTrail" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 20
+lifetime = 0.6
+gravity = Vector2(0, 0)
+scale_amount_min = 5.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_f1ej7")
+
+[node name="GrappleSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_oprun")
+volume_db = -15.171

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cpifrvbrgpjp0"]
+[gd_scene load_steps=26 format=3 uid="uid://cpifrvbrgpjp0"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_ewkot"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_gveo2"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bmvs0w7clrpuk" path="res://scenes/movingspike.tscn" id="9_jy7ex"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="9_yd7i6"]
 [ext_resource type="Script" uid="uid://dymki1mih2quj" path="res://scenes/levels/end_trigger_12.gd" id="10_vcewm"]
+[ext_resource type="PackedScene" uid="uid://cqepm8bac6fx2" path="res://scenes/spike.tscn" id="15_muk3n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2ii7u"]
 texture = ExtResource("1_ewkot")
@@ -205,6 +206,882 @@ script = ExtResource("10_vcewm")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger12"]
 position = Vector2(263.1875, 621.5)
 shape = SubResource("RectangleShape2D_b73n6")
+
+[node name="Spike" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 153)
+
+[node name="Spike2" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 144)
+
+[node name="Spike3" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 135)
+
+[node name="Spike4" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 126)
+
+[node name="Spike5" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 116)
+
+[node name="Spike6" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 106)
+
+[node name="Spike7" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 97)
+
+[node name="Spike8" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 87)
+
+[node name="Spike9" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 79)
+
+[node name="Spike10" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(864, 72)
+
+[node name="Spike17" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -103)
+
+[node name="Spike18" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -112)
+
+[node name="Spike19" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -121)
+
+[node name="Spike20" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -130)
+
+[node name="Spike21" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -140)
+
+[node name="Spike22" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -150)
+
+[node name="Spike23" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -159)
+
+[node name="Spike24" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -169)
+
+[node name="Spike25" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -177)
+
+[node name="Spike26" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -184)
+
+[node name="Spike27" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -13)
+
+[node name="Spike28" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -22)
+
+[node name="Spike29" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -31)
+
+[node name="Spike30" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -40)
+
+[node name="Spike31" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -50)
+
+[node name="Spike32" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -60)
+
+[node name="Spike33" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -69)
+
+[node name="Spike34" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -79)
+
+[node name="Spike35" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -87)
+
+[node name="Spike36" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -94)
+
+[node name="Spike37" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 76)
+
+[node name="Spike38" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 67)
+
+[node name="Spike39" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 58)
+
+[node name="Spike40" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 49)
+
+[node name="Spike41" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 39)
+
+[node name="Spike42" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 29)
+
+[node name="Spike43" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 20)
+
+[node name="Spike44" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 10)
+
+[node name="Spike45" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 2)
+
+[node name="Spike46" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, -5)
+
+[node name="Spike47" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 166)
+
+[node name="Spike48" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 157)
+
+[node name="Spike49" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 148)
+
+[node name="Spike50" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 139)
+
+[node name="Spike51" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 129)
+
+[node name="Spike52" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 119)
+
+[node name="Spike53" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 110)
+
+[node name="Spike54" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 100)
+
+[node name="Spike55" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 92)
+
+[node name="Spike56" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 85)
+
+[node name="Spike57" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 409)
+
+[node name="Spike58" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 400)
+
+[node name="Spike59" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 391)
+
+[node name="Spike60" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 382)
+
+[node name="Spike61" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 372)
+
+[node name="Spike62" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 362)
+
+[node name="Spike63" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 353)
+
+[node name="Spike64" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 343)
+
+[node name="Spike65" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 335)
+
+[node name="Spike66" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 328)
+
+[node name="Spike67" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 499)
+
+[node name="Spike68" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 490)
+
+[node name="Spike69" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 481)
+
+[node name="Spike70" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 472)
+
+[node name="Spike71" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 462)
+
+[node name="Spike72" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 452)
+
+[node name="Spike73" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 443)
+
+[node name="Spike74" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 433)
+
+[node name="Spike75" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 425)
+
+[node name="Spike76" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 418)
+
+[node name="Spike77" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 588)
+
+[node name="Spike78" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 579)
+
+[node name="Spike79" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 570)
+
+[node name="Spike80" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 561)
+
+[node name="Spike81" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 551)
+
+[node name="Spike82" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 541)
+
+[node name="Spike83" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 532)
+
+[node name="Spike84" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 522)
+
+[node name="Spike85" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 514)
+
+[node name="Spike86" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 507)
+
+[node name="Spike87" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 680)
+
+[node name="Spike88" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 671)
+
+[node name="Spike89" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 662)
+
+[node name="Spike90" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 653)
+
+[node name="Spike91" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 643)
+
+[node name="Spike92" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 633)
+
+[node name="Spike93" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 624)
+
+[node name="Spike94" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 614)
+
+[node name="Spike95" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 606)
+
+[node name="Spike96" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 599)
+
+[node name="Spike97" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 761)
+
+[node name="Spike98" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 752)
+
+[node name="Spike99" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 743)
+
+[node name="Spike100" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 734)
+
+[node name="Spike101" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 724)
+
+[node name="Spike102" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 714)
+
+[node name="Spike103" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 705)
+
+[node name="Spike104" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 695)
+
+[node name="Spike105" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 687)
+
+[node name="Spike106" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 680)
+
+[node name="Spike107" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 760)
+
+[node name="Spike108" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 751)
+
+[node name="Spike109" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 742)
+
+[node name="Spike110" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 733)
+
+[node name="Spike111" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 723)
+
+[node name="Spike112" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 713)
+
+[node name="Spike113" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 704)
+
+[node name="Spike114" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 694)
+
+[node name="Spike115" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 686)
+
+[node name="Spike116" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 679)
+
+[node name="Spike117" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 668)
+
+[node name="Spike118" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 659)
+
+[node name="Spike119" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 650)
+
+[node name="Spike120" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 641)
+
+[node name="Spike121" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 631)
+
+[node name="Spike122" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 621)
+
+[node name="Spike123" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 612)
+
+[node name="Spike124" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 602)
+
+[node name="Spike125" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 594)
+
+[node name="Spike126" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 587)
+
+[node name="Spike127" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 577)
+
+[node name="Spike128" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 568)
+
+[node name="Spike129" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 559)
+
+[node name="Spike130" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 550)
+
+[node name="Spike131" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 540)
+
+[node name="Spike132" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 530)
+
+[node name="Spike133" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 521)
+
+[node name="Spike134" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 511)
+
+[node name="Spike135" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 503)
+
+[node name="Spike136" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 496)
+
+[node name="Spike137" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 538)
+
+[node name="Spike138" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 529)
+
+[node name="Spike139" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 520)
+
+[node name="Spike140" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 511)
+
+[node name="Spike141" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 501)
+
+[node name="Spike142" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 491)
+
+[node name="Spike143" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 482)
+
+[node name="Spike144" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 472)
+
+[node name="Spike145" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 464)
+
+[node name="Spike146" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 457)
+
+[node name="Spike147" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 216)
+
+[node name="Spike148" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 207)
+
+[node name="Spike149" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 198)
+
+[node name="Spike150" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 189)
+
+[node name="Spike151" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 179)
+
+[node name="Spike152" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 169)
+
+[node name="Spike153" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 160)
+
+[node name="Spike154" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 150)
+
+[node name="Spike155" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 142)
+
+[node name="Spike156" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 135)
+
+[node name="Spike157" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 126)
+
+[node name="Spike158" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 117)
+
+[node name="Spike159" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 108)
+
+[node name="Spike160" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 99)
+
+[node name="Spike161" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 89)
+
+[node name="Spike162" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 79)
+
+[node name="Spike163" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 70)
+
+[node name="Spike164" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 60)
+
+[node name="Spike165" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 52)
+
+[node name="Spike166" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 45)
+
+[node name="Spike167" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 33)
+
+[node name="Spike168" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 24)
+
+[node name="Spike169" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 15)
+
+[node name="Spike170" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, 6)
+
+[node name="Spike171" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -4)
+
+[node name="Spike172" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -14)
+
+[node name="Spike173" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -23)
+
+[node name="Spike174" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -33)
+
+[node name="Spike175" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -41)
+
+[node name="Spike176" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -48)
+
+[node name="Spike177" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -58)
+
+[node name="Spike178" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -67)
+
+[node name="Spike179" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -76)
+
+[node name="Spike180" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -85)
+
+[node name="Spike181" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -95)
+
+[node name="Spike182" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -105)
+
+[node name="Spike183" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -114)
+
+[node name="Spike184" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -124)
+
+[node name="Spike185" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -132)
+
+[node name="Spike186" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1709, -139)
+
+[node name="Spike187" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 217)
+
+[node name="Spike188" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 208)
+
+[node name="Spike189" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 199)
+
+[node name="Spike190" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 190)
+
+[node name="Spike191" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 180)
+
+[node name="Spike192" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 170)
+
+[node name="Spike193" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 161)
+
+[node name="Spike194" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 151)
+
+[node name="Spike195" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 143)
+
+[node name="Spike196" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(1504, 136)
+
+[node name="Spike197" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 601)
+
+[node name="Spike198" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 592)
+
+[node name="Spike199" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 583)
+
+[node name="Spike200" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 574)
+
+[node name="Spike201" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 564)
+
+[node name="Spike202" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 554)
+
+[node name="Spike203" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 545)
+
+[node name="Spike204" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 535)
+
+[node name="Spike205" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 527)
+
+[node name="Spike206" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 520)
+
+[node name="Spike247" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2311, 512)
+rotation = 1.5707964
+
+[node name="Spike248" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2320, 512)
+rotation = 1.5707964
+
+[node name="Spike249" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2328, 512)
+rotation = 1.5707964
+
+[node name="Spike250" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2336, 512)
+rotation = 1.5707964
+
+[node name="Spike251" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2344, 512)
+rotation = 1.5707964
+
+[node name="Spike252" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2352, 512)
+rotation = 1.5707964
+
+[node name="Spike253" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2360, 512)
+rotation = 1.5707964
+
+[node name="Spike254" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2471, 512)
+rotation = 1.5707964
+
+[node name="Spike255" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2479, 512)
+rotation = 1.5707964
+
+[node name="Spike256" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2488, 512)
+rotation = 1.5707964
+
+[node name="Spike257" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2495, 512)
+rotation = 1.5707964
+
+[node name="Spike258" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2504, 512)
+rotation = 1.5707964
+
+[node name="Spike259" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2513, 512)
+rotation = 1.5707964
+
+[node name="Spike260" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2520, 512)
+rotation = 1.5707964
+
+[node name="Spike261" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2529, 512)
+rotation = 1.5707964
+
+[node name="Spike262" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2537, 512)
+rotation = 1.5707964
+
+[node name="Spike263" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2545, 512)
+rotation = 1.5707964
+
+[node name="Spike264" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2554, 512)
+rotation = 1.5707964
+
+[node name="Spike265" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2564, 512)
+rotation = 1.5707964
+
+[node name="Spike266" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2573, 512)
+rotation = 1.5707964
+
+[node name="Spike267" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2583, 512)
+rotation = 1.5707964
+
+[node name="Spike268" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2592, 512)
+rotation = 1.5707964
+
+[node name="Spike269" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2600, 512)
+rotation = 1.5707964
+
+[node name="Spike270" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2608, 512)
+rotation = 1.5707964
+
+[node name="Spike271" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2616, 512)
+rotation = 1.5707964
+
+[node name="Spike272" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2625, 512)
+rotation = 1.5707964
+
+[node name="Spike273" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2633, 512)
+rotation = 1.5707964
+
+[node name="Spike274" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2642, 512)
+rotation = 1.5707964
+
+[node name="Spike275" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2649, 512)
+rotation = 1.5707964
+
+[node name="Spike276" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2658, 512)
+rotation = 1.5707964
+
+[node name="Spike277" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2666, 512)
+rotation = 1.5707964
+
+[node name="Spike278" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2674, 512)
+rotation = 1.5707964
+
+[node name="Spike279" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2680, 512)
+rotation = 1.5707964
+
+[node name="Spike207" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 690)
+
+[node name="Spike208" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 681)
+
+[node name="Spike209" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 672)
+
+[node name="Spike210" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 663)
+
+[node name="Spike211" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 653)
+
+[node name="Spike212" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 643)
+
+[node name="Spike213" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 634)
+
+[node name="Spike214" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 624)
+
+[node name="Spike215" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 616)
+
+[node name="Spike216" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 609)
+
+[node name="Spike217" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 779)
+
+[node name="Spike218" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 770)
+
+[node name="Spike219" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 761)
+
+[node name="Spike220" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 752)
+
+[node name="Spike221" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 742)
+
+[node name="Spike222" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 732)
+
+[node name="Spike223" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 723)
+
+[node name="Spike224" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 713)
+
+[node name="Spike225" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 705)
+
+[node name="Spike226" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 698)
+
+[node name="Spike227" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 868)
+
+[node name="Spike228" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 859)
+
+[node name="Spike229" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 850)
+
+[node name="Spike230" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 841)
+
+[node name="Spike231" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 831)
+
+[node name="Spike232" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 821)
+
+[node name="Spike233" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 812)
+
+[node name="Spike234" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 802)
+
+[node name="Spike235" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 794)
+
+[node name="Spike236" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 787)
+
+[node name="Spike237" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 921)
+
+[node name="Spike238" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 912)
+
+[node name="Spike239" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 903)
+
+[node name="Spike240" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 894)
+
+[node name="Spike241" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 884)
+
+[node name="Spike242" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 874)
+
+[node name="Spike243" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 865)
+
+[node name="Spike244" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 855)
+
+[node name="Spike245" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 847)
+
+[node name="Spike246" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(2304, 840)
+
+[node name="Spike11" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(871, 64)
+rotation = 1.5707964
+
+[node name="Spike12" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(880, 64)
+rotation = 1.5707964
+
+[node name="Spike13" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(888, 64)
+rotation = 1.5707964
+
+[node name="Spike14" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(888, 171)
+rotation = 1.5707964
+
+[node name="Spike15" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(880, 171)
+rotation = 1.5707964
+
+[node name="Spike16" parent="." instance=ExtResource("15_muk3n")]
+position = Vector2(871, 171)
+rotation = 1.5707964
 
 [connection signal="body_entered" from="EndTrigger12" to="EndTrigger12" method="_on_body_entered"]
 

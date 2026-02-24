@@ -4,19 +4,20 @@ extends Camera2D
 # CONFIGURATION "SMOOTH & JUICY" (32x32)
 # ------------------------------------------------------------
 @export_group("Follow Settings")
-# Plus c'est bas, plus c'est lourd/cinématique. Plus c'est haut, plus c'est collé.
-# 5.0 est une bonne valeur "organique".
-@export var lerp_speed := 5.0
+@export var lerp_speed := 6.0 # Un poil plus rapide pour bien suivre le Dash
 @export var default_offset := Vector2(0, -20)
 
 @export_group("Look Ahead Settings")
-@export var look_ahead_dist_x := 140.0
+@export var look_ahead_dist_x := 120.0 # Un peu réduit pour ne pas trop te décentrer
 @export var look_ahead_dist_y := 80.0
-# TEMPS D'ATTENTE avant de déplacer le regard (en secondes).
-# Empêche la caméra de bouger si on fait juste gauche-droite vite fait.
-@export var look_ahead_delay := 0.6
-# Vitesse à laquelle le regard se déplace (plus doux = moins de mal de mer)
-@export var look_ahead_smoothness := 1.5
+
+# TEMPS D'ATTENTE AVANT DE SE RETOURNER :
+# Rendu très court (0.15s). Ça empêche la caméra de s'affoler si tu fais juste 
+# un mini pas en arrière, mais réagit très vite si tu fais vraiment demi-tour.
+@export var look_ahead_delay := 0.10
+
+# Vitesse du mouvement des "yeux" de la caméra (Plus élevé = Plus vif)
+@export var look_ahead_smoothness := 4.0 
 
 @export var fall_threshold := 450.0
 
@@ -30,6 +31,9 @@ var bounds_global_pos: Vector2
 # Gestion du Look Ahead
 var current_look_ahead_x := 0.0
 var current_look_ahead_y := 0.0
+var target_look_x := 0.0 # NOUVEAU : La cible devient persistante !
+var target_look_y := 0.0
+
 var look_ahead_timer := 0.0
 var last_facing_dir := 0
 
@@ -42,18 +46,19 @@ var is_locked := false
 # INITIALISATION
 # ------------------------------------------------------------
 func _ready():
-	# On désactive le lissage Godot, on gère tout nous-mêmes
 	position_smoothing_enabled = false
-	
-	# Zoom pour 32x32 (Sera écrasé par Main.gd, mais bonne pratique)
 	zoom = Vector2(2.5, 2.5)
 	
 	target = get_tree().root.get_node_or_null("Main/Player")
 	if not target: target = get_node_or_null("../Player")
 
-	# Téléportation initiale
 	if target:
 		global_position = target.global_position + default_offset
+		# On regarde tout de suite dans la direction du joueur s'il en a une
+		if "facing_dir" in target:
+			last_facing_dir = target.facing_dir
+			target_look_x = last_facing_dir * look_ahead_dist_x
+			current_look_ahead_x = target_look_x
 
 # ------------------------------------------------------------
 # PHYSICS PROCESS
@@ -61,13 +66,11 @@ func _ready():
 func _physics_process(delta):
 	if is_locked: return
 	
-	# 1. Cible
 	var follow_node = target
 	if is_cinematic and cinematic_target:
 		follow_node = cinematic_target
 	if not follow_node: return
 
-	# 2. Calcul de la Position de BASE
 	var ideal_pos = follow_node.global_position
 	
 	if not is_cinematic:
@@ -75,41 +78,41 @@ func _physics_process(delta):
 		
 		# --- GESTION INTELLIGENTE DU LOOK AHEAD ---
 		var input_x = Input.get_axis("ui_left", "ui_right")
-		var target_look_x = 0.0
-		var target_look_y = 0.0
 		
-		# A. Horizontal : On attend avant de regarder
+		# A. Horizontal
 		if input_x != 0:
-			# Si on change de direction, on reset le timer
-			if input_x != last_facing_dir:
-				look_ahead_timer = 0.0
+			# Si c'est notre tout premier mouvement ou qu'on va dans la même direction : instantané
+			if last_facing_dir == 0 or sign(input_x) == sign(last_facing_dir):
 				last_facing_dir = input_x
-			
-			look_ahead_timer += delta
-			
-			# Seulement si on maintient la direction assez longtemps
-			if look_ahead_timer >= look_ahead_delay:
-				target_look_x = input_x * look_ahead_dist_x
+				look_ahead_timer = 0.0
+			# Si on change de direction : on attend un tout petit peu
+			elif input_x != last_facing_dir:
+				look_ahead_timer += delta
+				if look_ahead_timer >= look_ahead_delay:
+					last_facing_dir = input_x
+					look_ahead_timer = 0.0
+					
+			# On met à jour la position cible (qui restera mémorisée)
+			target_look_x = last_facing_dir * look_ahead_dist_x
 		else:
 			look_ahead_timer = 0.0
-			# Optionnel : Si tu veux que la caméra revienne au centre quand on s'arrête
-			# target_look_x = 0.0 
-			# Si tu veux qu'elle reste décalée (style Mario), commente la ligne ci-dessus.
+			# On NE RESET PAS target_look_x à 0 ! 
+			# La caméra reste braquée devant toi, même quand tu t'arrêtes.
 			
 		# B. Vertical : Seulement en chute libre
 		if follow_node is CharacterBody2D and follow_node.velocity.y > fall_threshold:
 			target_look_y = look_ahead_dist_y
+		else:
+			target_look_y = 0.0
 		
-		# C. Lissage indépendant du Look Ahead (Très doux)
-		# On utilise lerp pour une transition "crémeuse" du regard
+		# C. Lissage du regard (Beaucoup plus vif qu'avant grâce au smoothness à 4.0)
 		current_look_ahead_x = lerp(current_look_ahead_x, target_look_x, look_ahead_smoothness * delta)
 		current_look_ahead_y = lerp(current_look_ahead_y, target_look_y, look_ahead_smoothness * delta)
 		
 		ideal_pos.x += current_look_ahead_x
 		ideal_pos.y += current_look_ahead_y
 
-	# 3. MOUVEMENT FLUIDE (Formule exponentielle indépendante du framerate)
-	# C'est cette formule qui enlève l'effet "brusque"
+	# 3. MOUVEMENT FLUIDE DE LA CAMÉRA
 	var smooth_factor = 1.0 - exp(-lerp_speed * delta)
 	global_position = global_position.lerp(ideal_pos, smooth_factor)
 
@@ -117,7 +120,7 @@ func _physics_process(delta):
 	_apply_bounds()
 
 # ------------------------------------------------------------
-# UTILITAIRES
+# UTILITAIRES (Inchangés)
 # ------------------------------------------------------------
 func _apply_bounds():
 	if not bounds_shape: return
@@ -132,13 +135,11 @@ func _apply_bounds():
 	var top    = bounds_global_pos.y - ext.y
 	var bottom = bounds_global_pos.y + ext.y
 	
-	# Clamp X
 	if right - left > view_size.x:
 		global_position.x = clamp(global_position.x, left + half_w, right - half_w)
 	else:
 		global_position.x = (left + right) / 2
 	
-	# Clamp Y
 	if bottom - top > view_size.y:
 		global_position.y = clamp(global_position.y, top + half_h, bottom - half_h)
 	else:
@@ -158,7 +159,6 @@ func start_cinematic(target_node: Node2D):
 func end_cinematic():
 	is_cinematic = false
 	cinematic_target = null
-	# On garde le look ahead actuel pour pas faire de saut brutal
 	
 func zoom_to(value: float, time: float = 2.0):
 	var tween = get_tree().create_tween()

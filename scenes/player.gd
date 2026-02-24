@@ -54,6 +54,9 @@ var grapple_unlocked: bool = false
 var grapple_launch_timer := 0.0
 var grapple_direction := Vector2.ZERO
 
+# --- NOUVEAU : État du zoom de la caméra ---
+var is_grapple_zoomed_out := false
+
 # Dash Etat
 var dash_unlocked: bool = false
 var is_dashing: bool = false
@@ -83,12 +86,16 @@ var is_dying := false
 @onready var popup = $EchoText
 @onready var jump_sfx = $JumpSFX
 
-# --- NOUVEAUX NOEUDS AUDIO POUR LA MORT ---
+# --- NOUVEAUX NOEUDS AUDIO POUR LA MORT ET LE GRAPPIN ---
 @onready var hit_sfx = get_node_or_null("HitSFX")
 @onready var decay_sfx = get_node_or_null("DecaySFX")
+@onready var grapple_sfx = get_node_or_null("GrappleSFX")
 
 @onready var anim_player = get_node_or_null("AnimationPlayer")
 @onready var hand_check = get_node_or_null("HandCheck")
+
+# --- NOUVEAU : Traînée du grappin ---
+@onready var grapple_trail = get_node_or_null("GrappleTrail")
 
 func _ready():
 	default_scale = sprite.scale
@@ -152,11 +159,15 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("gravity") and gravity_cooldown <= 0:
 			invert_gravity()
 
-	# --- SQUASH & STRETCH ---
+	# --- SQUASH & STRETCH ET ATTERRISSAGE ---
 	sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED)
 	if not was_on_floor and is_on_floor():
 		sprite.scale = Vector2(default_scale.x * 1.5, default_scale.y * 0.7)
 		spawn_dust()
+		
+		# --- RETOUR AU ZOOM NORMAL QUAND ON TOUCHE LE SOL ---
+		if is_grapple_zoomed_out:
+			reset_camera_zoom()
 	was_on_floor = is_on_floor()
 
 	# --- INPUTS ---
@@ -177,6 +188,21 @@ func _physics_process(delta):
 			grapple_direction = (grapple_target.global_position - global_position).normalized()
 			grapple_line.visible = true
 			grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
+			
+			# --- ALLUMER LA TRAÎNÉE ET LE SON ---
+			if grapple_trail:
+				grapple_trail.emitting = true
+				
+			if grapple_sfx:
+				grapple_sfx.pitch_scale = randf_range(0.9, 1.2)
+				grapple_sfx.play()
+				
+			# --- ZOOM OUT POUR LE GRAPPIN ---
+			is_grapple_zoomed_out = true
+			var main = get_tree().root.get_node_or_null("Main")
+			if main and main.camera:
+				var t = create_tween()
+				t.tween_property(main.camera, "zoom", main.DEFAULT_ZOOM * 0.90, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	if grappling and grapple_target:
 		handle_grapple(delta)
@@ -218,6 +244,14 @@ func _physics_process(delta):
 # ------------------------------------------------------------
 # FONCTIONS ACTIONS
 # ------------------------------------------------------------
+
+func reset_camera_zoom():
+	is_grapple_zoomed_out = false
+	var main = get_tree().root.get_node_or_null("Main")
+	if main and main.camera:
+		var t = create_tween()
+		t.tween_property(main.camera, "zoom", main.DEFAULT_ZOOM, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
 func invert_gravity():
 	gravity_dir *= -1
 	gravity_cooldown = 0.5
@@ -239,6 +273,20 @@ func start_dash():
 	if jump_sfx:
 		jump_sfx.pitch_scale = 1.5
 		jump_sfx.play()
+
+	# --- DASH FEEL ---
+	var main = get_tree().root.get_node_or_null("Main")
+	if main:
+		main.trigger_shake(4.0) 
+		
+		if main.camera:
+			# Si on dash pendant un saut de grappin, on garde le dézoom comme base !
+			var base_zoom = main.DEFAULT_ZOOM * 0.90 if is_grapple_zoomed_out else main.DEFAULT_ZOOM
+			var punch_zoom = base_zoom * 1.020 
+			
+			var t = create_tween()
+			t.tween_property(main.camera, "zoom", punch_zoom, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			t.tween_property(main.camera, "zoom", base_zoom, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func update_dash_direction():
 	var dir_vec = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -301,6 +349,11 @@ func handle_wall_grab(delta):
 
 	if on_wall and grabbing_button and not wall_exhausted:
 		wall_grabbing = true
+		
+		# --- RETOUR AU ZOOM NORMAL SI ON S'ACCROCHE À UN MUR ---
+		if is_grapple_zoomed_out:
+			reset_camera_zoom()
+		
 		wall_grab_time_left -= delta
 		if wall_grab_time_left <= 0:
 			wall_exhausted = true
@@ -370,6 +423,12 @@ func finish_grapple():
 	grapple_line.visible = false
 	grapple_line.points = []
 	can_dash = true
+	
+	# --- ÉTEINDRE LA TRAÎNÉE ET LE SON ---
+	if grapple_trail:
+		grapple_trail.emitting = false
+	if grapple_sfx:
+		grapple_sfx.stop()
 
 func die(hazard_pos := Vector2.ZERO):
 	if is_dying: return
@@ -377,20 +436,24 @@ func die(hazard_pos := Vector2.ZERO):
 	can_move = false
 	wall_grabbing = false 
 	
+	# --- SÉCURITÉ TRAÎNÉE ET SON ---
+	if grapple_trail:
+		grapple_trail.emitting = false
+	if grapple_sfx:
+		grapple_sfx.stop()
+	
+	# Sécurité Zoom
+	if is_grapple_zoomed_out:
+		reset_camera_zoom()
+	
 	sprite.scale = default_scale
 	
-	# --- EFFETS SONORES DE MORT ---
-	# 1. Le choc sec (avec une mini variation de pitch pour éviter l'effet "mitraillette" sur des morts répétées)
 	if hit_sfx:
 		hit_sfx.pitch_scale = randf_range(0.9, 1.1)
 		hit_sfx.play()
-		
-	# 2. Le son de dissolution glitch
 	if decay_sfx:
 		decay_sfx.play()
-	# ------------------------------
 	
-	# --- LE KNOCKBACK FLUIDE ---
 	velocity.y = -170.0 * gravity_dir
 	if hazard_pos != Vector2.ZERO:
 		var dir = sign(global_position.x - hazard_pos.x)
@@ -401,7 +464,6 @@ func die(hazard_pos := Vector2.ZERO):
 		
 	collision_mask = 0
 
-	# --- L'ANIMATION DE DÉSINTÉGRATION ---
 	if anim_player and anim_player.has_animation("death"):
 		anim_player.play("death")
 		await anim_player.animation_finished
@@ -411,7 +473,6 @@ func die(hazard_pos := Vector2.ZERO):
 	else:
 		await get_tree().create_timer(0.5).timeout
 
-	# --- LA TRANSITION ---
 	var main = get_tree().root.get_node_or_null("Main")
 	if main and main.has_method("play_death_sequence"): 
 		main.play_death_sequence()
