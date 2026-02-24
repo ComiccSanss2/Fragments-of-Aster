@@ -82,9 +82,12 @@ var is_dying := false
 @onready var grapple_line = $GrappleLine
 @onready var popup = $EchoText
 @onready var jump_sfx = $JumpSFX
-@onready var anim_player = get_node_or_null("AnimationPlayer")
 
-# --- NOUVEAU NOEUD : Le détecteur de mains ---
+# --- NOUVEAUX NOEUDS AUDIO POUR LA MORT ---
+@onready var hit_sfx = get_node_or_null("HitSFX")
+@onready var decay_sfx = get_node_or_null("DecaySFX")
+
+@onready var anim_player = get_node_or_null("AnimationPlayer")
 @onready var hand_check = get_node_or_null("HandCheck")
 
 func _ready():
@@ -376,7 +379,18 @@ func die(hazard_pos := Vector2.ZERO):
 	
 	sprite.scale = default_scale
 	
-	# --- 1. LE KNOCKBACK FLUIDE ---
+	# --- EFFETS SONORES DE MORT ---
+	# 1. Le choc sec (avec une mini variation de pitch pour éviter l'effet "mitraillette" sur des morts répétées)
+	if hit_sfx:
+		hit_sfx.pitch_scale = randf_range(0.9, 1.1)
+		hit_sfx.play()
+		
+	# 2. Le son de dissolution glitch
+	if decay_sfx:
+		decay_sfx.play()
+	# ------------------------------
+	
+	# --- LE KNOCKBACK FLUIDE ---
 	velocity.y = -170.0 * gravity_dir
 	if hazard_pos != Vector2.ZERO:
 		var dir = sign(global_position.x - hazard_pos.x)
@@ -387,7 +401,7 @@ func die(hazard_pos := Vector2.ZERO):
 		
 	collision_mask = 0
 
-	# --- 2. L'ANIMATION DE DÉSINTÉGRATION ---
+	# --- L'ANIMATION DE DÉSINTÉGRATION ---
 	if anim_player and anim_player.has_animation("death"):
 		anim_player.play("death")
 		await anim_player.animation_finished
@@ -397,7 +411,7 @@ func die(hazard_pos := Vector2.ZERO):
 	else:
 		await get_tree().create_timer(0.5).timeout
 
-	# --- 3. LA TRANSITION ---
+	# --- LA TRANSITION ---
 	var main = get_tree().root.get_node_or_null("Main")
 	if main and main.has_method("play_death_sequence"): 
 		main.play_death_sequence()

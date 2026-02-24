@@ -1,3 +1,4 @@
+AudioStreamPlayer
 RichTextLabel
 TileMap
 ColorRect
@@ -6,7 +7,6 @@ RayCast2D
 GPUParticles2D
 CollisionShape2D
 Area2D
-AudioStreamPlayer
 Camera2D
 CanvasLayer
 Label

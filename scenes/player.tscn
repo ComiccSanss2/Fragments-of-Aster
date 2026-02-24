@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=45 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d0lbwlc6bdtx1" path="res://assets/Escalade-Sheet.png" id="2_d2wvv"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://ddp2itqs1aynh" path="res://assets/Jump.png" id="5_3v2ag"]
 [ext_resource type="AudioStream" uid="uid://ijetnn8l564a" path="res://assets/sfx/jump.wav" id="5_qlg0r"]
 [ext_resource type="Texture2D" uid="uid://cyp8u03jgu3xa" path="res://assets/run-Sheet.png" id="6_jej6c"]
+[ext_resource type="AudioStream" uid="uid://caedqwmh2w7qi" path="res://assets/sfx/hitHurt.wav" id="13_f1ej7"]
+[ext_resource type="AudioStream" uid="uid://bxf7wsejawk4e" path="res://assets/sfx/decading.wav" id="14_oprun"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
 atlas = ExtResource("2_d2wvv")
@@ -307,3 +309,12 @@ volume_db = -15.0
 [node name="HandCheck" type="RayCast2D" parent="."]
 position = Vector2(5.5, -4)
 target_position = Vector2(1, 0)
+
+[node name="HitSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_f1ej7")
+volume_db = -6.158
+
+[node name="DecaySFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_oprun")
+volume_db = -9.579
+pitch_scale = 0.95
