@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bxtyfo1fbee7j"]
+[gd_scene load_steps=24 format=3 uid="uid://bxtyfo1fbee7j"]
 
 [ext_resource type="Script" uid="uid://44ktlxkrq8la" path="res://main_menu.gd" id="1_jix8l"]
 [ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="2_glbon"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dv1t2nvyryp4t" path="res://assets/Parallax/4.png" id="5_0o4t1"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="5_glbon"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="6_nlkkf"]
+[ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="7_0o4t1"]
 [ext_resource type="AudioStream" uid="uid://ceaiulggpmof1" path="res://assets/sfx/aster's dormancy.wav" id="9_dy7ct"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_8qtwp"]
@@ -20,8 +21,8 @@ shadow_size = 25
 shadow_color = Color(0.16917068, 0.1676555, 0.77984864, 0.5568628)
 
 [sub_resource type="LabelSettings" id="LabelSettings_dy7ct"]
-font = ExtResource("3_nlkkf")
-font_size = 40
+font = ExtResource("7_0o4t1")
+font_size = 70
 font_color = Color(0.33333334, 1, 0.8901961, 0.8784314)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
@@ -60,8 +61,8 @@ expand_margin_bottom = 10.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0o4t1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_nlkkf"]
-font = ExtResource("3_nlkkf")
-font_size = 50
+font = ExtResource("7_0o4t1")
+font_size = 80
 shadow_size = 25
 shadow_color = Color(0, 0, 0, 1)
 
@@ -224,8 +225,8 @@ mouse_filter = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 60
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 80
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
 text = "PLAY"
@@ -235,8 +236,8 @@ flat = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 60
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 80
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
 text = "OPTIONS"
@@ -246,8 +247,8 @@ flat = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 60
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 80
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_glbon")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_nlkkf")
 text = "EXIT"
@@ -261,10 +262,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -389.0
-offset_top = -256.0
-offset_right = 411.0
-offset_bottom = 544.0
+offset_left = -397.0
+offset_top = -248.0
+offset_right = 403.0
+offset_bottom = 552.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 50
@@ -276,13 +277,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
 
@@ -293,13 +294,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
 
@@ -310,13 +311,13 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer3"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
+theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
 
@@ -324,8 +325,8 @@ text = "X"
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 70
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_qe12f")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_8qtwp")
 text = "BACK"
@@ -439,16 +440,16 @@ alignment = 1
 [node name="ConfirmButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 65
 text = "YES"
 flat = true
 
 [node name="CancelButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 65
 text = "NO"
 flat = true
 
