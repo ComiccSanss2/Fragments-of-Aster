@@ -1,7 +1,10 @@
-res://scenes/levels/level_15.tscn
+res://scenes/main.tscn
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
 res://scenes/wind.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
+res://scenes/levels/level_14.tscn
+res://scenes/levels/areasecret_2d.gd
+res://scenes/player.tscn

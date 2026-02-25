@@ -242,7 +242,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sugp2"]
-size = Vector2(11, 14)
+size = Vector2(11, 15)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_qhqgy"]
 blend_mode = 1
@@ -267,10 +267,10 @@ script = ExtResource("1_g2els")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_vxglm")
-animation = &"fall"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_sugp2")
 
 [node name="GrappleLine" type="Line2D" parent="."]
