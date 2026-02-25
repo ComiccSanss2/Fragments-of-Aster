@@ -34,10 +34,12 @@ var intro_camera_pos := Vector2.ZERO
 # --- ZOOM PAR DÉFAUT ---
 const DEFAULT_ZOOM = Vector2(2.6, 2.6) 
 
+# --- INPUT DETECTION ---
+var is_using_gamepad: bool = false
+
 func _ready():
 	var is_intro = SaveManager.has_meta("intro_sequence")
 	
-	# Initialisation des deux écrans
 	if level_transition:
 		level_transition.visible = true
 		level_transition.material.set_shader_parameter("is_opening", false)
@@ -76,7 +78,6 @@ func _ready():
 		player.visible = true
 		_set_level_canvas_layers_visible(true)
 		
-		# --- CORRECTION DE L'OUVERTURE D'INTRO ---
 		level_transition.material.set_shader_parameter("is_opening", true)
 		level_transition.material.set_shader_parameter("cutoff", 0.0)
 		var t = create_tween()
@@ -85,7 +86,6 @@ func _ready():
 		
 		level_transition.material.set_shader_parameter("is_opening", false)
 		level_transition.material.set_shader_parameter("cutoff", 0.0)
-		# ----------------------------------------
 		
 	elif SaveManager.has_meta("level_to_load"):
 		var target_level = SaveManager.get_meta("level_to_load")
@@ -116,7 +116,6 @@ func _ready():
 				current_level_node.start_tutorial_sequence()
 
 func _process(delta):
-	# --- LOGIQUE CAMÉRA INTRO ---
 	if intro_camera_locked:
 		camera.global_position = intro_camera_pos
 		var catch_threshold = intro_camera_pos.y
@@ -127,7 +126,6 @@ func _process(delta):
 			if "lerp_speed" in camera: camera.lerp_speed = 20.0
 			if "default_offset" in camera: camera.default_offset.y = 100.0
 
-	# --- SCREEN SHAKE ---
 	if shake_strength > 0:
 		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
@@ -194,12 +192,10 @@ func load_level(path: String):
 		}
 		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 
-# --- TRANSITION DE NIVEAU (Utilise level_transition) ---
 func change_level_with_transition(next_level_path: String):
 	player.can_move = false
 	player.velocity = Vector2.ZERO
 	
-	# --- PHASE 1 : FERMETURE (De gauche à droite) ---
 	level_transition.material.set_shader_parameter("is_opening", false)
 	level_transition.material.set_shader_parameter("cutoff", 0.0)
 	
@@ -207,7 +203,6 @@ func change_level_with_transition(next_level_path: String):
 	t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 0.5)
 	await t.finished
 	
-	# --- CHARGEMENT ET PAUSE ---
 	load_level(next_level_path)
 	_show_game_content()
 	
@@ -215,10 +210,8 @@ func change_level_with_transition(next_level_path: String):
 	player.can_move = false
 	player.velocity = Vector2.ZERO
 	
-	# Pause d'une seconde sur l'écran bleu
 	await get_tree().create_timer(1.0).timeout
 	
-	# --- PHASE 2 : OUVERTURE (Continue de gauche à droite) ---
 	level_transition.material.set_shader_parameter("is_opening", true)
 	level_transition.material.set_shader_parameter("cutoff", 0.0)
 	
@@ -231,13 +224,11 @@ func change_level_with_transition(next_level_path: String):
 	
 	player.can_move = true
 
-# --- TRANSITION DE MORT (Utilise death_transition avec le cercle) ---
 func play_death_sequence():
 	player.can_move = false
 	
 	var screen_size = get_viewport().get_visible_rect().size
 	
-	# Configuration de l'Iris Wipe
 	death_transition.material.set_shader_parameter("aspect_ratio", screen_size.x / screen_size.y)
 	var player_screen_pos = player.get_global_transform_with_canvas().origin / screen_size
 	death_transition.material.set_shader_parameter("center", player_screen_pos)
@@ -259,7 +250,6 @@ func play_death_sequence():
 	
 	await get_tree().create_timer(0.3).timeout 
 	
-	# On recentre le cercle sur la nouvelle position de spawn avant de l'ouvrir !
 	player_screen_pos = player.get_global_transform_with_canvas().origin / screen_size
 	death_transition.material.set_shader_parameter("center", player_screen_pos)
 	
@@ -270,7 +260,6 @@ func play_death_sequence():
 	player.can_move = true
 	player.is_dying = false
 
-# (Le reste des fonctions est inchangé)
 func show_grapple_message(msg: String):
 	var label = $UI/CenterContainer/EchoText
 	if label: label.text = msg; $UI.visible = true
@@ -325,3 +314,14 @@ func cleanup_before_exit():
 	self.visible = false
 	if ui_layer: ui_layer.visible = false
 	_set_level_canvas_layers_visible(false)
+
+# --- NOUVEAU : DÉTECTION DU PÉRIPHÉRIQUE ---
+func _input(event):
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		if event is InputEventJoypadMotion and abs(event.axis_value) < 0.2:
+			return 
+		is_using_gamepad = true
+		
+	elif event is InputEventKey or event is InputEventMouse:
+		is_using_gamepad = false
+# -------------------------------------------

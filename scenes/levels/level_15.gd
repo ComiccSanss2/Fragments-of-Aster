@@ -35,6 +35,16 @@ func start_cinematic():
 	player.can_move = false
 	player.velocity = Vector2.ZERO
 	
+	# --- NOUVEAU : NETTOYAGE DES ÉTATS (SQUASH & DASH GHOSTS) ---
+	player.is_dashing = false # Stoppe la génération des fantômes
+	player.wall_grabbing = false
+	player.grappling = false
+	if player.grapple_line:
+		player.grapple_line.visible = false
+	if player.sprite:
+		player.sprite.scale = player.default_scale # Annule l'étirement du saut
+	# ------------------------------------------------------------
+	
 	# --- CORRECTION DU GLISSEMENT ---
 	# On coupe la physique du joueur pour que son script n'écrase pas l'animation "walk"
 	player.set_physics_process(false)

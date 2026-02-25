@@ -18,7 +18,6 @@ var waiting_for_input := false
 
 const MOVE_SPEED := 100.0
 
-
 func _ready():
 	# --- VÉRIFICATION DE LA MÉMOIRE ---
 	var main = get_tree().root.get_node("Main")
@@ -43,6 +42,22 @@ func _ready():
 		
 	camera = get_tree().root.get_node("Main/Camera2D")
 
+# --- GÉNÉRATEUR D'INPUT DYNAMIQUE ---
+func get_input_name(action: String) -> String:
+	var main = get_tree().root.get_node_or_null("Main")
+	var is_pad = false
+	if main and "is_using_gamepad" in main:
+		is_pad = main.is_using_gamepad
+	
+	match action:
+		"grapple":
+			return "[color=#ffdd33](X)[/color]" if is_pad else "[color=#ffdd33](E)[/color]"
+		"dash":
+			return "[color=#ffdd33](B)[/color]" if is_pad else "[color=#ffdd33](F)[/color]"
+		"inversion":
+			return "[color=#ffdd33](Y)[/color]" if is_pad else "[color=#ffdd33](R)[/color]"
+	return ""
+# ------------------------------------
 
 func _on_TriggerArea_body_entered(body):
 	if body.is_in_group("player") and not cutscene_running:
@@ -83,14 +98,11 @@ func _on_TriggerArea_body_entered(body):
 
 		anim.play("pickup")
 
-
 func start_move_to_player():
 	moving_to_player = true
 
-
 func stop_move_to_player():
 	moving_to_player = false
-
 
 func _process(delta):
 	if moving_to_player and player:
@@ -108,7 +120,6 @@ func _process(delta):
 	if waiting_for_input:
 		if Input.is_action_just_pressed("ui_accept"):
 			end_cutscene()
-
 
 func _on_collect_finished():
 	var fx = fx_scene.instantiate()
@@ -133,27 +144,27 @@ func _on_collect_finished():
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	var main = get_tree().root.get_node("Main")
 
-	# --- SYSTEM MESSAGE ---
+	# --- SYSTEM MESSAGE AVEC INPUT DYNAMIQUE ---
 	if shard_type == ShardType.GRAPPLE:
 		player.grapple_unlocked = true
 		main.grapple_collected = true
 		
 		await dialog.show_dialog("Echo-Grapple Restored.")
-		await dialog.show_dialog("Press (E) to use when near a grapple point.")
+		await dialog.show_dialog("Press " + get_input_name("grapple") + " to use when near a grapple point.")
 		
 	elif shard_type == ShardType.DASH:
 		player.dash_unlocked = true
 		main.dash_collected = true
 		
 		await dialog.show_dialog("Pulse-Dash Restored.")
-		await dialog.show_dialog("Press (F) to Dash.")
+		await dialog.show_dialog("Press " + get_input_name("dash") + " to Dash.")
 		
 	elif shard_type == ShardType.INVERSION:
 		player.gravity_unlocked = true
 		main.set("gravity_collected", true) 
 		
 		await dialog.show_dialog("Reality Anchor Destabilized.")
-		await dialog.show_dialog("Press (R) to Invert Reality.")
+		await dialog.show_dialog("Press " + get_input_name("inversion") + " to Invert Reality.")
 	# ----------------------------------------
 
 	player.hide_popup()
@@ -242,7 +253,6 @@ func _on_collect_finished():
 		)
 	
 	waiting_for_input = true
-
 
 func end_cutscene():
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")

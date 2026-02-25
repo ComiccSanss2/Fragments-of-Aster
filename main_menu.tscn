@@ -224,6 +224,7 @@ mouse_filter = 2
 [node name="PlayButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 80
@@ -235,6 +236,7 @@ flat = true
 [node name="OptionsButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 80
@@ -246,6 +248,7 @@ flat = true
 [node name="ExitButton" type="Button" parent="MenuContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 80
@@ -277,12 +280,14 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_colors/font_color = Color(0.9607843, 0, 0.5372549, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
@@ -294,12 +299,14 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
@@ -311,12 +318,14 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
 [node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer3"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
 text = "X"
@@ -324,6 +333,7 @@ text = "X"
 [node name="SlotBackButton" type="Button" parent="SlotContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 70
@@ -391,6 +401,7 @@ icon_alignment = 1
 [node name="OptionsBackButton" type="Button" parent="OptionsContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("3_nlkkf")
 theme_override_font_sizes/font_size = 30
@@ -439,6 +450,7 @@ alignment = 1
 
 [node name="ConfirmButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
@@ -447,6 +459,7 @@ flat = true
 
 [node name="CancelButton" type="Button" parent="DeletePopup/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65

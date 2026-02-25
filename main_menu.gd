@@ -69,14 +69,12 @@ func _ready():
 	# 5. Connexions OPTIONS
 	if options_back_btn: options_back_btn.pressed.connect(_on_back_to_menu)
 	
-	# Audio setup (Master Bus) - FIX AUDIO ICI
+	# Audio setup (Master Bus)
 	var bus_index = AudioServer.get_bus_index("Master")
 	if volume_slider:
-		# Force les bornes pour éviter la saturation
 		volume_slider.min_value = 0.0
 		volume_slider.max_value = 1.0
 		volume_slider.step = 0.05
-		
 		volume_slider.value = db_to_linear(AudioServer.get_bus_volume_db(bus_index))
 		volume_slider.value_changed.connect(_on_volume_changed)
 	
@@ -89,50 +87,84 @@ func _ready():
 		vsync_check.button_pressed = (DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED)
 		vsync_check.toggled.connect(_on_vsync_toggled)
 
-	# 6. Connexions POPUP
+# 6. Connexions POPUP
 	if confirm_btn: confirm_btn.pressed.connect(_on_confirm_delete)
 	if cancel_btn: cancel_btn.pressed.connect(_on_cancel_delete)
+	
+	# --- NOUVEAU : BLOQUER LE FOCUS DANS LE POPUP ---
+	if confirm_btn and cancel_btn:
+		# Empêcher le focus de s'échapper vers le haut ou le bas
+		confirm_btn.focus_neighbor_top = confirm_btn.get_path()
+		confirm_btn.focus_neighbor_bottom = confirm_btn.get_path()
+		
+		cancel_btn.focus_neighbor_top = cancel_btn.get_path()
+		cancel_btn.focus_neighbor_bottom = cancel_btn.get_path()
+		
+		# (Optionnel) Forcer la boucle gauche/droite si on appuie sur gauche depuis "Confirm"
+		confirm_btn.focus_neighbor_left = cancel_btn.get_path()
+		cancel_btn.focus_neighbor_right = confirm_btn.get_path()
+	# ------------------------------------------------
 
 func _input(event):
 	if current_state == State.TITLE:
-		if event is InputEventKey and event.pressed:
+		# Accepte le clavier OU n'importe quel bouton de manette pour démarrer
+		if (event is InputEventKey and event.pressed) or (event is InputEventJoypadButton and event.pressed) or Input.is_action_just_pressed("ui_accept"):
 			show_main_menu()
+	else:
+		# --- GESTION DU BOUTON RETOUR (B / ROND / ECHAP) ---
+		if Input.is_action_just_pressed("ui_cancel"):
+			if current_state == State.SLOTS or current_state == State.OPTIONS:
+				_on_back_to_menu()
+			elif current_state == State.POPUP:
+				_on_cancel_delete()
 
 # --- TRANSITIONS ---
 
 func show_main_menu():
 	current_state = State.MENU
-	# Fade Out Title
+	
 	var t = create_tween()
 	t.tween_property(title_container, "modulate:a", 0.0, 0.5)
 	t.tween_callback(func(): title_container.visible = false)
 	
-	# Fade In Menu
-	menu_container.visible = true
+	# Fade In Menu + DONNER LE FOCUS AU BOUTON "PLAY"
+	t.tween_callback(func(): 
+		menu_container.visible = true
+		btn_play.grab_focus() # <-- C'est ça qui active la manette !
+	)
+	
 	menu_container.modulate.a = 0.0
 	t.tween_property(menu_container, "modulate:a", 1.0, 0.5)
 
 func _on_play_pressed():
-	_switch_view(menu_container, slot_container, State.SLOTS)
+	# On focus le premier slot de sauvegarde
+	var first_slot = slot_container.get_child(0).get_node_or_null("SlotButton")
+	_switch_view(menu_container, slot_container, State.SLOTS, first_slot)
 
 func _on_options_pressed():
-	_switch_view(menu_container, options_container, State.OPTIONS)
+	# On focus le slider de volume
+	_switch_view(menu_container, options_container, State.OPTIONS, volume_slider)
 
 func _on_back_to_menu():
-	# Retour au menu principal depuis Slots ou Options
 	if current_state == State.SLOTS:
-		_switch_view(slot_container, menu_container, State.MENU)
+		_switch_view(slot_container, menu_container, State.MENU, btn_play)
 	elif current_state == State.OPTIONS:
-		_switch_view(options_container, menu_container, State.MENU)
+		_switch_view(options_container, menu_container, State.MENU, btn_play)
 
-func _switch_view(from_node: Control, to_node: Control, new_state: State):
+# Ajout d'un paramètre optionnel "focus_node" pour dire à Godot quoi sélectionner
+func _switch_view(from_node: Control, to_node: Control, new_state: State, focus_node: Control = null):
 	current_state = new_state
 	var t = create_tween()
-	# Fade Out
+	
 	t.tween_property(from_node, "modulate:a", 0.0, 0.3)
 	t.tween_callback(func(): from_node.visible = false)
-	# Fade In
-	t.tween_callback(func(): to_node.visible = true)
+	
+	t.tween_callback(func(): 
+		to_node.visible = true
+		if focus_node:
+			focus_node.grab_focus() # <-- On donne le focus au nouvel écran
+	)
+	
 	to_node.modulate.a = 0.0
 	t.tween_property(to_node, "modulate:a", 1.0, 0.3)
 
@@ -143,8 +175,6 @@ func _on_exit_pressed():
 
 func _on_volume_changed(value: float):
 	var bus_index = AudioServer.get_bus_index("Master")
-	
-	# FIX DU VOLUME : Gestion du mute et conversion linéaire -> dB
 	if value <= 0.0:
 		AudioServer.set_bus_mute(bus_index, true)
 	else:
@@ -163,7 +193,7 @@ func _on_vsync_toggled(is_vsync: bool):
 	else:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 
-# --- LOGIQUE SLOTS & JEU (inchangée) ---
+# --- LOGIQUE SLOTS & JEU ---
 
 func update_slot_display(slot_id: int):
 	var hbox = slot_container.get_child(slot_id-1)
@@ -181,41 +211,36 @@ func update_slot_display(slot_id: int):
 
 func _on_slot_pressed(slot_id: int):
 	SaveManager.current_slot_id = slot_id
-	
 	var target_scene = ""
 	var saved_data = SaveManager.load_data(slot_id)
 	
 	if saved_data:
-		# Sauvegarde existante -> On va direct au jeu
 		target_scene = "res://scenes/main.tscn"
 		var level = saved_data["current_level"]
 		SaveManager.set_meta("level_to_load", level)
 	else:
-		# Nouvelle partie -> On crée la save et on va à l'Intro
 		var new_data = SaveManager.get_default_data()
 		SaveManager.save_game(slot_id, new_data)
 		target_scene = "res://intro.tscn" 
 	
-	# Lancement du Loading Screen
 	var loading_screen = load("res://loading_screen.tscn").instantiate()
 	loading_screen.target_scene_path = target_scene
 	get_tree().root.add_child(loading_screen)
 	queue_free()
 
-# --- LOGIQUE POPUP (inchangée) ---
+# --- LOGIQUE POPUP ---
 
-# --- LOGIQUE DE SUPPRESSION ---
 func _on_delete_request(slot_id: int):
 	slot_to_delete = slot_id
 	current_state = State.POPUP
 	
-	# 1. On rend l'objet visible
 	delete_popup.visible = true
-	
-	# 2. IMPORTANT : On remet l'opacité (Alpha) à 1.0
 	delete_popup.modulate.a = 0.0
+	
 	var t = create_tween()
 	t.tween_property(delete_popup, "modulate:a", 1.0, 0.2)
+	# Focus sur "Annuler" par défaut pour éviter les suppressions accidentelles !
+	t.tween_callback(func(): cancel_btn.grab_focus())
 
 func _on_confirm_delete():
 	if slot_to_delete != -1:
@@ -229,10 +254,15 @@ func _on_cancel_delete():
 func _close_popup():
 	var t = create_tween()
 	t.tween_property(delete_popup, "modulate:a", 0.0, 0.2)
-	await t.finished
-	delete_popup.visible = false
-	current_state = State.SLOTS
-	slot_to_delete = -1
+	t.tween_callback(func(): 
+		delete_popup.visible = false
+		current_state = State.SLOTS
+		slot_to_delete = -1
+		
+		# On redonne le focus au bouton "Retour" de la liste des slots par sécurité
+		if slot_back_btn:
+			slot_back_btn.grab_focus()
+	)
 
 # --- HELPERS ---
 func loop_press_key_anim():

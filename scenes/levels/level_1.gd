@@ -12,8 +12,21 @@ func start_intro_sequence():
 	is_waiting_for_landing = true
 	player.can_move = false
 	player.velocity = Vector2.ZERO
+
+# --- GÉNÉRATEUR D'INPUT DYNAMIQUE ---
+func get_input_name(action: String) -> String:
+	var main = get_tree().root.get_node("Main")
+	var is_pad = main.is_using_gamepad
 	
-	# Transition complètement retirée d'ici !
+	match action:
+		"move":
+			return "[color=#ffdd33](DPAD)[/color]" if is_pad else "[color=#ffdd33](ARROW KEYS)[/color]"
+		"jump":
+			return "[color=#ffdd33](A)[/color]" if is_pad else "[color=#ffdd33](SPACE)[/color]"
+		"climb":
+			return "[color=#ffdd33](RB)[/color]" if is_pad else "[color=#ffdd33](SHIFT)[/color]"
+	return ""
+# ------------------------------------
 
 func start_tutorial_sequence():
 	var main = get_tree().root.get_node("Main")
@@ -23,9 +36,10 @@ func start_tutorial_sequence():
 	player.can_move = false
 	player.play_anim("idle")
 	
-	await dialog.show_dialog("Press (ARROW KEYS) or (DPAD) to MOVE")
-	await dialog.show_dialog("Press (SPACE) or (A) to JUMP")
-	await dialog.show_dialog("Press (SHIFT) or (RB) to CLIMB")
+	# Utilisation de la fonction dynamique
+	await dialog.show_dialog("Press " + get_input_name("move") + " to MOVE")
+	await dialog.show_dialog("Press " + get_input_name("jump") + " to JUMP")
+	await dialog.show_dialog("Press " + get_input_name("climb") + " to CLIMB")
 	
 	dialog.hide_dialog()
 	player.can_move = true
@@ -50,11 +64,9 @@ func _process(delta):
 func landing_impact():
 	var main = get_tree().root.get_node("Main")
 	
-	# --- CORRECTION ICI : lerp_speed AU LIEU DE follow_smoothness ---
 	if "lerp_speed" in main.camera:
 		main.camera.lerp_speed = 8.0 
 		
-	# --- CORRECTION ICI : default_offset AU LIEU DE cam_offset ---
 	if "default_offset" in main.camera:
 		main.camera.default_offset.y = 15.0
 	
