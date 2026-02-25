@@ -10,7 +10,7 @@ func _physics_process(delta):
 # Connecte le signal "body_entered" de l'Area2D à ce script
 func _on_body_entered(body):
 	if body.is_in_group("player"):
-		# On appelle la mort du joueur via le Main
-		var main = get_tree().root.get_node("Main")
-		if main:
-			main.play_death_sequence()
+		# Au lieu d'appeler le Main directement, on appelle la vraie mort du joueur !
+		# On lui passe global_position pour que le joueur soit repoussé dans le bon sens.
+		if body.has_method("die"):
+			body.die(global_position)

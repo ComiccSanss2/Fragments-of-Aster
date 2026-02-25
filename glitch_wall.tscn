@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://8krk45hejcvb" path="res://glitch_wall.gdshader" id="1_n2t0i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3t1ol"]
-size = Vector2(235, 1128)
+size = Vector2(308, 5692)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n2t0i"]
 shader = ExtResource("1_n2t0i")
@@ -12,10 +12,11 @@ shader_parameter/shake_power = 0.03
 shader_parameter/scanline_count = 50.0
 
 [node name="GlitchWall" type="Area2D"]
+z_index = 100
 script = ExtResource("1_ag2xm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(107.5, 554)
+position = Vector2(52, 1)
 shape = SubResource("RectangleShape2D_3t1ol")
 
 [node name="ColorRect" type="ColorRect" parent="."]

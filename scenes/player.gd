@@ -54,8 +54,11 @@ var grapple_unlocked: bool = false
 var grapple_launch_timer := 0.0
 var grapple_direction := Vector2.ZERO
 
-# --- NOUVEAU : État du zoom de la caméra ---
+# État du zoom de la caméra
 var is_grapple_zoomed_out := false
+
+# Pour gérer proprement les tweens de distorsion
+var active_distortion_tween: Tween = null
 
 # Dash Etat
 var dash_unlocked: bool = false
@@ -69,14 +72,18 @@ var dash_adjust_timer: float = 0.0
 var gravity_unlocked: bool = false
 var gravity_dir: int = 1 # 1 = Normal (Bas), -1 = Inversé (Haut)
 var gravity_cooldown: float = 0.0
+var can_invert_gravity: bool = true # Autorise l'inversion
 
 # Visuals
-var was_on_floor: bool = true # CORRECTION : Mis à true par défaut pour éviter le squash du spawn
+var was_on_floor: bool = true
 var default_scale := Vector2(1, 1)
 
 var facing_dir := 1
 var can_move := true
 var is_dying := false
+
+# Mémorisation du HandCheck
+var default_hand_check_y := 0.0
 
 # ------------------------------------------------------------
 # NOEUDS
@@ -86,7 +93,7 @@ var is_dying := false
 @onready var popup = $EchoText
 @onready var jump_sfx = $JumpSFX
 
-# --- NOUVEAUX NOEUDS AUDIO POUR LA MORT ET LE GRAPPIN ---
+# --- NOEUDS AUDIO ---
 @onready var hit_sfx = get_node_or_null("HitSFX")
 @onready var decay_sfx = get_node_or_null("DecaySFX")
 @onready var grapple_sfx = get_node_or_null("GrappleSFX")
@@ -94,14 +101,20 @@ var is_dying := false
 @onready var anim_player = get_node_or_null("AnimationPlayer")
 @onready var hand_check = get_node_or_null("HandCheck")
 
-# --- NOUVEAU : Traînée du grappin ---
+# --- FX ---
 @onready var grapple_trail = get_node_or_null("GrappleTrail")
+@onready var gravity_distortion = get_node_or_null("GravityDistortion")
 
 func _ready():
 	default_scale = sprite.scale
-	
-	# CORRECTION : On triche pour le premier affichage
 	was_on_floor = true 
+	
+	if hand_check:
+		default_hand_check_y = hand_check.position.y
+	
+	# Éteindre la distorsion au lancement par sécurité
+	if gravity_distortion and gravity_distortion.material:
+		gravity_distortion.material.set_shader_parameter("strength", 0.0)
 	
 	grapple_line.visible = false
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
@@ -135,13 +148,10 @@ func _physics_process(delta):
 		else:
 			velocity.x = 0
 			
-			# --- CORRECTION : NETTOYAGE DES ÉTATS (FIN DE NIVEAU) ---
-			# Si le joueur rentre dans la porte en dashant, on force le retour à la normale
 			is_dashing = false
 			grappling = false
 			wall_grabbing = false
 			sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED * 2.0)
-			# ---------------------------------------------------------
 			
 			if not is_on_floor():
 				velocity.y += GRAVITY * gravity_dir * delta
@@ -153,7 +163,7 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# --- DASH ---
+	# --- DASH EN COURS ---
 	if is_dashing:
 		dash_timer -= delta
 		if dash_adjust_timer > 0:
@@ -164,24 +174,27 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# --- GRAVITÉ (R) ---
-	if gravity_unlocked:
-		if gravity_cooldown > 0: gravity_cooldown -= delta
-		if Input.is_action_just_pressed("gravity") and gravity_cooldown <= 0:
-			invert_gravity()
-
 	# --- SQUASH & STRETCH ET ATTERRISSAGE ---
 	sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED)
+	
 	if not was_on_floor and is_on_floor():
 		sprite.scale = Vector2(default_scale.x * 1.5, default_scale.y * 0.7)
 		spawn_dust()
 		
-		# --- RETOUR AU ZOOM NORMAL QUAND ON TOUCHE LE SOL ---
 		if is_grapple_zoomed_out:
 			reset_camera_zoom()
+			
+		if gravity_distortion and gravity_distortion.material:
+			var mat = gravity_distortion.material as ShaderMaterial
+			var current_strength = mat.get_shader_parameter("strength")
+			if current_strength != null and current_strength > 0.001:
+				if active_distortion_tween: active_distortion_tween.kill()
+				active_distortion_tween = create_tween()
+				active_distortion_tween.tween_method(func(val): mat.set_shader_parameter("strength", val), current_strength, 0.0, 0.2).set_trans(Tween.TRANS_SINE)
+		
 	was_on_floor = is_on_floor()
 
-	# --- INPUTS ---
+	# --- INPUTS (GAUCHE / DROITE) ---
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 	if input_dir != 0:
 		facing_dir = input_dir
@@ -190,7 +203,7 @@ func _physics_process(delta):
 		if hand_check:
 			hand_check.target_position.x = facing_dir * 15.0
 
-	# Grappin
+	# --- GRAPPIN ---
 	if grapple_unlocked and Input.is_action_just_pressed("grapple") and not grappling and grapple_launch_timer <= 0:
 		grapple_target = find_grapple_point()
 		if grapple_target:
@@ -200,15 +213,11 @@ func _physics_process(delta):
 			grapple_line.visible = true
 			grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
 			
-			# --- ALLUMER LA TRAÎNÉE ET LE SON ---
-			if grapple_trail:
-				grapple_trail.emitting = true
-				
+			if grapple_trail: grapple_trail.emitting = true
 			if grapple_sfx:
 				grapple_sfx.pitch_scale = randf_range(0.9, 1.2)
 				grapple_sfx.play()
 				
-			# --- ZOOM OUT POUR LE GRAPPIN ---
 			is_grapple_zoomed_out = true
 			var main = get_tree().root.get_node_or_null("Main")
 			if main and main.camera:
@@ -228,22 +237,40 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# Physique Standard
+	# --- PHYSIQUE STANDARD ---
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * gravity_dir * delta
 
-	# Timers
+	# --- TIMERS ---
 	if Input.is_action_just_pressed("ui_accept"): jump_buffer_timer = JUMP_BUFFER_TIME
 	if jump_buffer_timer > 0: jump_buffer_timer -= delta
 	if is_on_floor(): coyote_timer = COYOTE_TIME
 	else: coyote_timer -= delta
 
-	# Mouvement
+	# --- MOUVEMENT ---
 	velocity.x = input_dir * SPEED
 
-	# Dash Check
-	if is_on_floor() or is_on_wall(): can_dash = true
-	if dash_unlocked and Input.is_action_just_pressed("dash") and can_dash: start_dash()
+	# =========================================================
+	# RECHARGE ET ACTIVATION DES POUVOIRS (DASH & GRAVITÉ)
+	# =========================================================
+	
+	if is_on_floor() or is_on_wall(): 
+		can_dash = true
+		can_invert_gravity = true
+		
+	# Activation Gravité
+	if gravity_unlocked:
+		if gravity_cooldown > 0: gravity_cooldown -= delta
+		if Input.is_action_just_pressed("gravity") and gravity_cooldown <= 0 and can_invert_gravity:
+			invert_gravity()
+			can_invert_gravity = false 
+
+	# --- CORRECTION DÉRIVE DASH : On bloque la physique pour la frame 1 ---
+	if dash_unlocked and Input.is_action_just_pressed("dash") and can_dash: 
+		start_dash()
+		move_and_slide()
+		return # <-- Isoler le dash de la gravité et des sauts restants sur cette frame !
+	# =========================================================
 
 	handle_jump(delta)
 	handle_wall_grab(delta)
@@ -272,6 +299,15 @@ func invert_gravity():
 	if jump_sfx:
 		jump_sfx.pitch_scale = 0.5
 		jump_sfx.play()
+		
+	if hand_check:
+		hand_check.position.y = default_hand_check_y * gravity_dir
+
+	if gravity_distortion and gravity_distortion.material:
+		var mat = gravity_distortion.material as ShaderMaterial
+		if active_distortion_tween: active_distortion_tween.kill()
+		active_distortion_tween = create_tween()
+		active_distortion_tween.tween_method(func(val): mat.set_shader_parameter("strength", val), 0.0, 0.03, 0.2).set_trans(Tween.TRANS_SINE)
 
 func start_dash():
 	is_dashing = true
@@ -285,26 +321,30 @@ func start_dash():
 		jump_sfx.pitch_scale = 1.5
 		jump_sfx.play()
 
-	# --- DASH FEEL ---
+	# Dash Feel
 	var main = get_tree().root.get_node_or_null("Main")
 	if main:
-		main.trigger_shake(4.0) 
+		main.trigger_shake(3.5) 
 		
 		if main.camera:
-			# Si on dash pendant un saut de grappin, on garde le dézoom comme base !
 			var base_zoom = main.DEFAULT_ZOOM * 0.90 if is_grapple_zoomed_out else main.DEFAULT_ZOOM
 			var punch_zoom = base_zoom * 1.020 
-			
 			var t = create_tween()
 			t.tween_property(main.camera, "zoom", punch_zoom, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			t.tween_property(main.camera, "zoom", base_zoom, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func update_dash_direction():
 	var dir_vec = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	if dir_vec == Vector2.ZERO:
+	
+	# --- CORRECTION DÉRIVE DASH : On force les 8 directions parfaites ---
+	if dir_vec.length() < 0.2: # Petite "zone morte" pour éviter les accidents
 		velocity = Vector2(facing_dir * DASH_SPEED, 0)
 	else:
-		velocity = dir_vec.normalized() * DASH_SPEED
+		# Cette ligne magique oblige l'angle à s'arrondir tous les 45° (PI/4). 
+		# Fini les joystick capricieux !
+		var angle = snapped(dir_vec.angle(), PI / 4.0)
+		velocity = Vector2(cos(angle), sin(angle)) * DASH_SPEED
+	# ------------------------------------------------------------------
 
 func end_dash():
 	is_dashing = false
@@ -346,8 +386,6 @@ func handle_jump(delta):
 			is_jump_held = false
 
 func handle_wall_grab(delta):
-	if gravity_dir == -1: return
-
 	var grabbing_button = Input.is_action_pressed("grab")
 	var on_wall = is_on_wall() and not is_on_floor()
 
@@ -361,7 +399,6 @@ func handle_wall_grab(delta):
 	if on_wall and grabbing_button and not wall_exhausted:
 		wall_grabbing = true
 		
-		# --- RETOUR AU ZOOM NORMAL SI ON S'ACCROCHE À UN MUR ---
 		if is_grapple_zoomed_out:
 			reset_camera_zoom()
 		
@@ -377,16 +414,16 @@ func handle_wall_grab(delta):
 			if hand_check and not hand_check.is_colliding():
 				velocity.y = 0 
 			else:
-				velocity.y = -WALL_CLIMB_SPEED 
+				velocity.y = -WALL_CLIMB_SPEED * gravity_dir
 				
 		elif Input.is_action_pressed("ui_down"):
-			velocity.y = WALL_CLIMB_SPEED
+			velocity.y = WALL_CLIMB_SPEED * gravity_dir
 	else:
 		wall_grabbing = false
-		if wall_exhausted and on_wall: velocity.y = WALL_SLIDE_SPEED
+		if wall_exhausted and on_wall: 
+			velocity.y = WALL_SLIDE_SPEED * gravity_dir
 
 func handle_wall_jump():
-	if gravity_dir == -1: return
 	var grabbing_button = Input.is_action_pressed("grab")
 	if wall_coyote_timer > 0.0 and grabbing_button and not wall_exhausted and Input.is_action_just_pressed("ui_accept"):
 		wall_grabbing = false
@@ -397,7 +434,8 @@ func handle_wall_jump():
 			jump_sfx.play()
 		if is_on_wall_left(): velocity.x = WALL_JUMP_H
 		elif is_on_wall_right(): velocity.x = -WALL_JUMP_H
-		velocity.y = WALL_JUMP_V
+		
+		velocity.y = WALL_JUMP_V * gravity_dir
 
 # ------------------------------------------------------------
 # UTILITAIRES
@@ -434,12 +472,10 @@ func finish_grapple():
 	grapple_line.visible = false
 	grapple_line.points = []
 	can_dash = true
+	can_invert_gravity = true 
 	
-	# --- ÉTEINDRE LA TRAÎNÉE ET LE SON ---
-	if grapple_trail:
-		grapple_trail.emitting = false
-	if grapple_sfx:
-		grapple_sfx.stop()
+	if grapple_trail: grapple_trail.emitting = false
+	if grapple_sfx: grapple_sfx.stop()
 
 func die(hazard_pos := Vector2.ZERO):
 	if is_dying: return
@@ -447,15 +483,13 @@ func die(hazard_pos := Vector2.ZERO):
 	can_move = false
 	wall_grabbing = false 
 	
-	# --- SÉCURITÉ TRAÎNÉE ET SON ---
-	if grapple_trail:
-		grapple_trail.emitting = false
-	if grapple_sfx:
-		grapple_sfx.stop()
-	
-	# Sécurité Zoom
-	if is_grapple_zoomed_out:
-		reset_camera_zoom()
+	if grapple_trail: grapple_trail.emitting = false
+	if grapple_sfx: grapple_sfx.stop()
+	if is_grapple_zoomed_out: reset_camera_zoom()
+		
+	if active_distortion_tween: active_distortion_tween.kill()
+	if gravity_distortion and gravity_distortion.material:
+		gravity_distortion.material.set_shader_parameter("strength", 0.0)
 	
 	sprite.scale = default_scale
 	
@@ -484,6 +518,14 @@ func die(hazard_pos := Vector2.ZERO):
 	else:
 		await get_tree().create_timer(0.5).timeout
 
+	gravity_dir = 1
+	up_direction = Vector2.UP
+	sprite.flip_v = false
+	gravity_cooldown = 0.0
+	can_invert_gravity = true 
+	if hand_check:
+		hand_check.position.y = default_hand_check_y
+
 	var main = get_tree().root.get_node_or_null("Main")
 	if main and main.has_method("play_death_sequence"): 
 		main.play_death_sequence()
@@ -496,15 +538,24 @@ func start_respawn_sequence():
 	velocity = Vector2.ZERO
 	collision_mask = 1 
 	
-	# CORRECTION : Réinitialiser l'échelle et l'état "was_on_floor"
 	sprite.scale = default_scale
 	was_on_floor = true 
 	
 	play_anim("idle")
 	sprite.visible = true
+	
 	gravity_dir = 1
 	up_direction = Vector2.UP
 	sprite.flip_v = false
+	can_invert_gravity = true 
+	
+	if hand_check:
+		hand_check.position.y = default_hand_check_y
+		
+	if active_distortion_tween: active_distortion_tween.kill()
+	if gravity_distortion and gravity_distortion.material:
+		gravity_distortion.material.set_shader_parameter("strength", 0.0)
+		
 	if anim_player and anim_player.has_animation("spawn"):
 		anim_player.play("spawn")
 		await anim_player.animation_finished

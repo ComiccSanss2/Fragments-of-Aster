@@ -1,3 +1,4 @@
+ColorRect
 CollisionShape2D
 Area2D
 Node2D
@@ -5,7 +6,6 @@ TileMap
 AudioStreamPlayer
 CPUParticles2D
 RichTextLabel
-ColorRect
 AnimatedSprite2D
 RayCast2D
 GPUParticles2D

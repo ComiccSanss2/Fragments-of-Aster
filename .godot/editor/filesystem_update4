@@ -5,10 +5,9 @@ res://scenes/wind.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://dialogue_box.tscn
-res://scenes/levels/areasecret_2d.gd
-res://scenes/levels/level_15.tscn
-res://scenes/levels/level_16.tscn
-res://scenes/shard.tscn
 res://scenes/player.gd
-res://scenes/levels/level_15.gd
+res://scenes/player.tscn
+res://scenes/gravitydistortion.gdshader
+res://scenes/levels/level_16.tscn
+res://glitch_wall.gd
+res://glitch_wall.tscn
