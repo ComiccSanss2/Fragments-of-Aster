@@ -34,7 +34,19 @@ func start_cinematic():
 	# 1. SETUP
 	player.can_move = false
 	player.velocity = Vector2.ZERO
+	
+	# --- CORRECTION DU GLISSEMENT ---
+	# On coupe la physique du joueur pour que son script n'écrase pas l'animation "walk"
+	player.set_physics_process(false)
+	
+	# On s'assure qu'il regarde vers le marqueur avant de marcher
+	var dir_to_marker = sign(player_marker.global_position.x - player.global_position.x)
+	if dir_to_marker != 0:
+		player.facing_dir = dir_to_marker
+		player.sprite.flip_h = (dir_to_marker < 0)
+		
 	player.play_anim("walk")
+	# --------------------------------
 	
 	# --- AJOUT MUSIQUE ---
 	var main = get_tree().root.get_node("Main")
@@ -55,7 +67,12 @@ func start_cinematic():
 	# --- MOUVEMENT JOUEUR ---
 	var t_move = create_tween()
 	t_move.tween_property(player, "global_position:x", player_marker.global_position.x, 1.5)
-	t_move.tween_callback(func(): player.play_anim("idle"))
+	
+	# Quand il arrive au marqueur, on remet idle ET on réactive sa physique
+	t_move.tween_callback(func(): 
+		player.play_anim("idle")
+		player.set_physics_process(true)
+	)
 	
 	if active_camera:
 		var center_pos = (player_marker.global_position + boss.global_position) / 2

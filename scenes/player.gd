@@ -71,7 +71,7 @@ var gravity_dir: int = 1 # 1 = Normal (Bas), -1 = Inversé (Haut)
 var gravity_cooldown: float = 0.0
 
 # Visuals
-var was_on_floor: bool = false
+var was_on_floor: bool = true # CORRECTION : Mis à true par défaut pour éviter le squash du spawn
 var default_scale := Vector2(1, 1)
 
 var facing_dir := 1
@@ -99,6 +99,9 @@ var is_dying := false
 
 func _ready():
 	default_scale = sprite.scale
+	
+	# CORRECTION : On triche pour le premier affichage
+	was_on_floor = true 
 	
 	grapple_line.visible = false
 	grapple_line.points = [Vector2.ZERO, Vector2.ZERO]
@@ -131,6 +134,14 @@ func _physics_process(delta):
 			velocity = velocity.move_toward(Vector2.ZERO, 600.0 * delta)
 		else:
 			velocity.x = 0
+			
+			# --- CORRECTION : NETTOYAGE DES ÉTATS (FIN DE NIVEAU) ---
+			# Si le joueur rentre dans la porte en dashant, on force le retour à la normale
+			is_dashing = false
+			grappling = false
+			wall_grabbing = false
+			sprite.scale = sprite.scale.lerp(default_scale, delta * SQUASH_SPEED * 2.0)
+			# ---------------------------------------------------------
 			
 			if not is_on_floor():
 				velocity.y += GRAVITY * gravity_dir * delta
@@ -484,6 +495,11 @@ func start_respawn_sequence():
 	is_dying = false
 	velocity = Vector2.ZERO
 	collision_mask = 1 
+	
+	# CORRECTION : Réinitialiser l'échelle et l'état "was_on_floor"
+	sprite.scale = default_scale
+	was_on_floor = true 
+	
 	play_anim("idle")
 	sprite.visible = true
 	gravity_dir = 1
