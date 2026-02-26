@@ -6,5 +6,12 @@ res://scenes/wind.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://glitch_wall.gd
+res://default_bus_layout.tres
+res://scenes/levels/level_15.tscn
+res://scenes/main.tscn
 res://glitch_wall.tscn
+res://glitch_wall.gd
+res://chase_checkpoint.tscn
+res://chase_checkpoint.gd
+res://scenes/main.gd
+res://ChaseCheckpoint.tscn

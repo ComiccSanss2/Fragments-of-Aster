@@ -1,7 +1,8 @@
 Area2D
+Marker2D
+CollisionShape2D
 Sprite2D
 PointLight2D
-CollisionShape2D
 AnimatedSprite2D
 TextureRect
 ColorRect
@@ -11,4 +12,3 @@ AudioStreamPlayer
 CPUParticles2D
 RichTextLabel
 RayCast2D
-GPUParticles2D

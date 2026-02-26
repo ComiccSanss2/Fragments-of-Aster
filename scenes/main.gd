@@ -37,6 +37,12 @@ const DEFAULT_ZOOM = Vector2(2.6, 2.6)
 # --- INPUT DETECTION ---
 var is_using_gamepad: bool = false
 
+# --- NOUVEAU : SYSTÈME DE CHECKPOINT POUR LE CHASE ---
+var has_checkpoint := false
+var checkpoint_level_path := ""
+var checkpoint_player_pos := Vector2.ZERO
+var checkpoint_wall_pos := Vector2.ZERO
+
 func _ready():
 	var is_intro = SaveManager.has_meta("intro_sequence")
 	
@@ -139,6 +145,10 @@ func _set_level_canvas_layers_visible(is_visible: bool):
 			if subchild is CanvasLayer or subchild is ParallaxBackground: subchild.visible = is_visible
 
 func load_level(path: String):
+	# Si on change de niveau, on supprime le checkpoint pour ne pas réapparaître au mauvais endroit
+	if has_checkpoint and checkpoint_level_path != path:
+		has_checkpoint = false
+
 	current_level_path = path
 	
 	for c in level_root.get_children(): c.queue_free()
@@ -149,7 +159,23 @@ func load_level(path: String):
 	if level_scene.has_node("PlayerStart"):
 		var spawn = level_scene.get_node("PlayerStart")
 		
-		player.global_position = spawn.global_position
+		# --- LOGIQUE DE SPAWN / CHECKPOINT ---
+		if has_checkpoint and checkpoint_level_path == path:
+			# 1. Placer Lyra au checkpoint
+			player.global_position = checkpoint_player_pos
+			
+			# 2. Chercher le Glitch Wall et le placer à son Marker
+			var wall = level_scene.find_child("GlitchWall", true, false)
+			if wall:
+				wall.global_position = checkpoint_wall_pos
+				# Réinitialiser la vitesse et le boost pour éviter que le mur ne tue le joueur direct
+				if "is_boosting" in wall: wall.is_boosting = false
+				if "current_speed" in wall: wall.current_speed = wall.speed
+		else:
+			# Si pas de checkpoint, on spawn normalement au début du niveau
+			player.global_position = spawn.global_position
+		# ---------------------------------------
+		
 		player.velocity = Vector2.ZERO
 		player.can_move = true
 		player.is_dying = false
@@ -315,7 +341,7 @@ func cleanup_before_exit():
 	if ui_layer: ui_layer.visible = false
 	_set_level_canvas_layers_visible(false)
 
-# --- NOUVEAU : DÉTECTION DU PÉRIPHÉRIQUE ---
+# --- DÉTECTION DU PÉRIPHÉRIQUE ---
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		if event is InputEventJoypadMotion and abs(event.axis_value) < 0.2:

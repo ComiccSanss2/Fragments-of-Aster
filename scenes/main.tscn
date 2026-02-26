@@ -186,3 +186,4 @@ stream = ExtResource("10_ya4ey")
 
 [node name="MusicBossChase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_eb6dy")
+bus = &"GlitchEffect"
