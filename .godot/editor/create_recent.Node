@@ -1,8 +1,8 @@
+Area2D
 Sprite2D
 PointLight2D
 CollisionShape2D
 AnimatedSprite2D
-Area2D
 TextureRect
 ColorRect
 Node2D
@@ -12,4 +12,3 @@ CPUParticles2D
 RichTextLabel
 RayCast2D
 GPUParticles2D
-Camera2D
