@@ -1,13 +1,19 @@
-[gd_scene load_steps=20 format=3 uid="uid://jngd0b8bsbpv"]
+[gd_scene load_steps=26 format=3 uid="uid://jngd0b8bsbpv"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_6iamk"]
 [ext_resource type="Script" uid="uid://cshtloxflhmai" path="res://scenes/levels/level_1.gd" id="1_x42e6"]
 [ext_resource type="Texture2D" uid="uid://drq43tifibmm3" path="res://assets/basetiles.png" id="2_6761a"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="2_sk5k4"]
+[ext_resource type="Texture2D" uid="uid://bfvln3ee12sk3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0167.png" id="2_wtwp4"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="3_6761a"]
+[ext_resource type="Texture2D" uid="uid://cgeni1xvmi6gf" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0034.png" id="3_iwr0g"]
 [ext_resource type="Script" uid="uid://cpxeepvxj2u6y" path="res://scenes/levels/end_trigger.gd" id="3_nsrm0"]
+[ext_resource type="Texture2D" uid="uid://ddcgtjxgv2hxs" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0153.png" id="4_bahl2"]
 [ext_resource type="Texture2D" uid="uid://ca6pfmxuq156" path="res://assets/Bloc_Ruine_32x32.png" id="4_oc4kc"]
+[ext_resource type="Texture2D" uid="uid://cvgv2ra36yho3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0004.png" id="5_np2pn"]
 [ext_resource type="Texture2D" uid="uid://c3r6mbof4mwna" path="res://assets/Biome_Plaine.png" id="6_s8va5"]
+[ext_resource type="Texture2D" uid="uid://eehs1qxxpv8m" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0166.png" id="6_v6ha0"]
+[ext_resource type="Texture2D" uid="uid://ccvr6vmr48o3h" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0620.png" id="7_gmpev"]
 [ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="8_dga24"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sk5k4"]
@@ -192,6 +198,12 @@ size = Vector2(4440, 7896)
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_x42e6")
+tex_move_key = ExtResource("2_wtwp4")
+tex_move_pad = ExtResource("3_iwr0g")
+tex_jump_key = ExtResource("4_bahl2")
+tex_jump_pad = ExtResource("5_np2pn")
+tex_climb_key = ExtResource("6_v6ha0")
+tex_climb_pad = ExtResource("7_gmpev")
 
 [node name="Background" parent="." instance=ExtResource("2_sk5k4")]
 offset = Vector2(-50, -200)

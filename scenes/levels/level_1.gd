@@ -2,6 +2,20 @@ extends Node2D
 
 var is_waiting_for_landing = false
 
+# --- IMAGES DES TOUCHES (À glisser dans l'Inspecteur) ---
+@export_group("Touches de Mouvement")
+@export var tex_move_key: Texture2D
+@export var tex_move_pad: Texture2D
+
+@export_group("Touches de Saut")
+@export var tex_jump_key: Texture2D
+@export var tex_jump_pad: Texture2D
+
+@export_group("Touches de Grimpette")
+@export var tex_climb_key: Texture2D
+@export var tex_climb_pad: Texture2D
+# --------------------------------------------------------
+
 func _ready() -> void:
 	pass
 
@@ -13,18 +27,27 @@ func start_intro_sequence():
 	player.can_move = false
 	player.velocity = Vector2.ZERO
 
-# --- GÉNÉRATEUR D'INPUT DYNAMIQUE ---
+# --- GÉNÉRATEUR D'INPUT DYNAMIQUE AVEC INSPECTEUR ---
 func get_input_name(action: String) -> String:
-	var main = get_tree().root.get_node("Main")
-	var is_pad = main.is_using_gamepad
+	var tex_pad: Texture2D = null
+	var tex_key: Texture2D = null
 	
 	match action:
 		"move":
-			return "[color=#ffdd33](DPAD)[/color]" if is_pad else "[color=#ffdd33](ARROW KEYS)[/color]"
+			tex_pad = tex_move_pad
+			tex_key = tex_move_key
 		"jump":
-			return "[color=#ffdd33](A)[/color]" if is_pad else "[color=#ffdd33](SPACE)[/color]"
+			tex_pad = tex_jump_pad
+			tex_key = tex_jump_key
 		"climb":
-			return "[color=#ffdd33](RB)[/color]" if is_pad else "[color=#ffdd33](SHIFT)[/color]"
+			tex_pad = tex_climb_pad
+			tex_key = tex_climb_key
+			
+	if tex_pad and tex_key:
+		# On envoie les DEUX chemins à la DialogueBox via notre balise custom
+		return "[input:" + tex_pad.resource_path + "|" + tex_key.resource_path + "]"
+	
+	return ""
 	return ""
 # ------------------------------------
 
@@ -36,10 +59,13 @@ func start_tutorial_sequence():
 	player.can_move = false
 	player.play_anim("idle")
 	
-	# Utilisation de la fonction dynamique
-	await dialog.show_dialog("Press " + get_input_name("move") + " to MOVE")
-	await dialog.show_dialog("Press " + get_input_name("jump") + " to JUMP")
-	await dialog.show_dialog("Press " + get_input_name("climb") + " to CLIMB")
+	# --- AJOUT DE LA TAILLE DE POLICE ---
+	var size_start = "[font_size=40]" # Modifie ce nombre pour ajuster la taille globale
+	var size_end = "[/font_size]"
+	
+	await dialog.show_dialog(size_start + "Press" + get_input_name("move") + "to MOVE" + size_end)
+	await dialog.show_dialog(size_start + "Press" + get_input_name("jump") + "to JUMP" + size_end)
+	await dialog.show_dialog(size_start + "Press" + get_input_name("climb") + "to CLIMB" + size_end)
 	
 	dialog.hide_dialog()
 	player.can_move = true

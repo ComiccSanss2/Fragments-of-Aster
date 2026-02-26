@@ -1,7 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://x4sbvg5yhc06"]
+[gd_scene load_steps=23 format=3 uid="uid://x4sbvg5yhc06"]
 
 [ext_resource type="Script" uid="uid://b7g3tckw8p00w" path="res://scenes/shard.gd" id="1_x0ayr"]
+[ext_resource type="Texture2D" uid="uid://dwk7h0qwad5f2" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0087.png" id="2_eppf2"]
 [ext_resource type="Texture2D" uid="uid://crfnmhbrfrglk" path="res://assets/Pouvoir_Fragment-Sheet.png" id="2_x0ayr"]
+[ext_resource type="Texture2D" uid="uid://mrtvup27ouvy" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0006.png" id="3_l5ig6"]
+[ext_resource type="Texture2D" uid="uid://d2emys8sv8t0j" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0123.png" id="4_dbi3r"]
+[ext_resource type="Texture2D" uid="uid://bbkb7elkuxa38" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0005.png" id="5_048tn"]
+[ext_resource type="Texture2D" uid="uid://duxf2lsu0r4ej" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0088.png" id="6_n0aau"]
+[ext_resource type="Texture2D" uid="uid://cbneny2c6nnkq" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0007.png" id="7_rr10k"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x0ayr"]
 radius = 11.0
@@ -143,6 +149,12 @@ size = Vector2(14.199999, 20.05)
 [node name="Shard" type="Area2D" groups=["shards"]]
 scale = Vector2(1.5, 1.5)
 script = ExtResource("1_x0ayr")
+tex_grapple_key = ExtResource("2_eppf2")
+tex_grapple_pad = ExtResource("3_l5ig6")
+tex_dash_key = ExtResource("4_dbi3r")
+tex_dash_pad = ExtResource("5_048tn")
+tex_inversion_key = ExtResource("6_n0aau")
+tex_inversion_pad = ExtResource("7_rr10k")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visibility_layer = 2

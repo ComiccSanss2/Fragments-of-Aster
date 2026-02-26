@@ -3,6 +3,20 @@ extends Area2D
 enum ShardType { GRAPPLE, DASH, INVERSION }
 @export var shard_type: ShardType = ShardType.GRAPPLE
 
+# --- IMAGES DES TOUCHES (À glisser dans l'Inspecteur) ---
+@export_group("Touches du Grappin")
+@export var tex_grapple_key: Texture2D
+@export var tex_grapple_pad: Texture2D
+
+@export_group("Touches du Dash")
+@export var tex_dash_key: Texture2D
+@export var tex_dash_pad: Texture2D
+
+@export_group("Touches d'Inversion")
+@export var tex_inversion_key: Texture2D
+@export var tex_inversion_pad: Texture2D
+# --------------------------------------------------------
+
 @onready var sprite: AnimatedSprite2D = $Sprite2D
 @onready var light := $PointLight2D
 @onready var anim := $AnimationPlayer
@@ -42,20 +56,25 @@ func _ready():
 		
 	camera = get_tree().root.get_node("Main/Camera2D")
 
-# --- GÉNÉRATEUR D'INPUT DYNAMIQUE ---
 func get_input_name(action: String) -> String:
-	var main = get_tree().root.get_node_or_null("Main")
-	var is_pad = false
-	if main and "is_using_gamepad" in main:
-		is_pad = main.is_using_gamepad
+	var tex_pad: Texture2D = null
+	var tex_key: Texture2D = null
 	
 	match action:
 		"grapple":
-			return "[color=#ffdd33](X)[/color]" if is_pad else "[color=#ffdd33](E)[/color]"
+			tex_pad = tex_grapple_pad
+			tex_key = tex_grapple_key
 		"dash":
-			return "[color=#ffdd33](B)[/color]" if is_pad else "[color=#ffdd33](F)[/color]"
+			tex_pad = tex_dash_pad
+			tex_key = tex_dash_key
 		"inversion":
-			return "[color=#ffdd33](Y)[/color]" if is_pad else "[color=#ffdd33](R)[/color]"
+			tex_pad = tex_inversion_pad
+			tex_key = tex_inversion_key
+			
+	if tex_pad and tex_key:
+		# On envoie les DEUX chemins à la DialogueBox via notre balise custom
+		return "[input:" + tex_pad.resource_path + "|" + tex_key.resource_path + "]"
+		
 	return ""
 # ------------------------------------
 
@@ -144,32 +163,34 @@ func _on_collect_finished():
 	var dialog := get_tree().root.get_node("Main/UI/DialogueBox")
 	var main = get_tree().root.get_node("Main")
 
-	# --- SYSTEM MESSAGE AVEC INPUT DYNAMIQUE ---
+	player.hide_popup() # On cache le popup s'il y en a un
+
+	# --- 1. SYSTEM MESSAGE AVEC INPUT DYNAMIQUE ---
+	var size_start = "[font_size=40]" 
+	var size_end = "[/font_size]"
+	
 	if shard_type == ShardType.GRAPPLE:
 		player.grapple_unlocked = true
 		main.grapple_collected = true
 		
-		await dialog.show_dialog("Echo-Grapple Restored.")
-		await dialog.show_dialog("Press " + get_input_name("grapple") + " to use when near a grapple point.")
+		await dialog.show_dialog(size_start + "Echo-Grapple Restored." + size_end)
+		await dialog.show_dialog(size_start + "Press" + get_input_name("grapple") + "to use when near a grapple point." + size_end)
 		
 	elif shard_type == ShardType.DASH:
 		player.dash_unlocked = true
 		main.dash_collected = true
 		
-		await dialog.show_dialog("Pulse-Dash Restored.")
-		await dialog.show_dialog("Press " + get_input_name("dash") + " to Dash.")
+		await dialog.show_dialog(size_start + "Pulse-Dash Restored." + size_end)
+		await dialog.show_dialog(size_start + "Press" + get_input_name("dash") + "to Dash." + size_end)
 		
 	elif shard_type == ShardType.INVERSION:
 		player.gravity_unlocked = true
 		main.set("gravity_collected", true) 
 		
-		await dialog.show_dialog("Reality Anchor Destabilized.")
-		await dialog.show_dialog("Press " + get_input_name("inversion") + " to Invert Reality.")
-	# ----------------------------------------
+		await dialog.show_dialog(size_start + "Reality Anchor Destabilized." + size_end)
+		await dialog.show_dialog(size_start + "Press" + get_input_name("inversion") + "to Invert Reality." + size_end)
 
-	player.hide_popup()
-
-	# --- TRANSITION MUSICALE ---
+	# --- 2. TRANSITION MUSICALE ---
 	var roots_music = main.get_node_or_null("FragmentsOfRoots")
 	var echoes_music = main.get_node_or_null("FragmentsOfEchoes")
 	var pulse_music = main.get_node_or_null("FragmentsOfPulse")
@@ -201,7 +222,7 @@ func _on_collect_finished():
 				echoes_music.stop()
 			)
 
-	# --- DIALOGUES LYRA (EN CYAN) ---
+	# --- 3. DIALOGUES LYRA (EN CYAN) ---
 	if shard_type == ShardType.DASH:
 		await dialog.show_dialog(
 			"[color=#33d9ff]I feel lighter... quicker...[/color]",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=30 format=3 uid="uid://b04fmg2hggmns"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_7yavk"]
 [ext_resource type="Script" uid="uid://kss8ed3sprka" path="res://scenes/levels/end_trigger_14.gd" id="9_hfkb1"]
 [ext_resource type="Script" uid="uid://dcslnwvd26snk" path="res://scenes/levels/areasecret_2d.gd" id="15_fijux"]
+[ext_resource type="PackedScene" uid="uid://delfwr1ly03e3" path="res://secret_terminal.tscn" id="16_w0qkw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2j1nx"]
 texture = ExtResource("1_g3nt1")
@@ -829,6 +830,10 @@ script = ExtResource("15_fijux")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SecretZone/Area2D"]
 position = Vector2(342, -1)
 shape = SubResource("RectangleShape2D_5muy6")
+
+[node name="SecretTerminal" parent="." instance=ExtResource("16_w0qkw")]
+z_index = -5
+position = Vector2(1520, 83)
 
 [connection signal="body_entered" from="EndTrigger14" to="EndTrigger14" method="_on_body_entered"]
 [connection signal="body_entered" from="SecretZone/Area2D" to="SecretZone/Area2D" method="_on_body_entered"]
