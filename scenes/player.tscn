@@ -325,7 +325,7 @@ texture = SubResource("GradientTexture2D_a8ls1")
 
 [node name="JumpSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_qlg0r")
-volume_db = -15.0
+volume_db = -10.0
 
 [node name="HandCheck" type="RayCast2D" parent="."]
 position = Vector2(5.5, -4)

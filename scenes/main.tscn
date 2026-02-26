@@ -7,10 +7,10 @@
 [ext_resource type="Shader" uid="uid://xgkypn75mghj" path="res://scenes/deathtransition.gdshader" id="5_eb6dy"]
 [ext_resource type="AudioStream" uid="uid://bjo2dl7aycvi6" path="res://assets/sfx/wind.wav" id="5_tbgi4"]
 [ext_resource type="Shader" uid="uid://ckf3v807pljna" path="res://scenes/transition.gdshader" id="5_trceg"]
-[ext_resource type="AudioStream" uid="uid://dj8ylcrdheniw" path="res://assets/sfx/fragments of roots.mp3" id="6_tefeu"]
 [ext_resource type="AudioStream" uid="uid://bmr04gbcqlo47" path="res://assets/sfx/fragments of pulse.wav" id="7_85g3d"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="7_o6xl0"]
-[ext_resource type="AudioStream" uid="uid://bs4v5sovofqu5" path="res://assets/sfx/fragments of echo.mp3" id="7_tipki"]
+[ext_resource type="AudioStream" uid="uid://dgrgm04gwc612" path="res://assets/sfx/fragmentsofroots.wav" id="8_trceg"]
+[ext_resource type="AudioStream" uid="uid://7duu7rev4an3" path="res://assets/sfx/fragmentsofecho.wav" id="10_trceg"]
 [ext_resource type="AudioStream" uid="uid://bwvv1chl4y1h5" path="res://assets/sfx/intro.wav" id="10_ya4ey"]
 [ext_resource type="AudioStream" uid="uid://db47dgtuonhnr" path="res://assets/sfx/drop.wav" id="11_eb6dy"]
 
@@ -152,18 +152,18 @@ volume_db = -4.208
 autoplay = true
 
 [node name="FragmentsOfRoots" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_tefeu")
-volume_db = -30.0
+stream = ExtResource("8_trceg")
+volume_db = -13.0
 autoplay = true
 
 [node name="FragmentsOfPulse" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_85g3d")
-volume_db = -11.527
+volume_db = -13.0
 autoplay = true
 
 [node name="FragmentsOfEchoes" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7_tipki")
-volume_db = -9.0
+stream = ExtResource("10_trceg")
+volume_db = -13.0
 
 [node name="WindLayer" type="CanvasLayer" parent="."]
 layer = 10
@@ -183,7 +183,9 @@ color = Color(0.79607844, 1, 1, 0.39215687)
 
 [node name="MusicBossIntro" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_ya4ey")
+volume_db = -8.0
 
 [node name="MusicBossChase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_eb6dy")
+volume_db = -6.0
 bus = &"GlitchEffect"
