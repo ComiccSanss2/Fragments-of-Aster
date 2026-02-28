@@ -4,7 +4,7 @@ extends Area2D
 @export var speed := 240.0           # Vitesse de base un poil plus rapide
 @export var boost_speed := 650.0     # Il va beaucoup plus vite quand il est en retard
 @export var max_distance := 500.0    # S'énerve beaucoup plus tôt (avant c'était 635)
-@export var safe_distance := 300.0   # Freine beaucoup plus près de Lyra (avant c'était 425)
+@export var safe_distance := 350.0   # Freine beaucoup plus près de Lyra (avant c'était 425)
 @export var panic_distance := 850.0  # NOUVEAU : Si Lyra sort de l'écran, il passe en Hyper Vitesse
 @export var smoothness := 2.0        # Il accélère plus nerveusement
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bj4u8xkq4booc"]
+[gd_scene load_steps=34 format=3 uid="uid://bj4u8xkq4booc"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_5bes1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_3ycd6"]
@@ -16,6 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://wbilbe7b8bvx" path="res://ChaseCheckpoint.tscn" id="13_n18m1"]
 [ext_resource type="Texture2D" uid="uid://bf1pfd5hmm77b" path="res://assets/Enemy in the dark - Free Pack/Enemy 2/Idle Enemy2.png" id="14_84ve3"]
 [ext_resource type="Script" uid="uid://bn3osbxmx6mf7" path="res://scenes/levels/final_trigger.gd" id="15_4u4vv"]
+[ext_resource type="PackedScene" uid="uid://b6sldnxm7s5ag" path="res://scenes/moving_platformvertical.tscn" id="17_f0pij"]
+[ext_resource type="PackedScene" uid="uid://bmvs0w7clrpuk" path="res://scenes/movingspike.tscn" id="18_riis0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw7bu"]
 texture = ExtResource("1_5bes1")
@@ -979,5 +981,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="MovingPlatform" parent="." instance=ExtResource("17_f0pij")]
+position = Vector2(11041.001, -108.00001)
+scale = Vector2(2.5, 2.5)
+move_type = 1
+distance = 152.0
+speed = 1.5
+pause_time = 0.1
+
+[node name="Spike" parent="MovingPlatform" instance=ExtResource("18_riis0")]
+position = Vector2(5.6, -3)
+
+[node name="Spike2" parent="MovingPlatform" instance=ExtResource("18_riis0")]
+position = Vector2(-4.7999988, 4)
+rotation = 3.1415927
+
+[node name="MovingPlatform2" parent="." instance=ExtResource("17_f0pij")]
+position = Vector2(11268, -108)
+scale = Vector2(2.5, 2.5)
+move_type = 1
+distance = 152.0
+speed = 1.0
+pause_time = 0.1
+
+[node name="Spike" parent="MovingPlatform2" instance=ExtResource("18_riis0")]
+position = Vector2(5.6, -3)
+
+[node name="Spike2" parent="MovingPlatform2" instance=ExtResource("18_riis0")]
+position = Vector2(-4.7999988, 4)
+rotation = 3.1415927
 
 [connection signal="body_entered" from="FinalTrigger" to="FinalTrigger" method="_on_body_entered"]
