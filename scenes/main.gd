@@ -19,6 +19,7 @@ extends Node2D
 @onready var wind_layer := $WindLayer
 @onready var music_boss_intro := $MusicBossIntro
 @onready var music_boss_chase := $MusicBossChase
+@onready var music_cinematic_final := $MusicCinematicFinal # <-- NOUVELLE PISTE ICI
 
 var current_level_path: String = ""
 var intro_played := false
@@ -145,7 +146,6 @@ func _set_level_canvas_layers_visible(is_visible: bool):
 			if subchild is CanvasLayer or subchild is ParallaxBackground: subchild.visible = is_visible
 
 func load_level(path: String):
-	# Si on change de niveau, on supprime le checkpoint pour ne pas réapparaître au mauvais endroit
 	if has_checkpoint and checkpoint_level_path != path:
 		has_checkpoint = false
 
@@ -159,22 +159,15 @@ func load_level(path: String):
 	if level_scene.has_node("PlayerStart"):
 		var spawn = level_scene.get_node("PlayerStart")
 		
-		# --- LOGIQUE DE SPAWN / CHECKPOINT ---
 		if has_checkpoint and checkpoint_level_path == path:
-			# 1. Placer Lyra au checkpoint
 			player.global_position = checkpoint_player_pos
-			
-			# 2. Chercher le Glitch Wall et le placer à son Marker
 			var wall = level_scene.find_child("GlitchWall", true, false)
 			if wall:
 				wall.global_position = checkpoint_wall_pos
-				# Réinitialiser la vitesse et le boost pour éviter que le mur ne tue le joueur direct
 				if "is_boosting" in wall: wall.is_boosting = false
 				if "current_speed" in wall: wall.current_speed = wall.speed
 		else:
-			# Si pas de checkpoint, on spawn normalement au début du niveau
 			player.global_position = spawn.global_position
-		# ---------------------------------------
 		
 		player.velocity = Vector2.ZERO
 		player.can_move = true
@@ -330,6 +323,7 @@ func cleanup_before_exit():
 	_stop_exploration_music()
 	if music_boss_intro: music_boss_intro.stop()
 	if music_boss_chase: music_boss_chase.stop()
+	if music_cinematic_final: music_cinematic_final.stop()
 	if ambiance_player: ambiance_player.stop()
 	if wind_layer:
 		wind_layer.visible = false
@@ -341,6 +335,15 @@ func cleanup_before_exit():
 	if ui_layer: ui_layer.visible = false
 	_set_level_canvas_layers_visible(false)
 
+# --- NOUVEAU : FONCTION POUR LA MUSIQUE FINALE ---
+func play_final_cinematic_music():
+	_stop_exploration_music()
+	if music_boss_intro.playing: music_boss_intro.stop()
+	if music_boss_chase.playing: music_boss_chase.stop()
+	
+	if music_cinematic_final and not music_cinematic_final.playing:
+		music_cinematic_final.play()
+
 # --- DÉTECTION DU PÉRIPHÉRIQUE ---
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
@@ -350,4 +353,3 @@ func _input(event):
 		
 	elif event is InputEventKey or event is InputEventMouse:
 		is_using_gamepad = false
-# -------------------------------------------

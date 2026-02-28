@@ -1,1 +1,15 @@
 res://default_bus_layout.tres
+res://scenes/levels/level_16.tscn
+res://scenes/gravitydistortion.gdshader
+res://scenes/deathtransition.gdshader
+res://scenes/transition.gdshader
+res://scenes/wind.gdshader
+res://scenes/levels/matrix.gdshader
+res://glitch_wall.gdshader
+res://scenes/shard.gdshader
+res://scenes/levels/final_trigger.gd
+res://scenes/levels/level_bounds.gd
+res://scenes/player.gd
+res://scenes/player.tscn
+res://scenes/main.tscn
+res://scenes/main.gd

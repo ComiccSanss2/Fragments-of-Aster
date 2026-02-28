@@ -611,3 +611,36 @@ func hide_popup():
 		t.tween_property(popup, "modulate:a", 0.0, 0.25)
 		await t.finished
 	popup.visible = false
+	
+	# ==========================================================
+# FONCTION CINÉMATIQUE (Fin de Démo)
+# ==========================================================
+func prepare_cinematic():
+	# 1. Coupe la physique et les contrôles
+	if "can_move" in self: can_move = false
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	
+	# 2. Reset le Squash & Stretch (remet l'échelle à la normale)
+	# Remplace "Sprite2D" par le nom exact de ton nœud visuel si différent
+	var sprite = get_node_or_null("Sprite2D")
+	if not sprite: sprite = get_node_or_null("AnimatedSprite2D")
+	
+	if sprite: 
+		sprite.scale = Vector2(0.5, 0.5)
+		sprite.rotation = 0.0 
+		
+	# 3. Coupe le Ghost du Dash (Si tu as un Timer qui gère ça)
+	if has_node("GhostTimer"):
+		$GhostTimer.stop()
+		
+	# 4. Coupe les particules (Traînées, poussière, etc.)
+	for child in get_children():
+		if child is CPUParticles2D or child is GPUParticles2D:
+			child.emitting = false
+			
+	# 5. Force l'animation pure du saut (Fige Lyra dans la bonne pose)
+	if has_node("AnimationPlayer"):
+		$AnimationPlayer.play("jump")
+	elif has_node("AnimatedSprite2D"):
+		$AnimatedSprite2D.play("jump")

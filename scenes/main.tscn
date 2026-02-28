@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=23 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://7duu7rev4an3" path="res://assets/sfx/fragmentsofecho.wav" id="10_trceg"]
 [ext_resource type="AudioStream" uid="uid://bwvv1chl4y1h5" path="res://assets/sfx/intro.wav" id="10_ya4ey"]
 [ext_resource type="AudioStream" uid="uid://db47dgtuonhnr" path="res://assets/sfx/drop.wav" id="11_eb6dy"]
+[ext_resource type="AudioStream" uid="uid://cbpsth5mprlka" path="res://assets/sfx/outro.wav" id="14_a8y0u"]
 
 [sub_resource type="Environment" id="Environment_tefeu"]
 background_mode = 3
@@ -189,3 +190,7 @@ volume_db = -8.0
 stream = ExtResource("11_eb6dy")
 volume_db = -6.0
 bus = &"GlitchEffect"
+
+[node name="MusicCinematicFinal" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_a8y0u")
+volume_db = -6.0
