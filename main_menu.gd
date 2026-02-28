@@ -38,25 +38,46 @@ var current_state = State.TITLE
 var slot_to_delete: int = -1
 
 func _ready():
-	# 1. Initialisation visuelle : On cache le vrai menu, on ne garde que le TitleContainer
-	_reset_alpha_and_hide([button_container, title_label, slot_container, options_container, delete_popup])
+	# --- VÉRIFICATION DU RETOUR DE JEU ---
+	var skip_intro = SaveManager.has_meta("skip_main_menu_intro")
 	
-	if title_container:
-		title_container.visible = true
-		title_container.modulate.a = 0.0
+	if skip_intro:
+		# On a fini le jeu, on veut le vrai menu direct !
+		SaveManager.remove_meta("skip_main_menu_intro") # On nettoie le flag
 		
-		# 2. Intro Animation (Fait apparaître le conteneur d'intro)
-		var t = create_tween()
-		t.tween_interval(0.5)
-		t.tween_property(title_container, "modulate:a", 1.0, 2.0)
-		t.tween_callback(loop_press_key_anim)
+		_reset_alpha_and_hide([title_container, slot_container, options_container, delete_popup])
+		
+		# On affiche directement les boutons et le titre
+		if title_label: 
+			title_label.visible = true
+			title_label.modulate.a = 1.0
+		if button_container: 
+			button_container.visible = true
+			button_container.modulate.a = 1.0
+			
+		current_state = State.MENU
+		if btn_play: btn_play.grab_focus()
+		
+	else:
+		# Lancement normal du jeu (avec le "Press Any Key")
+		_reset_alpha_and_hide([button_container, title_label, slot_container, options_container, delete_popup])
+		
+		if title_container:
+			title_container.visible = true
+			title_container.modulate.a = 0.0
+			
+			# Intro Animation
+			var t = create_tween()
+			t.tween_interval(0.5)
+			t.tween_property(title_container, "modulate:a", 1.0, 2.0)
+			t.tween_callback(loop_press_key_anim)
 	
-	# 3. Connexions MENU PRINCIPAL
+	# --- Connexions MENU PRINCIPAL ---
 	if btn_play: btn_play.pressed.connect(_on_play_pressed)
 	if btn_options: btn_options.pressed.connect(_on_options_pressed)
 	if btn_exit: btn_exit.pressed.connect(_on_exit_pressed)
 	
-	# 4. Connexions SLOTS (Dynamique)
+	# --- Connexions SLOTS (Dynamique) ---
 	if slot_container:
 		for i in range(1, 4):
 			if slot_container.get_child_count() >= i:
@@ -70,10 +91,10 @@ func _ready():
 
 	if slot_back_btn: slot_back_btn.pressed.connect(_on_back_to_menu)
 	
-	# 5. Connexions OPTIONS
+	# --- Connexions OPTIONS ---
 	if options_back_btn: options_back_btn.pressed.connect(_on_back_to_menu)
 	
-	# Audio setup (Master Bus)
+	# Audio setup
 	var bus_index = AudioServer.get_bus_index("Master")
 	if volume_slider:
 		volume_slider.min_value = 0.0
@@ -91,23 +112,21 @@ func _ready():
 		vsync_check.button_pressed = (DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED)
 		vsync_check.toggled.connect(_on_vsync_toggled)
 
-# 6. Connexions POPUP
+	# --- Connexions POPUP ---
 	if confirm_btn: confirm_btn.pressed.connect(_on_confirm_delete)
 	if cancel_btn: cancel_btn.pressed.connect(_on_cancel_delete)
 	
 	# Bloquer le focus TOTALEMENT dans le popup
 	if confirm_btn and cancel_btn:
-		# --- SI CONFIRM (YES) EST À GAUCHE ---
 		confirm_btn.focus_neighbor_top = confirm_btn.get_path()
 		confirm_btn.focus_neighbor_bottom = confirm_btn.get_path()
-		confirm_btn.focus_neighbor_left = confirm_btn.get_path() # Bloqué à gauche
-		confirm_btn.focus_neighbor_right = cancel_btn.get_path() # Va vers Cancel à droite
+		confirm_btn.focus_neighbor_left = confirm_btn.get_path()
+		confirm_btn.focus_neighbor_right = cancel_btn.get_path()
 		
-		# --- SI CANCEL (NO) EST À DROITE ---
 		cancel_btn.focus_neighbor_top = cancel_btn.get_path()
 		cancel_btn.focus_neighbor_bottom = cancel_btn.get_path()
-		cancel_btn.focus_neighbor_right = cancel_btn.get_path() # Bloqué à droite
-		cancel_btn.focus_neighbor_left = confirm_btn.get_path() # Va vers Confirm à gauche
+		cancel_btn.focus_neighbor_right = cancel_btn.get_path()
+		cancel_btn.focus_neighbor_left = confirm_btn.get_path()
 
 func _input(event):
 	if current_state == State.TITLE:
@@ -127,12 +146,10 @@ func show_main_menu():
 	
 	var t = create_tween()
 	
-	# 1. On fait disparaître tout l'écran d'intro (TitleContainer)
 	if title_container:
 		t.tween_property(title_container, "modulate:a", 0.0, 0.5)
 		t.tween_callback(func(): title_container.visible = false)
 	
-	# 2. On affiche le Titre racine et le Conteneur de boutons
 	t.tween_callback(func(): 
 		if title_label: title_label.visible = true
 		if button_container: 
@@ -140,7 +157,6 @@ func show_main_menu():
 			if btn_play: btn_play.grab_focus() 
 	)
 	
-	# 3. On les fait apparaître en fondu
 	if title_label: title_label.modulate.a = 0.0
 	if button_container: button_container.modulate.a = 0.0
 	
@@ -166,7 +182,6 @@ func _switch_view(from_node: Control, to_node: Control, new_state: State, focus_
 	
 	t.tween_property(from_node, "modulate:a", 0.0, 0.3)
 	
-	# --- Si on quitte le menu principal, on cache aussi le Titre ---
 	if from_node == button_container and title_label:
 		t.parallel().tween_property(title_label, "modulate:a", 0.0, 0.3)
 	
@@ -188,7 +203,6 @@ func _switch_view(from_node: Control, to_node: Control, new_state: State, focus_
 	to_node.modulate.a = 0.0
 	t.tween_property(to_node, "modulate:a", 1.0, 0.3)
 	
-	# --- Si on revient au menu principal, on réaffiche le Titre ---
 	if to_node == button_container and title_label:
 		title_label.modulate.a = 0.0
 		t.parallel().tween_property(title_label, "modulate:a", 1.0, 0.3)

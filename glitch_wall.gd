@@ -1,14 +1,15 @@
 extends Area2D
 
-# --- MOUVEMENT ---
-@export var speed := 220.0 
-@export var boost_speed := 460.0     # Légèrement augmenté pour un retour un peu plus mordant
-@export var max_distance := 650.0    # Laisse Lyra s'éloigner plus avant de paniquer
-@export var safe_distance := 450.0   # Freine plus tôt pour ne pas écraser le joueur
-@export var smoothness := 1.5        # Inertie de base (pour l'accélération)
+# --- MOUVEMENT OPPRESSANT ---
+@export var speed := 240.0           # Vitesse de base un poil plus rapide
+@export var boost_speed := 650.0     # Il va beaucoup plus vite quand il est en retard
+@export var max_distance := 500.0    # S'énerve beaucoup plus tôt (avant c'était 635)
+@export var safe_distance := 300.0   # Freine beaucoup plus près de Lyra (avant c'était 425)
+@export var panic_distance := 850.0  # NOUVEAU : Si Lyra sort de l'écran, il passe en Hyper Vitesse
+@export var smoothness := 2.0        # Il accélère plus nerveusement
 
 # --- AUDIO ---
-@export var audio_effect_distance := 400.0 
+@export var audio_effect_distance := 450.0 
 @export var underwater_cutoff := 500.0 
 @export var normal_cutoff := 20000.0 
 
@@ -23,26 +24,34 @@ func _physics_process(delta):
 	var target_speed = speed 
 	
 	if player:
-		# CALCUL DU BORD DROIT (Prend en compte l'échelle globale)
+		# CALCUL DU BORD DROIT
 		var shape_rect = collision_shape.shape.get_rect()
 		var wall_right_edge = collision_shape.global_position.x + (shape_rect.size.x / 2 * collision_shape.global_scale.x)
 		
 		var distance_to_edge = player.global_position.x - wall_right_edge
 		
-		# LOGIQUE DE BOOST AMÉLIORÉE
-		if distance_to_edge > max_distance:
+		# --- LOGIQUE DE BOOST SANS PITIÉ ---
+		if distance_to_edge > panic_distance:
+			# Si Lyra est VRAIMENT trop loin, le mur casse la limite de vitesse
 			is_boosting = true
+			target_speed = boost_speed * 1.5 
+		elif distance_to_edge > max_distance:
+			# Boost normal pour coller au joueur
+			is_boosting = true
+			target_speed = boost_speed
 		elif distance_to_edge < safe_distance:
+			# Il a rattrapé Lyra, il arrête de booster juste derrière elle
 			is_boosting = false
+			target_speed = speed
+		else:
+			# Maintient l'état actuel dans la zone grise
+			target_speed = boost_speed if is_boosting else speed
 			
-		target_speed = boost_speed if is_boosting else speed
-		
 		# LOGIQUE AUDIO
 		_update_underwater_effect(distance_to_edge)
 
-	# --- LE SECRET DU BON FREINAGE ---
+	# --- LE FREINAGE ---
 	var current_smoothness = smoothness
-	# Si le mur a fini son boost et doit ralentir, on multiplie le smoothness pour qu'il freine fort
 	if target_speed == speed and current_speed > speed:
 		current_smoothness = smoothness * 3.0 
 
@@ -54,7 +63,6 @@ func _update_underwater_effect(dist: float):
 	var filter: AudioEffectLowPassFilter = AudioServer.get_bus_effect(glitch_bus_idx, 0)
 	
 	if dist < audio_effect_distance:
-		# On utilise dist directement.
 		var ratio = clamp(dist / audio_effect_distance, 0.0, 1.0)
 		filter.cutoff_hz = lerp(underwater_cutoff, normal_cutoff, ratio)
 	else:

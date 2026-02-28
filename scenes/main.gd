@@ -19,7 +19,7 @@ extends Node2D
 @onready var wind_layer := $WindLayer
 @onready var music_boss_intro := $MusicBossIntro
 @onready var music_boss_chase := $MusicBossChase
-@onready var music_cinematic_final := $MusicCinematicFinal # <-- NOUVELLE PISTE ICI
+@onready var music_cinematic_final := $MusicCinematicFinal # <-- PISTE DE FIN
 
 var current_level_path: String = ""
 var intro_played := false
@@ -353,3 +353,39 @@ func _input(event):
 		
 	elif event is InputEventKey or event is InputEventMouse:
 		is_using_gamepad = false
+
+# ==========================================================
+# FIN DE LA DÉMO (OUTRO)
+# ==========================================================
+func show_outro_screen():
+	Engine.time_scale = 1.0 
+	
+	# 1. On cache tout
+	if level_root: level_root.visible = false
+	if player: player.visible = false
+	if ambiance_player: ambiance_player.stop()
+		
+	# 2. NETTOYAGE ABSOLU : On détruit l'interface et le vent
+	if wind_layer: wind_layer.queue_free()
+	if ui_layer: ui_layer.queue_free()
+	
+	# 3. On affiche la scène d'Outro
+	var outro_scene = load("res://end_demo_screen.tscn")
+	if outro_scene:
+		var outro_instance = outro_scene.instantiate()
+		var top_canvas = CanvasLayer.new()
+		top_canvas.layer = 128
+		add_child(top_canvas)
+		top_canvas.add_child(outro_instance)
+		
+	# 4. On attend que la musique épique se termine
+	if music_cinematic_final and music_cinematic_final.playing:
+		await music_cinematic_final.finished
+		
+	# 5. Retour au Menu Principal
+	cleanup_before_exit()
+	
+	# --- ON AJOUTE LE FLAG ICI POUR SAUTER L'INTRO DU MENU ---
+	SaveManager.set_meta("skip_main_menu_intro", true)
+	
+	get_tree().change_scene_to_file("res://main_menu.tscn")
