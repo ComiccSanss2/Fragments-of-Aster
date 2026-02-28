@@ -1,3 +1,4 @@
+CPUParticles2D
 CenterContainer
 Label
 AudioStreamPlayer
@@ -11,5 +12,3 @@ Sprite2D
 PointLight2D
 TextureRect
 Node2D
-TileMap
-CPUParticles2D

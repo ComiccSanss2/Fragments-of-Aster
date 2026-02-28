@@ -112,7 +112,6 @@ func _ready():
 	if hand_check:
 		default_hand_check_y = hand_check.position.y
 	
-	# Éteindre la distorsion au lancement par sécurité
 	if gravity_distortion and gravity_distortion.material:
 		gravity_distortion.material.set_shader_parameter("strength", 0.0)
 	
@@ -121,7 +120,6 @@ func _ready():
 	velocity = Vector2.ZERO
 	play_anim("idle")
 	
-	# Initialisation Gravité standard
 	up_direction = Vector2.UP
 	gravity_dir = 1
 	
@@ -143,11 +141,15 @@ func _process(delta):
 # ------------------------------------------------------------
 func _physics_process(delta):
 	if is_dying or not can_move:
+		# --- SÉCURITÉ CINÉMATIQUE : On coupe les particules continues ---
+		if has_node("RunParticles"): $RunParticles.emitting = false
+		if has_node("WallGrabParticles"): $WallGrabParticles.emitting = false
+		if has_node("WallClimbParticles"): $WallClimbParticles.emitting = false
+			
 		if is_dying: 
 			velocity = velocity.move_toward(Vector2.ZERO, 600.0 * delta)
 		else:
 			velocity.x = 0
-			
 			is_dashing = false
 			grappling = false
 			wall_grabbing = false
@@ -179,7 +181,7 @@ func _physics_process(delta):
 	
 	if not was_on_floor and is_on_floor():
 		sprite.scale = Vector2(default_scale.x * 1.5, default_scale.y * 0.7)
-		spawn_dust()
+		spawn_dust() 
 		
 		if is_grapple_zoomed_out:
 			reset_camera_zoom()
@@ -194,7 +196,7 @@ func _physics_process(delta):
 		
 	was_on_floor = is_on_floor()
 
-	# --- INPUTS (GAUCHE / DROITE) ---
+	# --- INPUTS ---
 	var input_dir = Input.get_axis("ui_left", "ui_right")
 	if input_dir != 0:
 		facing_dir = input_dir
@@ -237,7 +239,6 @@ func _physics_process(delta):
 		move_and_slide()
 		return
 
-	# --- PHYSIQUE STANDARD ---
 	if not wall_grabbing and not is_on_floor():
 		velocity.y += GRAVITY * gravity_dir * delta
 
@@ -250,31 +251,73 @@ func _physics_process(delta):
 	# --- MOUVEMENT ---
 	velocity.x = input_dir * SPEED
 
-	# =========================================================
-	# RECHARGE ET ACTIVATION DES POUVOIRS (DASH & GRAVITÉ)
-	# =========================================================
-	
 	if is_on_floor() or is_on_wall(): 
 		can_dash = true
 		can_invert_gravity = true
 		
-	# Activation Gravité
 	if gravity_unlocked:
 		if gravity_cooldown > 0: gravity_cooldown -= delta
 		if Input.is_action_just_pressed("gravity") and gravity_cooldown <= 0 and can_invert_gravity:
 			invert_gravity()
 			can_invert_gravity = false 
 
-	# --- CORRECTION DÉRIVE DASH : On bloque la physique pour la frame 1 ---
 	if dash_unlocked and Input.is_action_just_pressed("dash") and can_dash: 
 		start_dash()
 		move_and_slide()
-		return # <-- Isoler le dash de la gravité et des sauts restants sur cette frame !
-	# =========================================================
+		return 
 
 	handle_jump(delta)
 	handle_wall_grab(delta)
 	handle_wall_jump()
+	
+	# =========================================================
+	# GESTION DES PARTICULES CONTINUES (COURSE ET MURS)
+	# =========================================================
+	
+	# 1. EFFET DE COURSE
+	if has_node("RunParticles"):
+		if is_on_floor() and abs(velocity.x) > 10.0:
+			$RunParticles.emitting = true
+			$RunParticles.position.y = 7 * gravity_dir
+			var y_dir = -0.5 * gravity_dir 
+			if facing_dir == 1: $RunParticles.direction = Vector2(-1, y_dir) 
+			else: $RunParticles.direction = Vector2(1, y_dir)  
+		else:
+			$RunParticles.emitting = false
+
+	# 2. EFFETS DE MUR (GRAB & CLIMB)
+	if has_node("WallGrabParticles") and has_node("WallClimbParticles"):
+		# Si Lyra est sur un mur et pas au sol
+		if is_on_wall() and not is_on_floor():
+			# Détermine le côté du mur (-1 pour Gauche, 1 pour Droite)
+			var wall_side = -1 if is_on_wall_left() else 1
+			# Position X des particules (Ajuste le 10 selon la largeur de ton sprite)
+			var pos_x = 5.5 * wall_side
+			
+			$WallGrabParticles.position = Vector2(pos_x, 0)
+			$WallClimbParticles.position = Vector2(pos_x, 0)
+
+			# Si on s'accroche et qu'on est quasi immobile -> Petite poussière
+			if wall_grabbing and abs(velocity.y) < 10.0:
+				$WallGrabParticles.emitting = true
+				$WallClimbParticles.emitting = false
+			# Si on glisse ou on grimpe -> Grosse poussière
+			else:
+				$WallGrabParticles.emitting = false
+				if abs(velocity.y) > 10.0:
+					$WallClimbParticles.emitting = true
+					# Oriente la poussière dans le sens opposé du mouvement
+					# (Si on glisse vers le bas, la poussière s'envole vers le haut)
+					var y_dir = 1.0 if velocity.y < 0 else -1.0
+					$WallClimbParticles.direction = Vector2(0, y_dir)
+				else:
+					$WallClimbParticles.emitting = false
+		else:
+			# On n'est pas sur un mur, on éteint tout
+			$WallGrabParticles.emitting = false
+			$WallClimbParticles.emitting = false
+
+	# =========================================================
 
 	update_animation(input_dir)
 	move_and_slide()
@@ -321,7 +364,6 @@ func start_dash():
 		jump_sfx.pitch_scale = 1.5
 		jump_sfx.play()
 
-	# Dash Feel
 	var main = get_tree().root.get_node_or_null("Main")
 	if main:
 		main.trigger_shake(3.5) 
@@ -336,15 +378,11 @@ func start_dash():
 func update_dash_direction():
 	var dir_vec = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
-	# --- CORRECTION DÉRIVE DASH : On force les 8 directions parfaites ---
-	if dir_vec.length() < 0.2: # Petite "zone morte" pour éviter les accidents
+	if dir_vec.length() < 0.2: 
 		velocity = Vector2(facing_dir * DASH_SPEED, 0)
 	else:
-		# Cette ligne magique oblige l'angle à s'arrondir tous les 45° (PI/4). 
-		# Fini les joystick capricieux !
 		var angle = snapped(dir_vec.angle(), PI / 4.0)
 		velocity = Vector2(cos(angle), sin(angle)) * DASH_SPEED
-	# ------------------------------------------------------------------
 
 func end_dash():
 	is_dashing = false
@@ -365,6 +403,8 @@ func handle_jump(delta):
 	if jump_buffer_timer > 0 and coyote_timer > 0 and not wall_grabbing:
 		velocity.y = JUMP_FORCE * gravity_dir
 		sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
+		spawn_dust()
+		
 		if jump_sfx:
 			jump_sfx.pitch_scale = randf_range(0.9, 1.1)
 			jump_sfx.play()
@@ -591,9 +631,11 @@ func update_animation(input_dir):
 		play_anim("idle")
 
 func spawn_dust():
-	var dust_scene = load("res://scenes/cpu_particles_2d.tscn")
+	if not can_move: return
+	var dust_scene = load("res://cpu_particles_2d.tscn")
 	var d = dust_scene.instantiate()
-	d.global_position = global_position
+	d.global_position = global_position + Vector2(0, 16 * gravity_dir)
+	if gravity_dir == -1: d.rotation = PI 
 	get_tree().current_scene.add_child(d)
 
 func show_popup(msg: String):
@@ -612,16 +654,12 @@ func hide_popup():
 		await t.finished
 	popup.visible = false
 	
-# ==========================================================
-# FONCTION CINÉMATIQUE (Fin de Démo)
-# ==========================================================
 func prepare_cinematic():
 	if "can_move" in self: can_move = false
 	set_physics_process(false) 
 	velocity = Vector2.ZERO 
 	
-	# --- LE BOUCLIER ANTI-CRASH ---
-	is_dying = true # Empêche la mort par le vide ou les triggers !
+	is_dying = true 
 	collision_layer = 0
 	collision_mask = 0
 	

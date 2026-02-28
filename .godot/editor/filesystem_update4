@@ -1,5 +1,4 @@
 res://default_bus_layout.tres
-res://scenes/moving_platformvertical.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -7,6 +6,7 @@ res://scenes/wind.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://scenes/levels/level_16.tscn
-res://glitch_wall.tscn
-res://glitch_wall.gd
+res://cpu_particles_2d.gd
+res://cpu_particles_2d.tscn
+res://scenes/player.tscn
+res://scenes/player.gd

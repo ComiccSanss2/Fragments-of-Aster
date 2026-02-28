@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=54 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d0lbwlc6bdtx1" path="res://assets/Escalade-Sheet.png" id="2_d2wvv"]
@@ -275,6 +275,19 @@ shader_parameter/speed = 8.0
 shader_parameter/radius = 0.35
 shader_parameter/thickness = 0.15
 
+[sub_resource type="Curve" id="Curve_oprun"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_a8ls1"]
+colors = PackedColorArray(0.3553136, 0.35531354, 0.35531357, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_qfm1y"]
+colors = PackedColorArray(0.16206557, 0.1620656, 0.16206557, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_fulsm"]
+colors = PackedColorArray(0.27752772, 0.27752772, 0.27752772, 1, 1, 1, 1, 0)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 2
 scale = Vector2(2, 2)
@@ -283,8 +296,7 @@ script = ExtResource("1_g2els")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_vxglm")
-animation = &"walk"
-frame_progress = 0.46611315
+animation = &"grab"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 0.5)
@@ -361,3 +373,54 @@ offset_top = -34.0
 offset_right = 34.0
 offset_bottom = 34.0
 color = Color(1, 1, 1, 0)
+
+[node name="RunParticles" type="CPUParticles2D" parent="."]
+z_index = -1
+position = Vector2(-2.5, 7)
+emitting = false
+amount = 10
+lifetime = 0.4
+explosiveness = 0.4
+emission_shape = 3
+emission_rect_extents = Vector2(1, 1)
+direction = Vector2(-10, -1)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 30.0
+initial_velocity_max = 60.0
+damping_min = 50.0
+damping_max = 50.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+scale_amount_curve = SubResource("Curve_oprun")
+color_ramp = SubResource("Gradient_a8ls1")
+
+[node name="WallGrabParticles" type="CPUParticles2D" parent="."]
+position = Vector2(5.5, -3)
+emitting = false
+amount = 4
+lifetime = 0.6
+direction = Vector2(0, 1)
+spread = 15.0
+gravity = Vector2(0, 150)
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_qfm1y")
+
+[node name="WallClimbParticles" type="CPUParticles2D" parent="."]
+position = Vector2(5.5, -3)
+emitting = false
+amount = 12
+lifetime = 0.4
+direction = Vector2(0, -1)
+spread = 35.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 30.0
+initial_velocity_max = 70.0
+damping_min = 40.0
+damping_max = 40.0
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_fulsm")
