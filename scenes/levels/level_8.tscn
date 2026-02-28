@@ -272,6 +272,7 @@ scale = Vector2(1.5, 1.5)
 transform = Transform2D(1.5, 0, 0, 1.5, 0, -50)
 
 [node name="LevelBounds" type="Node2D" parent="."]
+visible = false
 position = Vector2(-35, 433)
 script = ExtResource("3_h6r4t")
 
@@ -298,10 +299,10 @@ position = Vector2(2404, 82)
 position = Vector2(2542, 51)
 
 [node name="BreakablePlatform37" parent="." instance=ExtResource("4_w2i51")]
-position = Vector2(3184, 240)
+position = Vector2(3182, 208)
 
 [node name="BreakablePlatform38" parent="." instance=ExtResource("4_w2i51")]
-position = Vector2(3216, 240)
+position = Vector2(3214, 208)
 
 [node name="GrapplePoint3" parent="." instance=ExtResource("6_0kxia")]
 position = Vector2(336, -53)

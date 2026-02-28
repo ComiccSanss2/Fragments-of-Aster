@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=34 format=3 uid="uid://b04fmg2hggmns"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://b4a14wq0oldp1" path="res://assets/Bloc_Ruine_Variante32x32.png" id="7_x7cri"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_7yavk"]
 [ext_resource type="Script" uid="uid://kss8ed3sprka" path="res://scenes/levels/end_trigger_14.gd" id="9_hfkb1"]
+[ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="14_q1ohf"]
 [ext_resource type="Script" uid="uid://dcslnwvd26snk" path="res://scenes/levels/areasecret_2d.gd" id="15_fijux"]
 [ext_resource type="PackedScene" uid="uid://delfwr1ly03e3" path="res://secret_terminal.tscn" id="16_w0qkw"]
 
@@ -118,6 +119,22 @@ size = Vector2(6446, 3971)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vi0f2"]
 size = Vector2(50.375, 99)
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sww00"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j62xx"]
+noise = SubResource("FastNoiseLite_sww00")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b2233"]
+shader = ExtResource("14_q1ohf")
+shader_parameter/mystic_color_1 = Color(0.8273616, 0.01778939, 0.11552245, 1)
+shader_parameter/mystic_color_2 = Color(0, 0, 0, 1)
+shader_parameter/flow_speed = 0.5
+shader_parameter/flow_noise_tex = SubResource("NoiseTexture2D_j62xx")
+shader_parameter/glitch_intensity = 0.9190000436525
+shader_parameter/glitch_speed = 5.762000226195
+shader_parameter/block_size = 18.962000663195
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fijux"]
 texture = ExtResource("3_hd4w6")
 texture_region_size = Vector2i(32, 32)
@@ -190,6 +207,13 @@ script = ExtResource("9_hfkb1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EndTrigger14"]
 position = Vector2(336.1875, 168.5)
 shape = SubResource("RectangleShape2D_vi0f2")
+
+[node name="ColorRect" type="ColorRect" parent="EndTrigger14"]
+material = SubResource("ShaderMaterial_b2233")
+offset_left = 277.0
+offset_top = 123.0
+offset_right = 330.0
+offset_bottom = 218.0
 
 [node name="Spike" parent="." instance=ExtResource("6_2j1nx")]
 position = Vector2(800, 217)
