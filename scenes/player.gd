@@ -46,6 +46,7 @@ var wall_coyote_timer := 0.0
 
 var wall_grab_time_left = WALL_GRAB_DURATION
 var wall_grabbing = false
+var was_wall_grabbing = false # <-- NOUVEAU : Mémoire pour l'impact du mur
 var wall_exhausted = false
 
 var grappling := false
@@ -320,6 +321,10 @@ func _physics_process(delta):
 	# =========================================================
 
 	update_animation(input_dir)
+	
+	# --- MÉMORISATION DU MUR POUR L'IMPACT ---
+	was_wall_grabbing = wall_grabbing
+	
 	move_and_slide()
 
 # ------------------------------------------------------------
@@ -438,6 +443,27 @@ func handle_wall_grab(delta):
 
 	if on_wall and grabbing_button and not wall_exhausted:
 		wall_grabbing = true
+		
+		# ==========================================
+		# --- IMPACT : SHAKE & BOUNCE ---
+		if not was_wall_grabbing:
+			var main = get_tree().root.get_node_or_null("Main")
+			if main:
+				# 1. Le Shake (Petit tremblement sec)
+				if main.has_method("trigger_shake"):
+					main.trigger_shake(2.5) 
+				
+				# 2. Le Bounce Caméra (Micro-zoom très rapide)
+				if main.camera and not is_grapple_zoomed_out:
+					var base_zoom = main.DEFAULT_ZOOM
+					var punch_zoom = base_zoom * 1.025 # Zoom de 2.5%
+					var t = create_tween()
+					t.tween_property(main.camera, "zoom", punch_zoom, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+					t.tween_property(main.camera, "zoom", base_zoom, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+			
+			# 3. Le Bounce du Sprite (S'écrase contre le mur)
+			sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
+		# ==========================================
 		
 		if is_grapple_zoomed_out:
 			reset_camera_zoom()
