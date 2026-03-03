@@ -1,14 +1,14 @@
+ColorRect
+Sprite2D
+TextureRect
 CPUParticles2D
 CenterContainer
 Label
 AudioStreamPlayer
 Marker2D
-ColorRect
 CanvasLayer
 CollisionShape2D
 Area2D
 AnimatedSprite2D
-Sprite2D
 PointLight2D
-TextureRect
 Node2D

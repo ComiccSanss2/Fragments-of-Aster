@@ -1,10 +1,10 @@
 [gd_scene load_steps=9 format=3 uid="uid://c8ojslcvmy5bm"]
 
 [ext_resource type="Shader" uid="uid://c2lavvbn3sntf" path="res://background.gdshader" id="1_eq6nc"]
-[ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="1_splo0"]
-[ext_resource type="Texture2D" uid="uid://dgdfs07xtnowr" path="res://assets/Parallax/2.png" id="2_eq6nc"]
-[ext_resource type="Texture2D" uid="uid://cb356o7yedki8" path="res://assets/Parallax/3.png" id="3_bpugw"]
-[ext_resource type="Texture2D" uid="uid://dv1t2nvyryp4t" path="res://assets/Parallax/4.png" id="4_gjjrj"]
+[ext_resource type="Texture2D" uid="uid://cia64xjiywmpd" path="res://assets/Parallax2/1.png" id="2_bpugw"]
+[ext_resource type="Texture2D" uid="uid://d3vly2n8pn13x" path="res://assets/Parallax2/2.png" id="3_eq6nc"]
+[ext_resource type="Texture2D" uid="uid://janqw764b1wb" path="res://assets/Parallax2/3.png" id="4_eq6nc"]
+[ext_resource type="Texture2D" uid="uid://cr0c3jdr1wnqh" path="res://assets/Parallax2/4.png" id="5_eq6nc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bpugw"]
 shader = ExtResource("1_eq6nc")
@@ -19,38 +19,57 @@ shader = ExtResource("1_eq6nc")
 shader_parameter/blur_amount = 2.0
 
 [node name="Background" type="ParallaxBackground"]
+scroll_base_scale = Vector2(3, 3)
 
 [node name="Layer_sky" type="ParallaxLayer" parent="."]
 motion_scale = Vector2(0, 0)
-motion_mirroring = Vector2(576, 0)
+motion_mirroring = Vector2(1728, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Layer_sky"]
+texture_repeat = 2
 material = SubResource("ShaderMaterial_bpugw")
-texture = ExtResource("1_splo0")
+texture = ExtResource("2_bpugw")
 centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2304, 324)
+
+[node name="ColorRect" type="ColorRect" parent="Layer_sky"]
+offset_top = 324.0
+offset_right = 2310.0
+offset_bottom = 2086.0
+color = Color(0.09019608, 0.08627451, 0.15686275, 1)
 
 [node name="Layer_sky2" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.1, 0.1)
-motion_mirroring = Vector2(576, 0)
+motion_scale = Vector2(0.05, 0.05)
+motion_mirroring = Vector2(1728, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Layer_sky2"]
+texture_repeat = 1
 material = SubResource("ShaderMaterial_eq6nc")
-texture = ExtResource("2_eq6nc")
+texture = ExtResource("3_eq6nc")
 centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2304, 324)
 
 [node name="Layer_sky3" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.5, 0.5)
-motion_mirroring = Vector2(576, 0)
+motion_scale = Vector2(0.1, 0.1)
+motion_mirroring = Vector2(1728, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Layer_sky3"]
+texture_repeat = 2
 material = SubResource("ShaderMaterial_gjjrj")
-texture = ExtResource("3_bpugw")
+texture = ExtResource("4_eq6nc")
 centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2304, 324)
 
 [node name="Layer_sky4" type="ParallaxLayer" parent="."]
-motion_scale = Vector2(0.8, 0.8)
-motion_mirroring = Vector2(576, 0)
+motion_scale = Vector2(0.2, 0.2)
+motion_mirroring = Vector2(1728, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Layer_sky4"]
-texture = ExtResource("4_gjjrj")
+texture_repeat = 2
+texture = ExtResource("5_eq6nc")
 centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 2304, 324)

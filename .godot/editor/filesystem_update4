@@ -1,1 +1,13 @@
 res://default_bus_layout.tres
+res://glitch_wall.tscn
+res://scenes/gravitydistortion.gdshader
+res://scenes/deathtransition.gdshader
+res://scenes/transition.gdshader
+res://scenes/wind.gdshader
+res://background.gdshader
+res://scenes/levels/matrix.gdshader
+res://glitch_wall.gdshader
+res://scenes/shard.gdshader
+res://glitch_wall.gd
+res://background.tscn
+res://main_menu.tscn
