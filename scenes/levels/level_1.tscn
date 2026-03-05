@@ -1,20 +1,20 @@
-[gd_scene load_steps=26 format=3 uid="uid://jngd0b8bsbpv"]
+[gd_scene load_steps=27 format=3 uid="uid://jngd0b8bsbpv"]
 
 [ext_resource type="Texture2D" uid="uid://pemp4jeluyn5" path="res://assets/GroundPlaceHolder.png" id="1_6iamk"]
 [ext_resource type="Script" uid="uid://cshtloxflhmai" path="res://scenes/levels/level_1.gd" id="1_x42e6"]
 [ext_resource type="Texture2D" uid="uid://drq43tifibmm3" path="res://assets/basetiles.png" id="2_6761a"]
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="2_sk5k4"]
-[ext_resource type="Texture2D" uid="uid://bfvln3ee12sk3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0167.png" id="2_wtwp4"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="3_6761a"]
-[ext_resource type="Texture2D" uid="uid://cgeni1xvmi6gf" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0034.png" id="3_iwr0g"]
 [ext_resource type="Script" uid="uid://cpxeepvxj2u6y" path="res://scenes/levels/end_trigger.gd" id="3_nsrm0"]
-[ext_resource type="Texture2D" uid="uid://ddcgtjxgv2hxs" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0153.png" id="4_bahl2"]
 [ext_resource type="Texture2D" uid="uid://ca6pfmxuq156" path="res://assets/Bloc_Ruine_32x32.png" id="4_oc4kc"]
 [ext_resource type="Texture2D" uid="uid://cvgv2ra36yho3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0004.png" id="5_np2pn"]
 [ext_resource type="Texture2D" uid="uid://c3r6mbof4mwna" path="res://assets/Biome_Plaine.png" id="6_s8va5"]
 [ext_resource type="Texture2D" uid="uid://eehs1qxxpv8m" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0166.png" id="6_v6ha0"]
 [ext_resource type="Texture2D" uid="uid://ccvr6vmr48o3h" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0620.png" id="7_gmpev"]
 [ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="8_dga24"]
+[ext_resource type="PackedScene" uid="uid://blpp8fxlrskuj" path="res://tutorial_prompt.tscn" id="11_excbq"]
+[ext_resource type="Texture2D" uid="uid://xw4tcijq4ftt" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0064.png" id="12_mm8aj"]
+[ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="16_iwr0g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sk5k4"]
 texture = ExtResource("2_6761a")
@@ -196,14 +196,11 @@ shader_parameter/block_size = 18.962000663195
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6iamk"]
 size = Vector2(4440, 7896)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iav0o"]
+size = Vector2(132, 281)
+
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_x42e6")
-tex_move_key = ExtResource("2_wtwp4")
-tex_move_pad = ExtResource("3_iwr0g")
-tex_jump_key = ExtResource("4_bahl2")
-tex_jump_pad = ExtResource("5_np2pn")
-tex_climb_key = ExtResource("6_v6ha0")
-tex_climb_pad = ExtResource("7_gmpev")
 
 [node name="Background" parent="." instance=ExtResource("2_sk5k4")]
 offset = Vector2(-50, -200)
@@ -232,7 +229,7 @@ offset_right = 19.0
 offset_bottom = 33.125
 
 [node name="PlayerStart" type="Node2D" parent="."]
-position = Vector2(-258, -3237)
+position = Vector2(-289, -17)
 
 [node name="LevelBounds" type="Node2D" parent="."]
 position = Vector2(-311, 0)
@@ -242,4 +239,56 @@ script = ExtResource("3_6761a")
 position = Vector2(1660, -3619)
 shape = SubResource("RectangleShape2D_6iamk")
 
+[node name="CinematicUI" type="CanvasLayer" parent="."]
+
+[node name="FadeRect" type="ColorRect" parent="CinematicUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TitleLabel" type="RichTextLabel" parent="CinematicUI"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_outline_size = 5
+theme_override_fonts/normal_font = ExtResource("16_iwr0g")
+theme_override_font_sizes/normal_font_size = 80
+bbcode_enabled = true
+
+[node name="TutorialPrompt" parent="." instance=ExtResource("11_excbq")]
+position = Vector2(116, -63)
+tex_keyboard = ExtResource("12_mm8aj")
+tex_gamepad = ExtResource("5_np2pn")
+
+[node name="TutorialPrompt3" parent="." instance=ExtResource("11_excbq")]
+position = Vector2(357, -101)
+tex_keyboard = ExtResource("12_mm8aj")
+tex_gamepad = ExtResource("5_np2pn")
+
+[node name="TutorialPrompt2" parent="." instance=ExtResource("11_excbq")]
+position = Vector2(685, -83)
+tex_keyboard = ExtResource("6_v6ha0")
+tex_gamepad = ExtResource("7_gmpev")
+
+[node name="CollisionShape2D" parent="TutorialPrompt2" index="0"]
+position = Vector2(-97, 82.5)
+shape = SubResource("RectangleShape2D_iav0o")
+
+[node name="Sprite2D" parent="TutorialPrompt2" index="1"]
+position = Vector2(-40, -46)
+texture = ExtResource("7_gmpev")
+
 [connection signal="body_entered" from="EndTrigger" to="EndTrigger" method="_on_body_entered"]
+
+[editable path="TutorialPrompt"]
+[editable path="TutorialPrompt3"]
+[editable path="TutorialPrompt2"]

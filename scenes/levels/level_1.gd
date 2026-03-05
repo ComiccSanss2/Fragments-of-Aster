@@ -1,75 +1,74 @@
 extends Node2D
 
-var is_waiting_for_landing = false
+@export var level_title := "ACT I: THE ILLUSION"
 
-# --- IMAGES DES TOUCHES (À glisser dans l'Inspecteur) ---
-@export_group("Touches de Mouvement")
-@export var tex_move_key: Texture2D
-@export var tex_move_pad: Texture2D
-
-@export_group("Touches de Saut")
-@export var tex_jump_key: Texture2D
-@export var tex_jump_pad: Texture2D
-
-@export_group("Touches de Grimpette")
-@export var tex_climb_key: Texture2D
-@export var tex_climb_pad: Texture2D
-# --------------------------------------------------------
+# Riferimenti alla UI
+@onready var fade_rect = $CinematicUI/FadeRect
+@onready var title_label = $CinematicUI/TitleLabel
 
 func _ready() -> void:
-	pass
+	# 1. SETUP INIZIALE
+	if title_label: title_label.modulate.a = 0.0
+	if fade_rect: fade_rect.modulate.a = 1.0 
+	
+	# 2. CONTROLLO SÉCURISÉ : Veniamo dall'Intro Testuale?
+	if SaveManager.has_meta("intro_sequence") and SaveManager.get_meta("intro_sequence") == true:
+		SaveManager.set_meta("intro_sequence", false) # On consomme le flag
+		start_cinematic_wake_up()
+	else:
+		# Lancement sans intro (ex: respawn)
+		if fade_rect: fade_rect.queue_free()
+		if title_label: title_label.queue_free()
+		# On attend la fin de la frame pour être sûr que le joueur est bien apparu
+		call_deferred("_enable_player_movement")
 
-func start_intro_sequence():
-	var main = get_tree().root.get_node("Main")
+func _enable_player_movement():
+	var main = get_tree().current_scene
+	if main and main.has_node("Player"):
+		main.get_node("Player").can_move = true
+
+func start_cinematic_wake_up():
+	await get_tree().process_frame
+	
+	# BEAUCOUP PLUS SÛR : on prend la scène actuelle au lieu de chercher le mot "Main"
+	var main = get_tree().current_scene 
+	
+	if not main or not main.has_node("Player"): 
+		print("ERREUR : Impossible de trouver le Player pour la cinématique.")
+		return
+	
 	var player = main.get_node("Player")
 	
-	is_waiting_for_landing = true
+	# --- FASE 1: BLOCCO E RISVEGLIO ---
 	player.can_move = false
 	player.velocity = Vector2.ZERO
-
-# --- GÉNÉRATEUR D'INPUT DYNAMIQUE AVEC INSPECTEUR ---
-func get_input_name(action: String) -> String:
-	var tex_pad: Texture2D = null
-	var tex_key: Texture2D = null
+	player.play_anim("idle") 
 	
-	match action:
-		"move":
-			tex_pad = tex_move_pad
-			tex_key = tex_move_key
-		"jump":
-			tex_pad = tex_jump_pad
-			tex_key = tex_jump_key
-		"climb":
-			tex_pad = tex_climb_pad
-			tex_key = tex_climb_key
-			
-	if tex_pad and tex_key:
-		# On envoie les DEUX chemins à la DialogueBox via notre balise custom
-		return "[input:" + tex_pad.resource_path + "|" + tex_key.resource_path + "]"
+	var t = create_tween()
 	
-	return ""
-	return ""
-# ------------------------------------
-
-func start_tutorial_sequence():
-	var main = get_tree().root.get_node("Main")
-	var player = main.get_node("Player")
-	var dialog = main.get_node("UI/DialogueBox")
+	# --- FASE 2: FADE IN ---
+	if fade_rect:
+		t.tween_property(fade_rect, "modulate:a", 0.0, 3.0)
 	
-	player.can_move = false
-	player.play_anim("idle")
+	t.tween_interval(1.5)
 	
-	# --- AJOUT DE LA TAILLE DE POLICE ---
-	var size_start = "[font_size=40]" # Modifie ce nombre pour ajuster la taille globale
-	var size_end = "[/font_size]"
+	# --- FASE 3: TITLE DROP ---
+	if title_label:
+		title_label.text = "[center]" + level_title + "[/center]"
+		t.tween_property(title_label, "modulate:a", 1.0, 2.0)
+		t.tween_interval(3.0)
+		t.tween_property(title_label, "modulate:a", 0.0, 2.0)
 	
-	await dialog.show_dialog(size_start + "Press" + get_input_name("move") + "to MOVE" + size_end)
-	await dialog.show_dialog(size_start + "Press" + get_input_name("jump") + "to JUMP" + size_end)
-	await dialog.show_dialog(size_start + "Press" + get_input_name("climb") + "to CLIMB" + size_end)
+	# --- FASE 4: LIBERTÀ ---
+	await t.finished
 	
-	dialog.hide_dialog()
 	player.can_move = true
-	main.intro_played = true
+	
+	if "intro_played" in main:
+		main.intro_played = true
+	
+	if fade_rect: fade_rect.queue_free()
+	if title_label: title_label.queue_free()
 	
 	SaveManager.save_game(SaveManager.current_slot_id, {
 		"current_level": main.current_level_path,
@@ -77,26 +76,3 @@ func start_tutorial_sequence():
 		"grapple_unlocked": player.grapple_unlocked,
 		"dash_unlocked": player.dash_unlocked
 	})
-
-func _process(delta):
-	if is_waiting_for_landing:
-		var main = get_tree().root.get_node("Main")
-		var player = main.get_node("Player")
-		
-		if player.is_on_floor():
-			is_waiting_for_landing = false
-			landing_impact()
-
-func landing_impact():
-	var main = get_tree().root.get_node("Main")
-	
-	if "lerp_speed" in main.camera:
-		main.camera.lerp_speed = 8.0 
-		
-	if "default_offset" in main.camera:
-		main.camera.default_offset.y = 15.0
-	
-	main.trigger_shake(50.0)
-	
-	await get_tree().create_timer(2.5).timeout
-	start_tutorial_sequence()

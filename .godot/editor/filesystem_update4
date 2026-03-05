@@ -1,5 +1,5 @@
 res://default_bus_layout.tres
-res://glitch_wall.tscn
+res://scenes/levels/level_1.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -8,6 +8,10 @@ res://background.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://glitch_wall.gd
-res://background.tscn
-res://main_menu.tscn
+res://scenes/levels/level_1.gd
+res://scenes/main.gd
+res://tutorial_prompt.tscn
+res://tutorial_prompt.gd
+res://scenes/levels/level_5.tscn
+res://scenes/levels/level_10.tscn
+res://scenes/levels/level_14.tscn

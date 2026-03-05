@@ -28,10 +28,6 @@ var dash_collected := false
 var gravity_collected := false 
 var shake_strength: float = 0.0
 
-# --- VARIABLES CAMÉRA INTRO ---
-var intro_camera_locked := false
-var intro_camera_pos := Vector2.ZERO
-
 # --- ZOOM PAR DÉFAUT ---
 const DEFAULT_ZOOM = Vector2(2.6, 2.6) 
 
@@ -45,56 +41,34 @@ var checkpoint_player_pos := Vector2.ZERO
 var checkpoint_wall_pos := Vector2.ZERO
 
 func _ready():
-	var is_intro = SaveManager.has_meta("intro_sequence")
-	
-	if level_transition:
-		level_transition.visible = true
-		level_transition.material.set_shader_parameter("is_opening", false)
-		level_transition.material.set_shader_parameter("cutoff", 1.0 if is_intro else 0.0)
-	if death_transition:
-		death_transition.visible = true
-		death_transition.material.set_shader_parameter("cutoff", 0.0)
-
 	if FileAccess.file_exists("res://pause_menu.tscn"):
 		ui_layer.add_child(load("res://pause_menu.tscn").instantiate())
 
-	if is_intro:
-		check_music_progression()
-		SaveManager.remove_meta("intro_sequence")
-		load_level("res://scenes/levels/level_1.tscn")
-		_set_level_canvas_layers_visible(false)
-		
-		player.global_position.y = -2500
-		player.can_move = false
-		player.velocity = Vector2.ZERO
-		
-		intro_camera_pos = Vector2(player.global_position.x, -1200)
-		camera.global_position = intro_camera_pos
-		camera.is_locked = true
-		intro_camera_locked = true
-		
-		var current_level_node = level_root.get_child(0)
-		if current_level_node.has_method("start_intro_sequence"):
-			current_level_node.start_intro_sequence()
-		
-		await get_tree().process_frame
-		await get_tree().process_frame
-		
-		self.visible = true
-		level_root.visible = true
-		player.visible = true
-		_set_level_canvas_layers_visible(true)
-		
-		level_transition.material.set_shader_parameter("is_opening", true)
-		level_transition.material.set_shader_parameter("cutoff", 0.0)
-		var t = create_tween()
-		t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 4.0)
-		await t.finished
-		
-		level_transition.material.set_shader_parameter("is_opening", false)
-		level_transition.material.set_shader_parameter("cutoff", 0.0)
-		
-	elif SaveManager.has_meta("level_to_load"):
+	# --- VÉRIFICATION : Vient-on de l'intro textuelle ? ---
+	var is_new_game_intro = false
+	if SaveManager.has_meta("intro_sequence") and SaveManager.get_meta("intro_sequence") == true:
+		is_new_game_intro = true
+
+	# --- GESTION DES TRANSITIONS DE DÉPART ---
+	if level_transition:
+		level_transition.visible = true
+		if is_new_game_intro:
+			# Si c'est l'intro : on cache tout pour laisser le FadeRect de level_1.gd agir
+			level_transition.material.set_shader_parameter("is_opening", false)
+			level_transition.material.set_shader_parameter("cutoff", 0.0) 
+		else:
+			# Si c'est un chargement normal : on fait l'ouverture classique du shader
+			level_transition.material.set_shader_parameter("is_opening", true)
+			level_transition.material.set_shader_parameter("cutoff", 0.0)
+			var t = create_tween()
+			t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 1.0) # Ajuste la durée si besoin
+			
+	if death_transition:
+		death_transition.visible = false
+		death_transition.material.set_shader_parameter("cutoff", 0.0)
+
+	# --- CHARGEMENT DU NIVEAU ---
+	if SaveManager.has_meta("level_to_load"):
 		var target_level = SaveManager.get_meta("level_to_load")
 		SaveManager.remove_meta("level_to_load")
 		if SaveManager.current_slot_id != -1:
@@ -107,32 +81,18 @@ func _ready():
 		
 		check_music_progression()
 		load_level(target_level)
-		self.visible = true
-		level_root.visible = true
-		player.visible = true
 		
 	else:
+		# Lancement standard (Nouvelle partie)
 		check_music_progression()
 		load_level("res://scenes/levels/level_1.tscn")
-		self.visible = true
-		level_root.visible = true
-		player.visible = true
-		if not intro_played:
-			var current_level_node = level_root.get_child(0)
-			if current_level_node.has_method("start_tutorial_sequence"):
-				current_level_node.start_tutorial_sequence()
+	
+	self.visible = true
+	level_root.visible = true
+	player.visible = true
 
 func _process(delta):
-	if intro_camera_locked:
-		camera.global_position = intro_camera_pos
-		var catch_threshold = intro_camera_pos.y
-		
-		if player.global_position.y >= catch_threshold:
-			intro_camera_locked = false
-			camera.is_locked = false
-			if "lerp_speed" in camera: camera.lerp_speed = 20.0
-			if "default_offset" in camera: camera.default_offset.y = 100.0
-
+	# On gère uniquement le Camera Shake ici maintenant
 	if shake_strength > 0:
 		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
@@ -170,6 +130,8 @@ func load_level(path: String):
 			player.global_position = spawn.global_position
 		
 		player.velocity = Vector2.ZERO
+		
+		# On rend le contrôle au joueur PAR DÉFAUT (level_1 le bloquera si c'est l'intro)
 		player.can_move = true
 		player.is_dying = false
 		player.collision_layer = 1
@@ -246,6 +208,10 @@ func change_level_with_transition(next_level_path: String):
 func play_death_sequence():
 	player.can_move = false
 	
+	# --- ON S'ASSURE QUE LA TRANSITION EST VISIBLE ---
+	if death_transition:
+		death_transition.visible = true
+	
 	var screen_size = get_viewport().get_visible_rect().size
 	
 	death_transition.material.set_shader_parameter("aspect_ratio", screen_size.x / screen_size.y)
@@ -275,6 +241,10 @@ func play_death_sequence():
 	var t2 = create_tween()
 	t2.tween_property(death_transition, "material:shader_parameter/cutoff", 0.0, 0.4)
 	await t2.finished
+	
+	# --- ON LA CACHE APRÈS L'ANIMATION POUR NE PAS GÊNER ---
+	if death_transition:
+		death_transition.visible = false
 	
 	player.can_move = true
 	player.is_dying = false
@@ -335,7 +305,6 @@ func cleanup_before_exit():
 	if ui_layer: ui_layer.visible = false
 	_set_level_canvas_layers_visible(false)
 
-# --- NOUVEAU : FONCTION POUR LA MUSIQUE FINALE ---
 func play_final_cinematic_music():
 	_stop_exploration_music()
 	if music_boss_intro.playing: music_boss_intro.stop()
@@ -344,7 +313,6 @@ func play_final_cinematic_music():
 	if music_cinematic_final and not music_cinematic_final.playing:
 		music_cinematic_final.play()
 
-# --- DÉTECTION DU PÉRIPHÉRIQUE ---
 func _input(event):
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		if event is InputEventJoypadMotion and abs(event.axis_value) < 0.2:
@@ -354,22 +322,16 @@ func _input(event):
 	elif event is InputEventKey or event is InputEventMouse:
 		is_using_gamepad = false
 
-# ==========================================================
-# FIN DE LA DÉMO (OUTRO)
-# ==========================================================
 func show_outro_screen():
 	Engine.time_scale = 1.0 
 	
-	# 1. On cache tout
 	if level_root: level_root.visible = false
 	if player: player.visible = false
 	if ambiance_player: ambiance_player.stop()
 		
-	# 2. NETTOYAGE ABSOLU : On détruit l'interface et le vent
 	if wind_layer: wind_layer.queue_free()
 	if ui_layer: ui_layer.queue_free()
 	
-	# 3. On affiche la scène d'Outro
 	var outro_scene = load("res://end_demo_screen.tscn")
 	if outro_scene:
 		var outro_instance = outro_scene.instantiate()
@@ -378,14 +340,9 @@ func show_outro_screen():
 		add_child(top_canvas)
 		top_canvas.add_child(outro_instance)
 		
-	# 4. On attend que la musique épique se termine
 	if music_cinematic_final and music_cinematic_final.playing:
 		await music_cinematic_final.finished
 		
-	# 5. Retour au Menu Principal
 	cleanup_before_exit()
-	
-	# --- ON AJOUTE LE FLAG ICI POUR SAUTER L'INTRO DU MENU ---
 	SaveManager.set_meta("skip_main_menu_intro", true)
-	
 	get_tree().change_scene_to_file("res://main_menu.tscn")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=37 format=3 uid="uid://b04fmg2hggmns"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
@@ -17,6 +17,9 @@
 [ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="14_q1ohf"]
 [ext_resource type="Script" uid="uid://dcslnwvd26snk" path="res://scenes/levels/areasecret_2d.gd" id="15_fijux"]
 [ext_resource type="PackedScene" uid="uid://delfwr1ly03e3" path="res://secret_terminal.tscn" id="16_w0qkw"]
+[ext_resource type="PackedScene" uid="uid://blpp8fxlrskuj" path="res://tutorial_prompt.tscn" id="18_sww00"]
+[ext_resource type="Texture2D" uid="uid://duxf2lsu0r4ej" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0088.png" id="19_j62xx"]
+[ext_resource type="Texture2D" uid="uid://cbneny2c6nnkq" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0007.png" id="20_b2233"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2j1nx"]
 texture = ExtResource("1_g3nt1")
@@ -859,6 +862,13 @@ shape = SubResource("RectangleShape2D_5muy6")
 z_index = -5
 position = Vector2(1520, 83)
 
+[node name="TutorialPrompt" parent="." instance=ExtResource("18_sww00")]
+position = Vector2(997, 340)
+tex_keyboard = ExtResource("19_j62xx")
+tex_gamepad = ExtResource("20_b2233")
+
 [connection signal="body_entered" from="EndTrigger14" to="EndTrigger14" method="_on_body_entered"]
 [connection signal="body_entered" from="SecretZone/Area2D" to="SecretZone/Area2D" method="_on_body_entered"]
 [connection signal="body_exited" from="SecretZone/Area2D" to="SecretZone/Area2D" method="_on_body_exited"]
+
+[editable path="TutorialPrompt"]

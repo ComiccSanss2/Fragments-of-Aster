@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ta8kqbpnctue"]
+[gd_scene load_steps=29 format=3 uid="uid://ta8kqbpnctue"]
 
 [ext_resource type="PackedScene" uid="uid://c8ojslcvmy5bm" path="res://background.tscn" id="1_2k7im"]
 [ext_resource type="Texture2D" uid="uid://baevhjj4dcbec" path="res://assets/basetilesyellow.png" id="1_gnb3t"]
@@ -14,6 +14,9 @@
 [ext_resource type="Script" uid="uid://vq7awrov7lie" path="res://scenes/levels/end_trigger_10.gd" id="8_qblg5"]
 [ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="9_7e7ni"]
 [ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="12_r3n8r"]
+[ext_resource type="PackedScene" uid="uid://blpp8fxlrskuj" path="res://tutorial_prompt.tscn" id="15_ko8rk"]
+[ext_resource type="Texture2D" uid="uid://d2emys8sv8t0j" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0123.png" id="16_gttrq"]
+[ext_resource type="Texture2D" uid="uid://bbkb7elkuxa38" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0005.png" id="17_n3gcc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hkd47"]
 texture = ExtResource("1_gnb3t")
@@ -401,4 +404,11 @@ rotation = 1.5707964
 position = Vector2(3224, 512)
 rotation = 1.5707964
 
+[node name="TutorialPrompt" parent="." instance=ExtResource("15_ko8rk")]
+position = Vector2(2009, 549)
+tex_keyboard = ExtResource("16_gttrq")
+tex_gamepad = ExtResource("17_n3gcc")
+
 [connection signal="body_entered" from="EndTrigger10" to="EndTrigger10" method="_on_body_entered"]
+
+[editable path="TutorialPrompt"]
