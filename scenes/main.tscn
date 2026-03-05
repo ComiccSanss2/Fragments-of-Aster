@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=27 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://7duu7rev4an3" path="res://assets/sfx/fragmentsofecho.wav" id="10_trceg"]
 [ext_resource type="AudioStream" uid="uid://bwvv1chl4y1h5" path="res://assets/sfx/intro.wav" id="10_ya4ey"]
 [ext_resource type="AudioStream" uid="uid://db47dgtuonhnr" path="res://assets/sfx/drop.wav" id="11_eb6dy"]
+[ext_resource type="Shader" uid="uid://siin6ououh57" path="res://scenes/wind2.gdshader" id="12_jkv2x"]
 [ext_resource type="AudioStream" uid="uid://cbpsth5mprlka" path="res://assets/sfx/outro.wav" id="14_a8y0u"]
 
 [sub_resource type="Environment" id="Environment_tefeu"]
@@ -60,9 +61,28 @@ seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 shader = ExtResource("7_o6xl0")
-shader_parameter/speed = 0.08
-shader_parameter/strength = 0.01
+shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.3882353)
+shader_parameter/scroll_speed = Vector2(0.15, 0.01)
+shader_parameter/density = 0.6000000285
+shader_parameter/distortion_strength = 0.05
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkv2x"]
+frequency = 0.042
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jbj1t"]
+width = 200
+height = 600
+noise = SubResource("FastNoiseLite_jkv2x")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbj1t"]
+shader = ExtResource("12_jkv2x")
+shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.28627452)
+shader_parameter/scroll_speed = Vector2(0.02, 0.01)
+shader_parameter/density = 0.30000001425
+shader_parameter/distortion_strength = 0.05
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_jbj1t")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tbgi4")
@@ -180,6 +200,14 @@ offset_bottom = 3364.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.79607844, 1, 1, 0.39215687)
+
+[node name="ColorRect2" type="ColorRect" parent="WindLayer"]
+z_index = -5
+material = SubResource("ShaderMaterial_jbj1t")
+offset_left = -3013.0
+offset_top = -3315.0
+offset_right = 4839.0
+offset_bottom = 4451.0
 
 [node name="MusicBossIntro" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_ya4ey")
