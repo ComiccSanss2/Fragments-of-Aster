@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://b04fmg2hggmns"]
+[gd_scene load_steps=40 format=3 uid="uid://b04fmg2hggmns"]
 
 [ext_resource type="Texture2D" uid="uid://bh0l2ndp642mc" path="res://assets/basetileswhite.png" id="1_g3nt1"]
 [ext_resource type="Texture2D" uid="uid://bk3vtxsrkld5v" path="res://assets/basetilesmorewhite.png" id="2_xf43s"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://d2h62s6xwuld" path="res://scenes/breakableplatform/breakable_platform.tscn" id="7_wr6ej"]
 [ext_resource type="Texture2D" uid="uid://b4a14wq0oldp1" path="res://assets/Bloc_Ruine_Variante32x32.png" id="7_x7cri"]
 [ext_resource type="PackedScene" uid="uid://xkd4lg4d2jd7" path="res://scenes/grapple/grapple_point.tscn" id="8_7yavk"]
+[ext_resource type="Texture2D" uid="uid://dq4tjvi13k8rk" path="res://assets/TilesetFull.png" id="8_rfrxc"]
 [ext_resource type="Script" uid="uid://kss8ed3sprka" path="res://scenes/levels/end_trigger_14.gd" id="9_hfkb1"]
 [ext_resource type="Shader" uid="uid://ooxb6et8dech" path="res://scenes/levels/matrix.gdshader" id="14_q1ohf"]
 [ext_resource type="Script" uid="uid://dcslnwvd26snk" path="res://scenes/levels/areasecret_2d.gd" id="15_fijux"]
@@ -105,6 +106,45 @@ texture_region_size = Vector2i(32, 32)
 2:2/0 = 0
 2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3cpn8"]
+texture = ExtResource("8_rfrxc")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+7:3/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_gkh53"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
@@ -115,6 +155,7 @@ sources/3 = SubResource("TileSetAtlasSource_q1ohf")
 sources/4 = SubResource("TileSetAtlasSource_sww00")
 sources/5 = SubResource("TileSetAtlasSource_j62xx")
 sources/6 = SubResource("TileSetAtlasSource_5muy6")
+sources/7 = SubResource("TileSetAtlasSource_3cpn8")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2j1nx"]
 size = Vector2(6446, 3971)
@@ -138,6 +179,45 @@ shader_parameter/glitch_intensity = 0.9190000436525
 shader_parameter/glitch_speed = 5.762000226195
 shader_parameter/block_size = 18.962000663195
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8fg8a"]
+texture = ExtResource("8_rfrxc")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+7:3/0 = 0
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fijux"]
 texture = ExtResource("3_hd4w6")
 texture_region_size = Vector2i(32, 32)
@@ -154,6 +234,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_w0qkw"]
 tile_size = Vector2i(32, 32)
 sources/1 = SubResource("TileSetAtlasSource_fijux")
+sources/0 = SubResource("TileSetAtlasSource_8fg8a")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5muy6"]
 size = Vector2(672, 96)
@@ -863,7 +944,7 @@ z_index = -5
 position = Vector2(1520, 83)
 
 [node name="TutorialPrompt" parent="." instance=ExtResource("18_sww00")]
-position = Vector2(997, 340)
+position = Vector2(1003, 308)
 tex_keyboard = ExtResource("19_j62xx")
 tex_gamepad = ExtResource("20_b2233")
 

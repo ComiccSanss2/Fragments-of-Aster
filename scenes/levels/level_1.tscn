@@ -290,7 +290,6 @@ position = Vector2(1660, -3619)
 shape = SubResource("RectangleShape2D_6iamk")
 
 [node name="CinematicUI" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="FadeRect" type="ColorRect" parent="CinematicUI"]
 anchors_preset = 15
