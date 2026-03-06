@@ -24,6 +24,40 @@ glow_bloom = 0.5
 adjustment_enabled = true
 adjustment_contrast = 1.2
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_o6xl0"]
+frequency = 0.0139
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tipki"]
+width = 200
+height = 600
+noise = SubResource("FastNoiseLite_o6xl0")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
+shader = ExtResource("7_o6xl0")
+shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.65882355)
+shader_parameter/scroll_speed = Vector2(0.15, 0.01)
+shader_parameter/density = 0.6000000285
+shader_parameter/distortion_strength = 0.05
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkv2x"]
+frequency = 0.042
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jbj1t"]
+width = 200
+height = 600
+noise = SubResource("FastNoiseLite_jkv2x")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbj1t"]
+shader = ExtResource("12_jkv2x")
+shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.39215687)
+shader_parameter/scroll_speed = Vector2(0.02, 0.01)
+shader_parameter/density = 0.30000001425
+shader_parameter/distortion_strength = 0.05
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_jbj1t")
+
 [sub_resource type="Gradient" id="Gradient_tefeu"]
 colors = PackedColorArray(0, 0, 0, 0, 0.6039216, 0.5764706, 0.9490196, 0.5568628)
 
@@ -50,40 +84,6 @@ shader_parameter/smooth_size = 0.05
 shader_parameter/aspect_ratio = 1.777
 shader_parameter/center = Vector2(0.5, 0.5)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_o6xl0"]
-frequency = 0.0139
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tipki"]
-width = 200
-height = 600
-noise = SubResource("FastNoiseLite_o6xl0")
-seamless = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
-shader = ExtResource("7_o6xl0")
-shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.3882353)
-shader_parameter/scroll_speed = Vector2(0.15, 0.01)
-shader_parameter/density = 0.6000000285
-shader_parameter/distortion_strength = 0.05
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_jkv2x"]
-frequency = 0.042
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_jbj1t"]
-width = 200
-height = 600
-noise = SubResource("FastNoiseLite_jkv2x")
-seamless = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jbj1t"]
-shader = ExtResource("12_jkv2x")
-shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.28627452)
-shader_parameter/scroll_speed = Vector2(0.02, 0.01)
-shader_parameter/density = 0.30000001425
-shader_parameter/distortion_strength = 0.05
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_jbj1t")
-
 [node name="Main" type="Node2D"]
 script = ExtResource("1_tbgi4")
 
@@ -108,6 +108,31 @@ default_offset = Vector2(0, -10)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_tefeu")
+
+[node name="WindLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="WindLayer"]
+material = SubResource("ShaderMaterial_tipki")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2999.0
+offset_top = -3360.0
+offset_right = 2940.0
+offset_bottom = 3364.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.79607844, 1, 1, 0.39215687)
+
+[node name="WindLayer2" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect2" type="ColorRect" parent="WindLayer2"]
+material = SubResource("ShaderMaterial_jbj1t")
+offset_left = -3013.0
+offset_top = -3315.0
+offset_right = 4839.0
+offset_bottom = 4451.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 1000
@@ -184,30 +209,6 @@ autoplay = true
 [node name="FragmentsOfEchoes" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_trceg")
 volume_db = -13.0
-
-[node name="WindLayer" type="CanvasLayer" parent="."]
-layer = 10
-
-[node name="ColorRect" type="ColorRect" parent="WindLayer"]
-material = SubResource("ShaderMaterial_tipki")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2999.0
-offset_top = -3360.0
-offset_right = 2940.0
-offset_bottom = 3364.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.79607844, 1, 1, 0.39215687)
-
-[node name="ColorRect2" type="ColorRect" parent="WindLayer"]
-z_index = -5
-material = SubResource("ShaderMaterial_jbj1t")
-offset_left = -3013.0
-offset_top = -3315.0
-offset_right = 4839.0
-offset_bottom = 4451.0
 
 [node name="MusicBossIntro" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_ya4ey")

@@ -11,6 +11,23 @@
 [ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="7_0o4t1"]
 [ext_resource type="AudioStream" uid="uid://ceaiulggpmof1" path="res://assets/sfx/aster's dormancy.wav" id="9_dy7ct"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
+frequency = 0.0139
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tipki"]
+width = 200
+height = 600
+noise = SubResource("FastNoiseLite_nlkkf")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qe12f"]
+shader = ExtResource("5_glbon")
+shader_parameter/fog_color = Color(0, 0.52156866, 0.8235294, 0.65882355)
+shader_parameter/scroll_speed = Vector2(0.08, 0.01)
+shader_parameter/density = 0.5
+shader_parameter/distortion_strength = 0.05
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
+
 [sub_resource type="LabelSettings" id="LabelSettings_8qtwp"]
 font = ExtResource("3_nlkkf")
 font_size = 100
@@ -24,21 +41,6 @@ shadow_color = Color(0.16917068, 0.1676555, 0.77984864, 0.5568628)
 font = ExtResource("7_0o4t1")
 font_size = 70
 font_color = Color(0.33333334, 1, 0.8901961, 0.8784314)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
-frequency = 0.0139
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_tipki"]
-width = 200
-height = 600
-noise = SubResource("FastNoiseLite_nlkkf")
-seamless = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_qe12f"]
-shader = ExtResource("5_glbon")
-shader_parameter/speed = 0.08
-shader_parameter/strength = 0.01
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_tipki")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_glbon"]
 
@@ -136,6 +138,23 @@ mouse_filter = 2
 texture = ExtResource("5_0o4t1")
 stretch_mode = 6
 
+[node name="WindLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="WindLayer"]
+material = SubResource("ShaderMaterial_qe12f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -289.0
+offset_top = -159.0
+offset_right = 287.0
+offset_bottom = 155.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.79607844, 1, 1, 0.39215687)
+
 [node name="TitleContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -168,23 +187,6 @@ text = "PRESS ANY KEY TO START"
 label_settings = SubResource("LabelSettings_dy7ct")
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="WindLayer" type="CanvasLayer" parent="."]
-layer = 10
-
-[node name="ColorRect" type="ColorRect" parent="WindLayer"]
-material = SubResource("ShaderMaterial_qe12f")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -289.0
-offset_top = -159.0
-offset_right = 287.0
-offset_bottom = 155.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.79607844, 1, 1, 0.39215687)
 
 [node name="AmbiancePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_nlkkf")
