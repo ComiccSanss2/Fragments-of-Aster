@@ -46,7 +46,7 @@ var wall_coyote_timer := 0.0
 
 var wall_grab_time_left = WALL_GRAB_DURATION
 var wall_grabbing = false
-var was_wall_grabbing = false # <-- NOUVEAU : Mémoire pour l'impact du mur
+var was_wall_grabbing = false 
 var wall_exhausted = false
 
 var grappling := false
@@ -73,7 +73,7 @@ var dash_adjust_timer: float = 0.0
 var gravity_unlocked: bool = false
 var gravity_dir: int = 1 # 1 = Normal (Bas), -1 = Inversé (Haut)
 var gravity_cooldown: float = 0.0
-var can_invert_gravity: bool = true # Autorise l'inversion
+var can_invert_gravity: bool = true 
 
 # Visuals
 var was_on_floor: bool = true
@@ -142,7 +142,6 @@ func _process(delta):
 # ------------------------------------------------------------
 func _physics_process(delta):
 	if is_dying or not can_move:
-		# --- SÉCURITÉ CINÉMATIQUE : On coupe les particules continues ---
 		if has_node("RunParticles"): $RunParticles.emitting = false
 		if has_node("WallGrabParticles"): $WallGrabParticles.emitting = false
 		if has_node("WallClimbParticles"): $WallClimbParticles.emitting = false
@@ -197,8 +196,11 @@ func _physics_process(delta):
 		
 	was_on_floor = is_on_floor()
 
-	# --- INPUTS ---
-	var input_dir = Input.get_axis("ui_left", "ui_right")
+	# --- INPUTS: FEELING DIGITAL PUR (JOYPAD = DPAD) ---
+	var input_dir := 0
+	if Input.is_action_pressed("ui_right"): input_dir += 1
+	if Input.is_action_pressed("ui_left"): input_dir -= 1
+	
 	if input_dir != 0:
 		facing_dir = input_dir
 		sprite.flip_h = facing_dir < 0
@@ -274,8 +276,6 @@ func _physics_process(delta):
 	# =========================================================
 	# GESTION DES PARTICULES CONTINUES (COURSE ET MURS)
 	# =========================================================
-	
-	# 1. EFFET DE COURSE
 	if has_node("RunParticles"):
 		if is_on_floor() and abs(velocity.x) > 10.0:
 			$RunParticles.emitting = true
@@ -286,45 +286,31 @@ func _physics_process(delta):
 		else:
 			$RunParticles.emitting = false
 
-	# 2. EFFETS DE MUR (GRAB & CLIMB)
 	if has_node("WallGrabParticles") and has_node("WallClimbParticles"):
-		# Si Lyra est sur un mur et pas au sol
 		if is_on_wall() and not is_on_floor():
-			# Détermine le côté du mur (-1 pour Gauche, 1 pour Droite)
 			var wall_side = -1 if is_on_wall_left() else 1
-			# Position X des particules (Ajuste le 10 selon la largeur de ton sprite)
 			var pos_x = 5.5 * wall_side
 			
 			$WallGrabParticles.position = Vector2(pos_x, 0)
 			$WallClimbParticles.position = Vector2(pos_x, 0)
 
-			# Si on s'accroche et qu'on est quasi immobile -> Petite poussière
 			if wall_grabbing and abs(velocity.y) < 10.0:
 				$WallGrabParticles.emitting = true
 				$WallClimbParticles.emitting = false
-			# Si on glisse ou on grimpe -> Grosse poussière
 			else:
 				$WallGrabParticles.emitting = false
 				if abs(velocity.y) > 10.0:
 					$WallClimbParticles.emitting = true
-					# Oriente la poussière dans le sens opposé du mouvement
-					# (Si on glisse vers le bas, la poussière s'envole vers le haut)
 					var y_dir = 1.0 if velocity.y < 0 else -1.0
 					$WallClimbParticles.direction = Vector2(0, y_dir)
 				else:
 					$WallClimbParticles.emitting = false
 		else:
-			# On n'est pas sur un mur, on éteint tout
 			$WallGrabParticles.emitting = false
 			$WallClimbParticles.emitting = false
 
-	# =========================================================
-
 	update_animation(input_dir)
-	
-	# --- MÉMORISATION DU MUR POUR L'IMPACT ---
 	was_wall_grabbing = wall_grabbing
-	
 	move_and_slide()
 
 # ------------------------------------------------------------
@@ -371,7 +357,8 @@ func start_dash():
 
 	var main = get_tree().root.get_node_or_null("Main")
 	if main:
-		main.trigger_shake(3.5) 
+		if main.has_method("trigger_shake"):
+			main.trigger_shake(3.5) 
 		
 		if main.camera:
 			var base_zoom = main.DEFAULT_ZOOM * 0.90 if is_grapple_zoomed_out else main.DEFAULT_ZOOM
@@ -381,11 +368,20 @@ func start_dash():
 			t.tween_property(main.camera, "zoom", base_zoom, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 func update_dash_direction():
-	var dir_vec = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	# Forziamo il dash a 8 vie digitali, identico al D-Pad
+	var dx = 0
+	var dy = 0
+	if Input.is_action_pressed("ui_right"): dx += 1
+	if Input.is_action_pressed("ui_left"): dx -= 1
+	if Input.is_action_pressed("ui_down"): dy += 1
+	if Input.is_action_pressed("ui_up"): dy -= 1
 	
-	if dir_vec.length() < 0.2: 
+	var dir_vec = Vector2(dx, dy)
+	
+	if dir_vec == Vector2.ZERO: 
 		velocity = Vector2(facing_dir * DASH_SPEED, 0)
 	else:
+		dir_vec = dir_vec.normalized()
 		var angle = snapped(dir_vec.angle(), PI / 4.0)
 		velocity = Vector2(cos(angle), sin(angle)) * DASH_SPEED
 
@@ -444,26 +440,20 @@ func handle_wall_grab(delta):
 	if on_wall and grabbing_button and not wall_exhausted:
 		wall_grabbing = true
 		
-		# ==========================================
-		# --- IMPACT : SHAKE & BOUNCE ---
 		if not was_wall_grabbing:
 			var main = get_tree().root.get_node_or_null("Main")
 			if main:
-				# 1. Le Shake (Petit tremblement sec)
 				if main.has_method("trigger_shake"):
 					main.trigger_shake(2.5) 
 				
-				# 2. Le Bounce Caméra (Micro-zoom très rapide)
 				if main.camera and not is_grapple_zoomed_out:
 					var base_zoom = main.DEFAULT_ZOOM
-					var punch_zoom = base_zoom * 1.025 # Zoom de 2.5%
+					var punch_zoom = base_zoom * 1.025
 					var t = create_tween()
 					t.tween_property(main.camera, "zoom", punch_zoom, 0.05).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 					t.tween_property(main.camera, "zoom", base_zoom, 0.15).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 			
-			# 3. Le Bounce du Sprite (S'écrase contre le mur)
 			sprite.scale = Vector2(default_scale.x * 0.6, default_scale.y * 1.4)
-		# ==========================================
 		
 		if is_grapple_zoomed_out:
 			reset_camera_zoom()
@@ -476,12 +466,12 @@ func handle_wall_grab(delta):
 		
 		velocity.y = 0
 		
+		# --- RETOUR AU DIGITAL POUR LE MUR ---
 		if Input.is_action_pressed("ui_up"):
 			if hand_check and not hand_check.is_colliding():
 				velocity.y = 0 
 			else:
 				velocity.y = -WALL_CLIMB_SPEED * gravity_dir
-				
 		elif Input.is_action_pressed("ui_down"):
 			velocity.y = WALL_CLIMB_SPEED * gravity_dir
 	else:
@@ -689,12 +679,12 @@ func prepare_cinematic():
 	collision_layer = 0
 	collision_mask = 0
 	
-	var sprite = get_node_or_null("Sprite2D")
-	if not sprite: sprite = get_node_or_null("AnimatedSprite2D")
+	var spr = get_node_or_null("Sprite2D")
+	if not spr: spr = get_node_or_null("AnimatedSprite2D")
 	
-	if sprite: 
-		sprite.scale = Vector2(0.5, 0.5) 
-		sprite.rotation = 0.0 
+	if spr: 
+		spr.scale = Vector2(0.5, 0.5) 
+		spr.rotation = 0.0 
 		
 	if has_node("GhostTimer"): $GhostTimer.stop()
 		

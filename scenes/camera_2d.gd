@@ -4,19 +4,17 @@ extends Camera2D
 # CONFIGURATION "SMOOTH & JUICY" (32x32)
 # ------------------------------------------------------------
 @export_group("Follow Settings")
-@export var lerp_speed := 6.0 # Un poil plus rapide pour bien suivre le Dash
+@export var lerp_speed := 6.0 
 @export var default_offset := Vector2(0, -20)
 
 @export_group("Look Ahead Settings")
-@export var look_ahead_dist_x := 120.0 # Un peu réduit pour ne pas trop te décentrer
+@export var look_ahead_dist_x := 120.0 
 @export var look_ahead_dist_y := 80.0
 
 # TEMPS D'ATTENTE AVANT DE SE RETOURNER :
-# Rendu très court (0.15s). Ça empêche la caméra de s'affoler si tu fais juste 
-# un mini pas en arrière, mais réagit très vite si tu fais vraiment demi-tour.
 @export var look_ahead_delay := 0.10
 
-# Vitesse du mouvement des "yeux" de la caméra (Plus élevé = Plus vif)
+# Vitesse du mouvement des "yeux" de la caméra 
 @export var look_ahead_smoothness := 4.0 
 
 @export var fall_threshold := 450.0
@@ -31,7 +29,7 @@ var bounds_global_pos: Vector2
 # Gestion du Look Ahead
 var current_look_ahead_x := 0.0
 var current_look_ahead_y := 0.0
-var target_look_x := 0.0 # NOUVEAU : La cible devient persistante !
+var target_look_x := 0.0 
 var target_look_y := 0.0
 
 var look_ahead_timer := 0.0
@@ -54,7 +52,6 @@ func _ready():
 
 	if target:
 		global_position = target.global_position + default_offset
-		# On regarde tout de suite dans la direction du joueur s'il en a une
 		if "facing_dir" in target:
 			last_facing_dir = target.facing_dir
 			target_look_x = last_facing_dir * look_ahead_dist_x
@@ -76,8 +73,10 @@ func _physics_process(delta):
 	if not is_cinematic:
 		ideal_pos += default_offset
 		
-		# --- GESTION INTELLIGENTE DU LOOK AHEAD ---
-		var input_x = Input.get_axis("ui_left", "ui_right")
+		# --- GESTION INTELLIGENTE DU LOOK AHEAD (DIGITAL FIX) ---
+		var input_x := 0
+		if Input.is_action_pressed("ui_right"): input_x += 1
+		if Input.is_action_pressed("ui_left"): input_x -= 1
 		
 		# A. Horizontal
 		if input_x != 0:
@@ -92,12 +91,10 @@ func _physics_process(delta):
 					last_facing_dir = input_x
 					look_ahead_timer = 0.0
 					
-			# On met à jour la position cible (qui restera mémorisée)
+			# On met à jour la position cible avec une valeur entière garantie (1 ou -1)
 			target_look_x = last_facing_dir * look_ahead_dist_x
 		else:
 			look_ahead_timer = 0.0
-			# On NE RESET PAS target_look_x à 0 ! 
-			# La caméra reste braquée devant toi, même quand tu t'arrêtes.
 			
 		# B. Vertical : Seulement en chute libre
 		if follow_node is CharacterBody2D and follow_node.velocity.y > fall_threshold:
@@ -105,7 +102,7 @@ func _physics_process(delta):
 		else:
 			target_look_y = 0.0
 		
-		# C. Lissage du regard (Beaucoup plus vif qu'avant grâce au smoothness à 4.0)
+		# C. Lissage du regard 
 		current_look_ahead_x = lerp(current_look_ahead_x, target_look_x, look_ahead_smoothness * delta)
 		current_look_ahead_y = lerp(current_look_ahead_y, target_look_y, look_ahead_smoothness * delta)
 		
@@ -120,7 +117,7 @@ func _physics_process(delta):
 	_apply_bounds()
 
 # ------------------------------------------------------------
-# UTILITAIRES (Inchangés)
+# UTILITAIRES 
 # ------------------------------------------------------------
 func _apply_bounds():
 	if not bounds_shape: return
