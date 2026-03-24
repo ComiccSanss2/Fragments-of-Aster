@@ -1,4 +1,4 @@
-res://scenes/levels/level_4.tscn
+res://scenes/levels/level_6.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -8,7 +8,3 @@ res://background.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://scenes/levels/level_5.tscn
-res://tutorial_prompt.tscn
-res://scenes/player.gd
-res://scenes/camera_2d.gd
