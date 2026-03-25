@@ -103,8 +103,10 @@ scale = Vector2(1.5, 1.5)
 layer = 10
 
 [node name="DialogueBox" parent="CanvasLayer" instance=ExtResource("6_ak4l1")]
-offset_left = 206.0
-offset_right = 206.0
+offset_left = 275.0
+offset_top = -72.0
+offset_right = 275.0
+offset_bottom = -72.0
 
 [node name="LevelBounds" type="Node2D" parent="."]
 visible = false

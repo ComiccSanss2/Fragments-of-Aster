@@ -166,7 +166,7 @@ func _on_collect_finished():
 	player.hide_popup() # On cache le popup s'il y en a un
 
 	# --- 1. SYSTEM MESSAGE AVEC INPUT DYNAMIQUE ---
-	var size_start = "[font_size=40]" 
+	var size_start = "[font_size=28]" 
 	var size_end = "[/font_size]"
 	
 	if shard_type == ShardType.GRAPPLE:

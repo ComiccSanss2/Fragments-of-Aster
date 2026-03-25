@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://bs23qpjbpsg3y"]
 
 [ext_resource type="Script" uid="uid://bbded0u4v4uja" path="res://dialogue_box.gd" id="1_0nste"]
-[ext_resource type="Texture2D" uid="uid://b3he2310desyf" path="res://assets/panel.png" id="2_85jfh"]
 [ext_resource type="Texture2D" uid="uid://xw4tcijq4ftt" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0064.png" id="2_f71wr"]
 [ext_resource type="Texture2D" uid="uid://cvgv2ra36yho3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0004.png" id="3_2klrv"]
 [ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_351bv"]
 [ext_resource type="Texture2D" uid="uid://1k8wa8y7ty3v" path="res://assets/dialoguebox/portrait.png" id="4_if77y"]
+[ext_resource type="Texture2D" uid="uid://dhiuq5jc4wto" path="res://assets/dialoguebox/Box3.png" id="4_med3p"]
 [ext_resource type="AudioStream" uid="uid://cuod4736sddge" path="res://assets/sfx/talking.wav" id="6_85jfh"]
 
 [node name="DialogueBox" type="Control"]
@@ -21,34 +21,36 @@ tex_prompt_key = ExtResource("2_f71wr")
 tex_prompt_pad = ExtResource("3_2klrv")
 
 [node name="Panel" type="NinePatchRect" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -419.0
-offset_top = -418.0
-offset_right = 981.0
-offset_bottom = 230.0
+offset_left = -516.0
+offset_top = -356.0
+offset_right = -258.25
+offset_bottom = -256.25
 grow_horizontal = 2
 grow_vertical = 0
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("2_85jfh")
-patch_margin_left = 4
-patch_margin_top = 4
-patch_margin_right = 4
-patch_margin_bottom = 4
+scale = Vector2(4, 4)
+texture = ExtResource("4_med3p")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+axis_stretch_vertical = 1
 
 [node name="Portrait" type="TextureRect" parent="Panel"]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 130.0
-offset_top = -141.0
-offset_right = 421.0
-offset_bottom = 141.5
+offset_left = 15.5
+offset_top = -29.125
+offset_right = 66.75
+offset_bottom = 24.625
 grow_vertical = 2
 texture = ExtResource("4_if77y")
 expand_mode = 1
@@ -61,26 +63,33 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -256.66663
-offset_top = -209.66663
-offset_right = -149.0
-offset_bottom = -122.0
+offset_left = -31.0
+offset_top = -32.0
+offset_right = -21.75
+offset_bottom = -24.0
 grow_horizontal = 0
 grow_vertical = 0
 stretch_mode = 5
-
-[node name="Text" type="RichTextLabel" parent="Panel"]
-layout_mode = 0
-offset_left = 437.0
-offset_top = 228.0
-offset_right = 1234.0
-offset_bottom = 424.0
-theme_override_fonts/normal_font = ExtResource("3_351bv")
-theme_override_font_sizes/normal_font_size = 32
-bbcode_enabled = true
-scroll_active = false
 
 [node name="VoicePlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_85jfh")
 volume_db = -20.0
 max_polyphony = 3
+
+[node name="Text" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -234.0
+offset_top = -241.0
+offset_right = 428.0
+offset_bottom = -88.0
+theme_override_fonts/normal_font = ExtResource("3_351bv")
+theme_override_font_sizes/normal_font_size = 24
+bbcode_enabled = true
+text = "
+"
+scroll_active = false

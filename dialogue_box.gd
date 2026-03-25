@@ -1,7 +1,7 @@
 extends Control
 
 @onready var panel := $Panel
-@onready var text_label := $Panel/Text 
+@onready var text_label := $Text 
 @onready var portrait := $Panel/Portrait
 @onready var space_hint := $Panel/SpaceHint 
 @onready var voice_player := $VoicePlayer 
@@ -68,7 +68,7 @@ func _apply_text_and_images():
 			var key_p = paths[1]
 			# On choisit l'image en direct selon le contrôleur actuel
 			var chosen = pad_p if is_using_gamepad else key_p
-			var img_tag = "  [img=90]" + chosen + "[/img]  "
+			var img_tag = "  [img=48]" + chosen + "[/img]  "
 			
 			# On remplace notre balise custom par la balise image de Godot
 			final_text = final_text.replace("[input:" + inner + "]", img_tag)
@@ -85,7 +85,7 @@ func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: flo
 	modulate.a = 1.0
 	
 	current_raw_text = text
-	_update_dynamic_inputs() # Applique directement les bonnes images
+	_update_dynamic_inputs() # Applica il testo al RichTextLabel
 
 	if portrait_tex != null:
 		portrait.texture = portrait_tex
@@ -96,7 +96,21 @@ func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: flo
 	space_hint.visible = false
 	waiting_for_space = false
 	
-	text_label.visible_characters = 0
+	# ==========================================================
+	# IL BYPASS DEFINITIVO: Contiamo le lettere in memoria!
+	# ==========================================================
+	var parsed_text = text_label.get_parsed_text()
+	var total_chars = parsed_text.length()
+	
+	# Debug utile: Stampa nella console cosa sta per scrivere
+	print("Inizio dialogo. Lettere totali da scrivere: ", total_chars)
+	
+	# Se per qualche assurdo motivo è 0, lo forziamo a 1 per evitare crash
+	if total_chars <= 0:
+		total_chars = 1
+		
+	text_label.visible_characters = 0 
+	# ==========================================================
 	
 	var current_pitch = DEFAULT_PITCH
 	if custom_pitch > 0.0:
@@ -108,7 +122,6 @@ func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: flo
 	wait_time = clamp(wait_time, 0.02, 0.1)
 
 	var time_dialog_started = Time.get_ticks_msec()
-	var total_chars = text_label.get_total_character_count()
 	
 	for i in range(total_chars):
 		text_label.visible_characters = i + 1
@@ -123,7 +136,7 @@ func show_dialog(text: String, portrait_tex: Texture2D = null, custom_pitch: flo
 		
 		await get_tree().create_timer(current_wait).timeout
 
-	text_label.visible_ratio = 1.0
+	text_label.visible_characters = -1 # Mostra tutto alla fine in modo sicuro
 	space_hint.visible = true
 	waiting_for_space = true
 

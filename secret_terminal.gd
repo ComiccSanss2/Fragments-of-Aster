@@ -104,7 +104,7 @@ func read_terminal():
 		t_flash.tween_property(light, "energy", 2.5, 0.1)
 		t_flash.tween_property(light, "energy", 1.5, 0.2)
 			
-		var font_tag_start = "[font=\"" + TERMINAL_FONT + "\"][font_size=70]"
+		var font_tag_start = "[font=\"" + TERMINAL_FONT + "\"][font_size=40]"
 		var font_tag_end = "[/font_size][/font]"
 		
 		await dialog.show_dialog(font_tag_start + "[color=#00ff99]> INITIALIZING SECURE LOG...[/color]" + font_tag_end, null, TERMINAL_PITCH)

@@ -14,7 +14,7 @@ var main_env: Environment = null
 
 # --- CONFIGURATION FONTS & STYLE ---
 const FONT_BOSS = "res://assets/fonts/Evil Empire.otf"
-const SIZE_BOSS = 54 
+const SIZE_BOSS = 54
 const BOSS_PORTRAIT = preload("res://assets/enemydialogue.png")
 
 func _ready():
