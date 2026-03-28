@@ -101,6 +101,7 @@ drag_vertical_offset = 0.15
 script = ExtResource("2_jyhfs")
 lerp_speed = 8.0
 default_offset = Vector2(0, -10)
+peek_dist_y = 250.0
 
 [node name="Player" parent="." instance=ExtResource("1_jyhfs")]
 

@@ -1,0 +1,36 @@
+[gd_scene load_steps=10 format=3 uid="uid://cmng0ki2urlb3"]
+
+[ext_resource type="Texture2D" uid="uid://legf77i26byn" path="res://assets/panneau.png" id="1_kps3m"]
+[ext_resource type="Script" uid="uid://cngsn1orr35r8" path="res://signpost.gd" id="1_vikaq"]
+[ext_resource type="Texture2D" uid="uid://ddcgtjxgv2hxs" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0153.png" id="2_wgd30"]
+[ext_resource type="Texture2D" uid="uid://cvgv2ra36yho3" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0004.png" id="3_82v23"]
+[ext_resource type="Texture2D" uid="uid://c6757cii41rmk" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0168.png" id="4_1gufk"]
+[ext_resource type="Texture2D" uid="uid://dq8e11s61cvnu" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0037.png" id="5_70obh"]
+[ext_resource type="Texture2D" uid="uid://eehs1qxxpv8m" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0166.png" id="6_xlk5e"]
+[ext_resource type="Texture2D" uid="uid://dm21eckwxknug" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0035.png" id="7_okcmj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vikaq"]
+size = Vector2(28, 134)
+
+[node name="Signpost" type="Area2D"]
+script = ExtResource("1_vikaq")
+tex_interact_key = ExtResource("2_wgd30")
+tex_interact_pad = ExtResource("3_82v23")
+tex_down_key = ExtResource("4_1gufk")
+tex_down_pad = ExtResource("5_70obh")
+tex_up_key = ExtResource("6_xlk5e")
+tex_up_pad = ExtResource("7_okcmj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -51)
+shape = SubResource("RectangleShape2D_vikaq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_kps3m")
+
+[node name="PromptSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -15)
+scale = Vector2(0.8, 0.8)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

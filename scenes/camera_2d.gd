@@ -19,6 +19,10 @@ extends Camera2D
 
 @export var fall_threshold := 450.0
 
+@export_group("Peek Settings (Regarder en haut/bas)")
+@export var peek_delay := 0.5 # Temps (en secondes) à maintenir avant de regarder
+@export var peek_dist_y := 160.0 # Distance de la caméra vers le haut ou le bas
+
 # ------------------------------------------------------------
 # VARIABLES INTERNES
 # ------------------------------------------------------------
@@ -33,6 +37,7 @@ var target_look_x := 0.0
 var target_look_y := 0.0
 
 var look_ahead_timer := 0.0
+var vertical_peek_timer := 0.0 
 var last_facing_dir := 0
 
 # États
@@ -96,11 +101,33 @@ func _physics_process(delta):
 		else:
 			look_ahead_timer = 0.0
 			
-		# B. Vertical : Seulement en chute libre
-		if follow_node is CharacterBody2D and follow_node.velocity.y > fall_threshold:
+		# B. Vertical : Chute libre OU Regarder en haut/bas (Peek)
+		var is_falling = follow_node is CharacterBody2D and follow_node.velocity.y > fall_threshold
+		
+		if is_falling:
+			# Si on tombe très vite, on regarde vers le bas quoi qu'il arrive
 			target_look_y = look_ahead_dist_y
+			vertical_peek_timer = 0.0 # Reset du timer
 		else:
-			target_look_y = 0.0
+			# On check les inputs Haut et Bas
+			var input_y := 0
+			if Input.is_action_pressed("ui_down"): input_y += 1
+			if Input.is_action_pressed("ui_up"): input_y -= 1
+			
+			# CONDITION DE PEEK : Être au sol et (presque) à l'arrêt
+			var can_peek = true
+			if follow_node is CharacterBody2D:
+				can_peek = follow_node.is_on_floor() and abs(follow_node.velocity.x) < 10.0
+			
+			if input_y != 0 and can_peek:
+				vertical_peek_timer += delta
+				if vertical_peek_timer >= peek_delay:
+					# On déplace la cible de la caméra vers le haut (-1) ou le bas (1)
+					target_look_y = input_y * peek_dist_y
+			else:
+				# Si on lâche la touche ou qu'on se met à bouger, on annule tout
+				vertical_peek_timer = 0.0
+				target_look_y = 0.0
 		
 		# C. Lissage du regard 
 		current_look_ahead_x = lerp(current_look_ahead_x, target_look_x, look_ahead_smoothness * delta)

@@ -1,5 +1,5 @@
 res://default_bus_layout.tres
-res://dialogue_box.tscn
+res://scenes/player.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -9,11 +9,8 @@ res://background.gdshader
 res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/shard.gdshader
-res://scenes/levels/level_15.tscn
-res://dialogue_box.gd
+res://scenes/camera_2d.gd
 res://scenes/main.tscn
-res://scenes/shard.tscn
-res://scenes/shard.gd
-res://secret_terminal.tscn
-res://secret_terminal.gd
-res://scenes/levels/level_1.tscn
+res://signpost.tscn
+res://signpost.gd
+res://scenes/levels/level_7.tscn
