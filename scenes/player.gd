@@ -440,6 +440,21 @@ func handle_wall_grab(delta):
 	if on_wall and grabbing_button and not wall_exhausted:
 		wall_grabbing = true
 		
+		# ==========================================================
+		# FIX DEL FLICKERING SUL MURO
+		# Spingiamo leggermente Lyra contro il muro se non preme nulla,
+		# in modo da non farle mai perdere l'is_on_wall() !
+		# ==========================================================
+		var wall_normal_x = get_wall_normal().x
+		var input_x := 0
+		if Input.is_action_pressed("ui_right"): input_x += 1
+		if Input.is_action_pressed("ui_left"): input_x -= 1
+		
+		# Se il giocatore non preme nulla, o spinge VERSO il muro:
+		if input_x == 0 or sign(input_x) == sign(-wall_normal_x):
+			velocity.x = -wall_normal_x * 10.0 # Forza microscopica per restare incollati
+		# ==========================================================
+		
 		if not was_wall_grabbing:
 			var main = get_tree().root.get_node_or_null("Main")
 			if main:
@@ -466,7 +481,7 @@ func handle_wall_grab(delta):
 		
 		velocity.y = 0
 		
-		# --- RETOUR AU DIGITAL POUR LE MUR ---
+		# --- RITORNO AL DIGITALE PER LA SCALATA ---
 		if Input.is_action_pressed("ui_up"):
 			if hand_check and not hand_check.is_colliding():
 				velocity.y = 0 

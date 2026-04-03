@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=3 uid="uid://dycf8s6kkgti8"]
+
+[ext_resource type="Script" uid="uid://we0jrq3e00je" path="res://gamepad_splash.gd" id="1_rjd5k"]
+[ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="2_xvlnn"]
+[ext_resource type="Texture2D" uid="uid://c0uxo68x2fynq" path="res://assets/controller.png" id="3_7huw4"]
+[ext_resource type="AudioStream" uid="uid://q3plsakx0w78" path="res://assets/sfx/fallingpad.wav" id="4_xvlnn"]
+[ext_resource type="AudioStream" uid="uid://dveibbsia24mb" path="res://assets/sfx/impactpad.wav" id="5_62nmj"]
+[ext_resource type="AudioStream" uid="uid://bwyxrive3u7b3" path="res://assets/sfx/powerpad.wav" id="6_idbom"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_62nmj"]
+font = ExtResource("2_xvlnn")
+font_size = 48
+
+[node name="GamepadSplash" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rjd5k")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -441.0
+offset_top = 158.0
+offset_right = 442.0
+offset_bottom = 213.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+text = "Gamepad Recommended for the best experience"
+label_settings = SubResource("LabelSettings_62nmj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControllerLogo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -84.0
+offset_right = 124.0
+offset_bottom = 84.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7huw4")
+stretch_mode = 4
+
+[node name="WhooshPad" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_xvlnn")
+
+[node name="ImpactPad" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_62nmj")
+
+[node name="ConfirmationPad" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_idbom")

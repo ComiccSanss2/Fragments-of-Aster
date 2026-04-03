@@ -7,43 +7,38 @@ extends Node2D
 
 # --- NOUVEAU : Case à cocher dans l'éditeur ---
 @export var fall_up := false 
-# Si coché : la plateforme tombe vers le haut (gravité inversée)
 
 var breaking := false
 var falling := false
 var player_on := false
 var origin_pos: Vector2
 
+# --- FIX FLICKERING: Prendiamo il nodo del disegno ---
+@onready var sprite = $StaticBody2D/Sprite2D # Cambialo se il tuo si chiama "AnimatedSprite2D" o in altro modo
+
 func _ready():
 	origin_pos = global_position
 	
-	# Optionnel : Si tu veux que le sprite se retourne tout seul visuellement
 	if fall_up:
 		scale.y = -1 
-		# Attention : si cela inverse tes collisions bizarrement, 
-		# retire cette ligne et retourne le sprite manuellement dans l'éditeur.
 
 	$StaticBody2D/BreakTimer.wait_time = break_delay
 	$StaticBody2D/RegenTimer.wait_time = regen_delay
 
-
 func _process(delta):
-	# Tremblement
+	# --- FIX FLICKERING: Trema solo il disegno! ---
 	if breaking and not falling:
-		global_position = origin_pos + Vector2(
+		sprite.position = Vector2(
 			randf_range(-shake_amount, shake_amount),
 			randf_range(-shake_amount, shake_amount)
 		)
 
-	# Chute
+	# Chute (Questa va bene perché cade tutto il blocco)
 	if falling:
 		if fall_up:
-			# Tombe vers le HAUT (Y négatif)
 			global_position.y -= fall_speed * delta
 		else:
-			# Tombe vers le BAS (Y positif - Standard)
 			global_position.y += fall_speed * delta
-
 
 # ------------------------------------------------------------
 # DÉTECTION JOUEUR
@@ -56,11 +51,9 @@ func _on_Area2D_body_entered(body):
 			breaking = true
 			$StaticBody2D/BreakTimer.start()
 
-
 func _on_Area2D_body_exited(body):
 	if body.is_in_group("player"):
 		player_on = false
-
 
 # ------------------------------------------------------------
 # LA PLATEFORME SE CASSE
@@ -68,22 +61,21 @@ func _on_Area2D_body_exited(body):
 func _on_BreakTimer_timeout():
 	if breaking:
 		falling = true
+		sprite.position = Vector2.ZERO # Resetta lo sprite al centro prima di cadere
 		$StaticBody2D/CollisionShape2D.disabled = true
 		$StaticBody2D/RegenTimer.start()
-
 
 # ------------------------------------------------------------
 # RÉGÉNÉRATION
 # ------------------------------------------------------------
 func _on_RegenTimer_timeout():
-	# Respawn même si le joueur est tombé sans exit()
 	falling = false
 	breaking = false
 	player_on = false
 
-	# Reset position
+	# Reset di tutto
 	global_position = origin_pos
-
-	# Reset collisions
+	sprite.position = Vector2.ZERO # Resetta il disegno
+	
 	$StaticBody2D.position = Vector2.ZERO
 	$StaticBody2D/CollisionShape2D.disabled = false

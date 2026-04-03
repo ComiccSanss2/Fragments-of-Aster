@@ -1,16 +1,1 @@
 res://default_bus_layout.tres
-res://scenes/player.tscn
-res://scenes/gravitydistortion.gdshader
-res://scenes/deathtransition.gdshader
-res://scenes/transition.gdshader
-res://scenes/wind.gdshader
-res://scenes/wind2.gdshader
-res://background.gdshader
-res://scenes/levels/matrix.gdshader
-res://glitch_wall.gdshader
-res://scenes/shard.gdshader
-res://scenes/camera_2d.gd
-res://scenes/main.tscn
-res://signpost.tscn
-res://signpost.gd
-res://scenes/levels/level_7.tscn

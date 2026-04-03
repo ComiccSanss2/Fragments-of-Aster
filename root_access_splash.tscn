@@ -1,0 +1,73 @@
+[gd_scene load_steps=8 format=3 uid="uid://dr04sf56yely"]
+
+[ext_resource type="FontFile" uid="uid://dbkuehhx2jho3" path="res://assets/fonts/ThaleahFat.ttf" id="1_hblxd"]
+[ext_resource type="Script" uid="uid://brvc0jfopoisl" path="res://root_access_splash.gd" id="1_kfxr8"]
+[ext_resource type="AudioStream" uid="uid://dg2pt54jqorag" path="res://assets/sfx/confirm.wav" id="3_cploo"]
+[ext_resource type="AudioStream" uid="uid://cf5iw5chhe51o" path="res://assets/sfx/click1.ogg" id="3_sgmij"]
+[ext_resource type="AudioStream" uid="uid://46fws7ydg66n" path="res://assets/sfx/logoimpact.wav" id="4_sgmij"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kfxr8"]
+line_spacing = 6.0
+font = ExtResource("1_hblxd")
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_tp5lj"]
+font = ExtResource("1_hblxd")
+font_size = 100
+shadow_size = 10
+shadow_color = Color(0, 0, 1, 0.49803922)
+
+[node name="RootAccessSplash" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kfxr8")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TerminalLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_kfxr8")
+horizontal_alignment = 1
+
+[node name="LogoLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "ROOT ACCESS GAMES"
+label_settings = SubResource("LabelSettings_tp5lj")
+horizontal_alignment = 1
+
+[node name="KeyboardSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_sgmij")
+volume_db = -10.0
+
+[node name="AccessGrantedSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_cploo")
+volume_db = -5.0
+
+[node name="LogoImpactSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_sgmij")
+volume_db = -6.0
