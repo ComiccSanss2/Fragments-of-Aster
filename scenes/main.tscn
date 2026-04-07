@@ -59,7 +59,7 @@ shader_parameter/distortion_strength = 0.05
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_jbj1t")
 
 [sub_resource type="Gradient" id="Gradient_tefeu"]
-colors = PackedColorArray(0, 0, 0, 0, 0.6039216, 0.5764706, 0.9490196, 0.5568628)
+colors = PackedColorArray(0, 0, 0, 0, 0.102606915, 0.06127055, 0.26322797, 0.5568628)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_o6xl0"]
 gradient = SubResource("Gradient_tefeu")

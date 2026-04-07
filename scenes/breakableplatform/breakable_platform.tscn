@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://1xj11rwm6o6" path="res://assets/Rocher_fragile.png" id="2_gk0wa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4px8n"]
-size = Vector2(31, 18)
+size = Vector2(32, 21)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2aexv"]
-size = Vector2(34, 24)
+size = Vector2(34, 25)
 
 [node name="BreakablePlatform" type="Node2D"]
 visibility_layer = 128
@@ -19,13 +19,13 @@ script = ExtResource("1_gk0wa")
 texture = ExtResource("2_gk0wa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(0.5, 1)
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_4px8n")
 
 [node name="Area2D" type="Area2D" parent="StaticBody2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D"]
-position = Vector2(0, 1)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_2aexv")
 
 [node name="BreakTimer" type="Timer" parent="StaticBody2D"]

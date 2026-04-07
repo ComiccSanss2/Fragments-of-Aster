@@ -1,7 +1,9 @@
+ColorRect
+CanvasLayer
+CPUParticles2D
 AudioStreamPlayer
 Label
 VBoxContainer
-ColorRect
 Control
 TextureRect
 CenterContainer
@@ -10,5 +12,3 @@ CollisionShape2D
 Area2D
 Node2D
 RichTextLabel
-CanvasLayer
-CPUParticles2D

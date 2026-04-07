@@ -157,6 +157,29 @@ func load_level(path: String):
 		camera.offset = Vector2.ZERO
 		camera.make_current()
 		
+
+		# ==========================================
+		# GESTIONE EFFETTI ATMOSFERICI
+		# ==========================================
+		var path_lower = path.to_lower()
+		var is_chase_level = "level16" in path_lower or "level_16" in path_lower
+		
+		# 1. Spegniamo il WindLayer principale
+		if wind_layer:
+			wind_layer.visible = not is_chase_level
+			for child in wind_layer.get_children():
+				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+					if is_chase_level: child.stop()
+					
+		# 2. Spegniamo anche il WindLayer2 (se esiste)
+		var wind_layer_2 = get_node_or_null("WindLayer2")
+		if wind_layer_2:
+			wind_layer_2.visible = not is_chase_level
+			for child in wind_layer_2.get_children():
+				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
+					if is_chase_level: child.stop()
+		# ==========================================
+		
 		check_music_progression()
 		
 	if level_scene.has_node("LevelBounds"):
