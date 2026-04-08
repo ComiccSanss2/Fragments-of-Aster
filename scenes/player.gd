@@ -442,17 +442,14 @@ func handle_wall_grab(delta):
 		
 		# ==========================================================
 		# FIX DEL FLICKERING SUL MURO
-		# Spingiamo leggermente Lyra contro il muro se non preme nulla,
-		# in modo da non farle mai perdere l'is_on_wall() !
 		# ==========================================================
 		var wall_normal_x = get_wall_normal().x
 		var input_x := 0
 		if Input.is_action_pressed("ui_right"): input_x += 1
 		if Input.is_action_pressed("ui_left"): input_x -= 1
 		
-		# Se il giocatore non preme nulla, o spinge VERSO il muro:
 		if input_x == 0 or sign(input_x) == sign(-wall_normal_x):
-			velocity.x = -wall_normal_x * 10.0 # Forza microscopica per restare incollati
+			velocity.x = -wall_normal_x * 10.0 
 		# ==========================================================
 		
 		if not was_wall_grabbing:
@@ -481,7 +478,6 @@ func handle_wall_grab(delta):
 		
 		velocity.y = 0
 		
-		# --- RITORNO AL DIGITALE PER LA SCALATA ---
 		if Input.is_action_pressed("ui_up"):
 			if hand_check and not hand_check.is_colliding():
 				velocity.y = 0 
@@ -708,3 +704,38 @@ func prepare_cinematic():
 			
 	if has_node("AnimationPlayer"): $AnimationPlayer.play("jump")
 	elif has_node("AnimatedSprite2D"): $AnimatedSprite2D.play("jump")
+
+# ==========================================
+# LA CURA DEFINITIVA E "HARDCORE"
+# ==========================================
+func reset_from_cinematic():
+	print("PLAYER: Esecuzione reset_from_cinematic...")
+	is_dying = false
+	can_move = true
+	grappling = false
+	wall_grabbing = false
+	is_dashing = false
+	
+	set_physics_process(true)
+	set_process(true)
+	
+	collision_layer = 1
+	collision_mask = 1
+	
+	# IL KILL-SWITCH PER LE ANIMAZIONI INCANTATE
+	if has_node("AnimationPlayer"): 
+		$AnimationPlayer.stop()
+	
+	var spr = get_node_or_null("Sprite2D")
+	if not spr: spr = get_node_or_null("AnimatedSprite2D")
+	if spr:
+		spr.scale = default_scale
+		spr.rotation = 0.0
+		spr.visible = true
+		spr.play("fall")
+	
+	# La scossa per il motore fisico
+	velocity = Vector2(0, 150)
+	gravity_dir = 1
+	up_direction = Vector2.UP
+	print("PLAYER: Reset completato. Gravità riattivata.")

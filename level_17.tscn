@@ -1,0 +1,155 @@
+[gd_scene load_steps=12 format=3 uid="uid://d1pfbo63krp67"]
+
+[ext_resource type="Texture2D" uid="uid://ca6pfmxuq156" path="res://assets/Bloc_Ruine_32x32.png" id="1_0y6gu"]
+[ext_resource type="Script" uid="uid://0sofqkr2jai6" path="res://level_17.gd" id="1_o1uqt"]
+[ext_resource type="Texture2D" uid="uid://w551nc12j5nt" path="res://assets/Parallax/city/background.png" id="2_74rdr"]
+[ext_resource type="Texture2D" uid="uid://ga7srnwnajfn" path="res://assets/Parallax/city/city1plan.png" id="3_o1uqt"]
+[ext_resource type="Texture2D" uid="uid://crniiiuedxft7" path="res://assets/Parallax/city/city2plan.png" id="4_gkbo1"]
+[ext_resource type="Texture2D" uid="uid://ehl2frcl68mg" path="res://assets/Parallax/city/city3plan.png" id="5_yyr68"]
+[ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="9_74rdr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v6p2n"]
+texture = ExtResource("1_0y6gu")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_garqv"]
+tile_size = Vector2i(32, 32)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_v6p2n")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1uqt"]
+size = Vector2(6994, 45913.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gkbo1"]
+size = Vector2(278.5, 73.625)
+
+[node name="Level17" type="Node2D"]
+script = ExtResource("1_o1uqt")
+
+[node name="PlayerStart" type="Node2D" parent="."]
+position = Vector2(586, -1637)
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_garqv")
+format = 2
+layer_0/tile_data = PackedInt32Array(2031616, 65536, 1, 2097152, 65536, 1, 2031617, 65536, 1, 2097153, 65536, 1, 2031618, 65536, 1, 2097154, 65536, 1, 2031619, 65536, 1, 2097155, 65536, 1, 2031620, 65536, 1, 2097156, 65536, 1, 2031621, 65536, 1, 2097157, 65536, 1, 2031622, 65536, 1, 2097158, 65536, 1, 2031623, 65536, 1, 2097159, 65536, 1, 2031624, 65536, 1, 2097160, 65536, 1, 2031625, 65536, 1, 2097161, 65536, 1, 2031626, 65536, 1, 2097162, 65536, 1, 2031627, 65536, 1, 2097163, 65536, 1, 2031628, 65536, 1, 2097164, 65536, 1, 2031629, 65536, 1, 2097165, 65536, 1, 2031630, 65536, 1, 2097166, 65536, 1, 2031631, 65536, 1, 2097167, 65536, 1, 2031632, 65536, 1, 2097168, 65536, 1, 2031633, 65536, 1, 2097169, 65536, 1, 2031634, 65536, 1, 2097170, 65536, 1, 2031635, 65536, 1, 2097171, 65536, 1, 2031636, 65536, 1, 2097172, 65536, 1, 2031637, 65536, 1, 2097173, 65536, 1, 2031638, 65536, 1, 2097174, 65536, 1, 2031639, 65536, 1, 2097175, 65536, 1, 2031640, 65536, 1, 2097176, 65536, 1, 2031641, 65536, 1, 2097177, 65536, 1, 2031642, 65536, 1, 2097178, 65536, 1, 2031643, 65536, 1, 2097179, 65536, 1, 2031644, 65536, 1, 2097180, 65536, 1, 2031645, 65536, 1, 2097181, 65536, 1, 2031646, 65536, 1, 2097182, 65536, 1, 2031647, 65536, 1, 2097183, 65536, 1, 2031648, 65536, 1, 2097184, 65536, 1, 2031649, 65536, 1, 2097185, 65536, 1, 2031650, 65536, 1, 2097186, 65536, 1, 2031651, 65536, 1, 2097187, 65536, 1, 2031652, 65536, 1, 2097188, 65536, 1, 2031653, 65536, 1, 2097189, 65536, 1, 2031654, 65536, 1, 2097190, 65536, 1, 2031655, 65536, 1, 2097191, 65536, 1, 2031656, 65536, 1, 2097192, 65536, 1, 2031657, 65536, 1, 2097193, 65536, 1, 2031658, 65536, 1, 2097194, 65536, 1, 2031659, 65536, 1, 2097195, 65536, 1, 2031660, 65536, 1, 2097196, 65536, 1, 2031661, 65536, 1, 2097197, 65536, 1, 2031662, 65536, 1, 2097198, 65536, 1, 2031663, 65536, 1, 2097199, 65536, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
+offset_right = 1923.0
+offset_bottom = 1084.0
+texture = ExtResource("2_74rdr")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 12)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer2"]
+offset_right = 1917.0
+offset_bottom = 1078.0
+texture = ExtResource("3_o1uqt")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(6, -60)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer3"]
+offset_right = 1925.0
+offset_bottom = 1083.0
+texture = ExtResource("4_gkbo1")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 2)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer4"]
+offset_right = 1921.0
+offset_bottom = 1074.0
+texture = ExtResource("5_yyr68")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(-6, 18)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer5"]
+offset_right = 1920.0
+offset_bottom = 1078.0
+texture = ExtResource("4_gkbo1")
+metadata/_edit_use_anchors_ = true
+
+[node name="LevelBounds" type="Node2D" parent="."]
+visible = false
+position = Vector2(-35, 433)
+script = ExtResource("9_74rdr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
+position = Vector2(2975, -21490.25)
+shape = SubResource("RectangleShape2D_o1uqt")
+
+[node name="SpeedLines" type="CPUParticles2D" parent="."]
+position = Vector2(700, 1049)
+scale = Vector2(1.7599988, 1)
+amount = 2500
+lifetime = 20.0
+preprocess = 4.0
+emission_shape = 3
+emission_rect_extents = Vector2(400, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 1500.0
+initial_velocity_max = 2500.0
+scale_amount_max = 3.0
+
+[node name="ImpactTrigger" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImpactTrigger"]
+position = Vector2(540, 987)
+shape = SubResource("RectangleShape2D_gkbo1")
+
+[connection signal="body_entered" from="ImpactTrigger" to="." method="_on_impact_trigger_body_entered"]

@@ -1,0 +1,97 @@
+[gd_scene load_steps=9 format=3 uid="uid://dkfiurt11gpal"]
+
+[ext_resource type="Texture2D" uid="uid://w551nc12j5nt" path="res://assets/Parallax/city/background.png" id="1_0dvco"]
+[ext_resource type="Script" uid="uid://cx2sjpug5ij2c" path="res://scrapeyard_cinematic.gd" id="1_21ax8"]
+[ext_resource type="Texture2D" uid="uid://ga7srnwnajfn" path="res://assets/Parallax/city/city1plan.png" id="2_21ax8"]
+[ext_resource type="Texture2D" uid="uid://crniiiuedxft7" path="res://assets/Parallax/city/city2plan.png" id="3_1h7au"]
+[ext_resource type="Texture2D" uid="uid://ehl2frcl68mg" path="res://assets/Parallax/city/city3plan.png" id="4_bdh5b"]
+[ext_resource type="Texture2D" uid="uid://bwi4ms11ndioh" path="res://assets/Parallax/city/city4plan.png" id="5_bl5wb"]
+[ext_resource type="Texture2D" uid="uid://d4n0roquo3c04" path="res://assets/Parallax/city/smog1.png" id="6_ea6du"]
+[ext_resource type="Texture2D" uid="uid://dxh07ju87opch" path="res://assets/Parallax/city/smog2.png" id="7_njqyd"]
+
+[node name="ScrapeyardCinematic" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_21ax8")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_0dvco")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer2"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_21ax8")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer3"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_1h7au")
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer4"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_bdh5b")
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer5"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_1h7au")
+
+[node name="ParallaxLayer6" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer6"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("5_bl5wb")
+
+[node name="ParallaxLayer7" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer7"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("6_ea6du")
+
+[node name="ParallaxLayer8" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(0, 1080)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer8"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("7_njqyd")
+
+[node name="SpeedLines" type="CPUParticles2D" parent="."]
+position = Vector2(319, 360)
+amount = 100
+emission_shape = 3
+emission_rect_extents = Vector2(400, 1)
+direction = Vector2(0, -1)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 1500.0
+initial_velocity_max = 2500.0
+scale_amount_max = 3.0

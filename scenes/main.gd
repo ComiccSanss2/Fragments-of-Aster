@@ -44,31 +44,37 @@ func _ready():
 	if FileAccess.file_exists("res://pause_menu.tscn"):
 		ui_layer.add_child(load("res://pause_menu.tscn").instantiate())
 
-	# --- VÉRIFICATION : Vient-on de l'intro textuelle ? ---
 	var is_new_game_intro = false
 	if SaveManager.has_meta("intro_sequence") and SaveManager.get_meta("intro_sequence") == true:
 		is_new_game_intro = true
 
-	# --- GESTION DES TRANSITIONS DE DÉPART ---
 	if level_transition:
 		level_transition.visible = true
 		if is_new_game_intro:
-			# Si c'est l'intro : on cache tout pour laisser le FadeRect de level_1.gd agir
 			level_transition.material.set_shader_parameter("is_opening", false)
 			level_transition.material.set_shader_parameter("cutoff", 0.0) 
 		else:
-			# Si c'est un chargement normal : on fait l'ouverture classique du shader
 			level_transition.material.set_shader_parameter("is_opening", true)
 			level_transition.material.set_shader_parameter("cutoff", 0.0)
 			var t = create_tween()
-			t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 1.0) # Ajuste la durée si besoin
+			t.tween_property(level_transition, "material:shader_parameter/cutoff", 1.0, 1.0)
 			
 	if death_transition:
 		death_transition.visible = false
 		death_transition.material.set_shader_parameter("cutoff", 0.0)
 
+	# ==========================================
 	# --- CHARGEMENT DU NIVEAU ---
-	if SaveManager.has_meta("level_to_load"):
+	var is_testing = false # <--- METTI A FALSE QUANDO VUOI GIOCARE NORMALMENTE
+	
+	if is_testing:
+		grapple_collected = true
+		dash_collected = true
+		gravity_collected = true
+		check_music_progression()
+		load_level("res://level_16.tscn") 
+		
+	elif SaveManager.has_meta("level_to_load"):
 		var target_level = SaveManager.get_meta("level_to_load")
 		SaveManager.remove_meta("level_to_load")
 		if SaveManager.current_slot_id != -1:
@@ -83,16 +89,15 @@ func _ready():
 		load_level(target_level)
 		
 	else:
-		# Lancement standard (Nouvelle partie)
 		check_music_progression()
 		load_level("res://scenes/levels/level_1.tscn")
+	# ==========================================
 	
 	self.visible = true
 	level_root.visible = true
 	player.visible = true
 
 func _process(delta):
-	# On gère uniquement le Camera Shake ici maintenant
 	if shake_strength > 0:
 		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
@@ -131,11 +136,18 @@ func load_level(path: String):
 		
 		player.velocity = Vector2.ZERO
 		
-		# On rend le contrôle au joueur PAR DÉFAUT (level_1 le bloquera si c'est l'intro)
-		player.can_move = true
-		player.is_dying = false
-		player.collision_layer = 1
-		player.collision_mask = 1
+		# ==========================================
+		# SBLOCCO TELECAMERA
+		camera.set_process(true)
+		camera.set_physics_process(true)
+		camera.is_locked = false
+		camera.end_cinematic()
+		
+		# LA CURA AUTOMATICA CONTRO LE CINEMATICHE
+		Engine.time_scale = 1.0 
+		if player.has_method("reset_from_cinematic"):
+			player.reset_from_cinematic()
+		# ==========================================
 		
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
@@ -146,39 +158,27 @@ func load_level(path: String):
 		if "lerp_speed" in camera: camera.lerp_speed = 5.0
 		if "default_offset" in camera: camera.default_offset = Vector2(0, -20)
 		
-		camera.set_process(true)
-		camera.set_physics_process(true)
-		camera.is_locked = false
-		camera.end_cinematic()
-		
 		if "current_look_ahead_x" in camera: camera.current_look_ahead_x = 0.0
 		if "current_look_ahead_y" in camera: camera.current_look_ahead_y = 0.0
 		
 		camera.offset = Vector2.ZERO
 		camera.make_current()
 		
-
-		# ==========================================
-		# GESTIONE EFFETTI ATMOSFERICI
-		# ==========================================
 		var path_lower = path.to_lower()
 		var is_chase_level = "level16" in path_lower or "level_16" in path_lower
 		
-		# 1. Spegniamo il WindLayer principale
 		if wind_layer:
 			wind_layer.visible = not is_chase_level
 			for child in wind_layer.get_children():
 				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
 					if is_chase_level: child.stop()
 					
-		# 2. Spegniamo anche il WindLayer2 (se esiste)
 		var wind_layer_2 = get_node_or_null("WindLayer2")
 		if wind_layer_2:
 			wind_layer_2.visible = not is_chase_level
 			for child in wind_layer_2.get_children():
 				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
 					if is_chase_level: child.stop()
-		# ==========================================
 		
 		check_music_progression()
 		
@@ -231,7 +231,6 @@ func change_level_with_transition(next_level_path: String):
 func play_death_sequence():
 	player.can_move = false
 	
-	# --- ON S'ASSURE QUE LA TRANSITION EST VISIBLE ---
 	if death_transition:
 		death_transition.visible = true
 	
@@ -265,7 +264,6 @@ func play_death_sequence():
 	t2.tween_property(death_transition, "material:shader_parameter/cutoff", 0.0, 0.4)
 	await t2.finished
 	
-	# --- ON LA CACHE APRÈS L'ANIMATION POUR NE PAS GÊNER ---
 	if death_transition:
 		death_transition.visible = false
 	
@@ -324,10 +322,6 @@ func cleanup_before_exit():
 			if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
 				child.stop()
 
-	self.visible = false
-	if ui_layer: ui_layer.visible = false
-	_set_level_canvas_layers_visible(false)
-
 func play_final_cinematic_music():
 	_stop_exploration_music()
 	if music_boss_intro.playing: music_boss_intro.stop()
@@ -349,12 +343,12 @@ func show_outro_screen():
 	Engine.time_scale = 1.0 
 	
 	if level_root: level_root.visible = false
-	if player: player.visible = false
+	if player: 
+		player.visible = false
+		player.can_move = false
+		player.velocity = Vector2.ZERO
 	if ambiance_player: ambiance_player.stop()
 		
-	if wind_layer: wind_layer.queue_free()
-	if ui_layer: ui_layer.queue_free()
-	
 	var outro_scene = load("res://end_demo_screen.tscn")
 	if outro_scene:
 		var outro_instance = outro_scene.instantiate()
@@ -365,7 +359,3 @@ func show_outro_screen():
 		
 	if music_cinematic_final and music_cinematic_final.playing:
 		await music_cinematic_final.finished
-		
-	cleanup_before_exit()
-	SaveManager.set_meta("skip_main_menu_intro", true)
-	get_tree().change_scene_to_file("res://main_menu.tscn")
