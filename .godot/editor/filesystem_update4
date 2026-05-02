@@ -1,4 +1,4 @@
-res://end_demo_screen.tscn
+res://scenes/levels/level_2.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -9,11 +9,4 @@ res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/levels/level_16.gdshader
 res://scenes/shard.gdshader
-res://end_demo_screen.gd
-res://scrapeyard_cinematic.tscn
-res://scrapeyard_cinematic.gd
-res://level_17.tscn
-res://scenes/main.gd
-res://level_17.gd
-res://scenes/main.tscn
-res://scenes/player.gd
+res://scenes/levels/floatingrock.gd
