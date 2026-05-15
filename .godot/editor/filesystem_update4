@@ -11,3 +11,5 @@ res://glitch_wall.gdshader
 res://scenes/levels/level_16.gdshader
 res://scenes/shard.gdshader
 res://main_menu.gdshader
+res://pause_menu.tscn
+res://pause_menu.gd

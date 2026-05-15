@@ -44,7 +44,8 @@ func _ready():
 	# --- INITIALISATION EFFETS VISUELS ---
 	var main_buttons = [resume_btn, options_btn, menu_btn, options_back_btn]
 	for btn in main_buttons:
-		if btn: _setup_button_effects(btn)
+		# Passiamo 'false' per impedire lo zoom su TUTTI i bottoni del menu di pausa
+		if btn: _setup_button_effects(btn, false)
 		
 	var option_arrows = [master_minus, master_plus, music_minus, music_plus, sfx_minus, sfx_plus, video_minus, video_plus]
 	for arrow in option_arrows:
@@ -176,11 +177,20 @@ func update_video_label():
 	if video_label: video_label.text = "Fullscreen : ON" if is_fullscreen else "Fullscreen : OFF"
 
 # ==========================================
-# EFFETTI VISIVI (BRACKETS & RGB)
+# EFFETTI VISIVI (BRACKETS & RGB & FIX BACKGROUND)
 # ==========================================
-func _setup_button_effects(btn: Button):
+func _setup_button_effects(btn: Button, allow_zoom: bool):
+	btn.flat = true 
+	
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	
 	var clean_text = btn.text.strip_edges()
 	btn.set_meta("orig_text", clean_text)
+	btn.set_meta("allow_zoom", allow_zoom)
 	btn.text = "   " + clean_text + "   "
 	
 	btn.mouse_entered.connect(_on_btn_hovered.bind(btn))
@@ -190,19 +200,37 @@ func _setup_button_effects(btn: Button):
 
 func _on_btn_hovered(btn: Button):
 	hovered_button = btn
-	btn.text = "[  " + btn.get_meta("orig_text") + "  ]"
-	btn.pivot_offset = Vector2(0, btn.size.y / 2.0)
-	create_tween().tween_property(btn, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE)
+	var txt = str(btn.get_meta("orig_text", ""))
+	btn.text = "⩺  " + txt + "  ⩹"
+	if btn.get_meta("allow_zoom", false):
+		btn.pivot_offset = Vector2(0, btn.size.y / 2.0)
+		create_tween().tween_property(btn, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE)
 
 func _on_btn_unhovered(btn: Button):
 	if hovered_button == btn: hovered_button = null
-	btn.text = "   " + btn.get_meta("orig_text") + "   "
+	var txt = str(btn.get_meta("orig_text", ""))
+	btn.text = "   " + txt + "   "
 	btn.modulate = Color.WHITE
-	create_tween().tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE)
+	if btn.get_meta("allow_zoom", false):
+		create_tween().tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE)
 
 func _setup_simple_rgb_effect(btn: Button):
-	btn.mouse_entered.connect(func(): hovered_button = btn)
-	btn.focus_entered.connect(func(): hovered_button = btn)
+	btn.flat = true 
+	
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	
+	
+	btn.mouse_entered.connect(func(): 
+		hovered_button = btn
+	)
+	btn.focus_entered.connect(func(): 
+		hovered_button = btn
+	)
+	
 	btn.mouse_exited.connect(func(): 
 		if hovered_button == btn: hovered_button = null
 		btn.modulate = Color.WHITE
