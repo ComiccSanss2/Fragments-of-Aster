@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://b7vmj7cyeqx71"]
+[gd_scene load_steps=20 format=3 uid="uid://b7vmj7cyeqx71"]
 
-[ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="1_hdmo1"]
 [ext_resource type="Script" uid="uid://7d8s77kg1q85" path="res://pause_menu.gd" id="1_nwcfo"]
 [ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="3_05uyy"]
+[ext_resource type="AudioStream" uid="uid://k5onb7xif4g5" path="res://assets/sfx/clickmain.wav" id="4_2nc7s"]
+[ext_resource type="AudioStream" uid="uid://c3um1y26fqcsa" path="res://assets/sfx/clickoptions.wav" id="5_d3xb4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nwcfo"]
 
@@ -85,7 +86,7 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 30
-theme_override_fonts/font = ExtResource("1_hdmo1")
+theme_override_fonts/font = ExtResource("3_05uyy")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_nwcfo")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_05uyy")
@@ -104,7 +105,7 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 30
-theme_override_fonts/font = ExtResource("1_hdmo1")
+theme_override_fonts/font = ExtResource("3_05uyy")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_p81d2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
@@ -123,7 +124,7 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 30
-theme_override_fonts/font = ExtResource("1_hdmo1")
+theme_override_fonts/font = ExtResource("3_05uyy")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_d3xb4")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_mxa3g")
@@ -304,9 +305,17 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("1_hdmo1")
-theme_override_font_sizes/font_size = 30
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_42xcf")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1meuf")
 text = "BACK"
 flat = true
+
+[node name="ClickMain" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_2nc7s")
+bus = &"SFX"
+
+[node name="ClickOption" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_d3xb4")
+bus = &"SFX"

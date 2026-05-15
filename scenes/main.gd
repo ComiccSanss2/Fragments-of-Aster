@@ -19,7 +19,7 @@ extends Node2D
 @onready var wind_layer := $WindLayer
 @onready var music_boss_intro := $MusicBossIntro
 @onready var music_boss_chase := $MusicBossChase
-@onready var music_cinematic_final := $MusicCinematicFinal # <-- PISTE DE FIN
+@onready var music_cinematic_final := $MusicCinematicFinal
 
 var current_level_path: String = ""
 var intro_played := false
@@ -28,13 +28,16 @@ var dash_collected := false
 var gravity_collected := false 
 var shake_strength: float = 0.0
 
+# --- TIMER DI GIOCO ---
+var total_play_time: float = 0.0
+
 # --- ZOOM PAR DÉFAUT ---
 const DEFAULT_ZOOM = Vector2(2.6, 2.6) 
 
 # --- INPUT DETECTION ---
 var is_using_gamepad: bool = false
 
-# --- NOUVEAU : SYSTÈME DE CHECKPOINT POUR LE CHASE ---
+# --- SYSTÈME DE CHECKPOINT POUR LE CHASE ---
 var has_checkpoint := false
 var checkpoint_level_path := ""
 var checkpoint_player_pos := Vector2.ZERO
@@ -65,7 +68,7 @@ func _ready():
 
 	# ==========================================
 	# --- CHARGEMENT DU NIVEAU ---
-	var is_testing = false # <--- METTI A FALSE QUANDO VUOI GIOCARE NORMALMENTE
+	var is_testing = false 
 	
 	if is_testing:
 		grapple_collected = true
@@ -84,6 +87,8 @@ func _ready():
 				dash_collected = data.get("dash_unlocked", false)
 				gravity_collected = data.get("gravity_unlocked", false)
 				intro_played = data.get("intro_played", false)
+				# CARICA IL TEMPO SALVATO
+				total_play_time = float(data.get("play_time", 0.0))
 		
 		check_music_progression()
 		load_level(target_level)
@@ -98,6 +103,10 @@ func _ready():
 	player.visible = true
 
 func _process(delta):
+	# Incrementa il timer ad ogni frame usando il delta (frazione di secondo)
+	# Non conta quando il gioco è in pausa grazie al comportamento di default di _process
+	total_play_time += delta
+	
 	if shake_strength > 0:
 		shake_strength = lerp(shake_strength, 0.0, 10.0 * delta)
 		camera.offset = Vector2(randf_range(-shake_strength, shake_strength), randf_range(-shake_strength, shake_strength))
@@ -136,18 +145,14 @@ func load_level(path: String):
 		
 		player.velocity = Vector2.ZERO
 		
-		# ==========================================
-		# SBLOCCO TELECAMERA
 		camera.set_process(true)
 		camera.set_physics_process(true)
 		camera.is_locked = false
 		camera.end_cinematic()
 		
-		# LA CURA AUTOMATICA CONTRO LE CINEMATICHE
 		Engine.time_scale = 1.0 
 		if player.has_method("reset_from_cinematic"):
 			player.reset_from_cinematic()
-		# ==========================================
 		
 		player.grapple_unlocked = grapple_collected
 		player.dash_unlocked = dash_collected
@@ -192,7 +197,8 @@ func load_level(path: String):
 			"grapple_unlocked": grapple_collected,
 			"dash_unlocked": dash_collected,
 			"gravity_unlocked": gravity_collected,
-			"intro_played": intro_played
+			"intro_played": intro_played,
+			"play_time": total_play_time # SALVATAGGIO DEL TIMER
 		}
 		SaveManager.save_game(SaveManager.current_slot_id, data_to_save)
 

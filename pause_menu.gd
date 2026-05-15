@@ -28,6 +28,10 @@ extends Control
 
 @onready var options_back_btn = $OptionsContainer/OptionsBackButton
 
+# --- AUDIO NODES ---
+@onready var click_main = $ClickMain
+@onready var click_option = $ClickOption
+
 # --- VARIABLES D'ÉTAT ---
 var hovered_button: Button = null
 
@@ -41,15 +45,29 @@ func _ready():
 	options_container.visible = false
 	main_container.visible = true
 	
-	# --- INITIALISATION EFFETS VISUELS ---
-	var main_buttons = [resume_btn, options_btn, menu_btn, options_back_btn]
-	for btn in main_buttons:
-		# Passiamo 'false' per impedire lo zoom su TUTTI i bottoni del menu di pausa
-		if btn: _setup_button_effects(btn, false)
+	# --- INITIALISATION EFFETS VISUELS ET SUONI ---
+	
+	if resume_btn: 
+		_setup_button_effects(resume_btn, false)
+		resume_btn.pressed.connect(_play_main_click.bind(1.0)) # Pitch alto per il Resume
+		
+	if options_btn: 
+		_setup_button_effects(options_btn, false)
+		options_btn.pressed.connect(_play_main_click.bind(0.85)) # Pitch basso
+		
+	if menu_btn: 
+		_setup_button_effects(menu_btn, false)
+		menu_btn.pressed.connect(_play_main_click.bind(0.85)) # Pitch basso
+		
+	if options_back_btn: 
+		_setup_button_effects(options_back_btn, false)
+		options_back_btn.pressed.connect(_play_main_click.bind(0.85)) # Pitch basso
 		
 	var option_arrows = [master_minus, master_plus, music_minus, music_plus, sfx_minus, sfx_plus, video_minus, video_plus]
 	for arrow in option_arrows:
-		if arrow: _setup_simple_rgb_effect(arrow)
+		if arrow: 
+			_setup_simple_rgb_effect(arrow)
+			arrow.pressed.connect(_play_option_click) # Suono per i settaggi
 	
 	# --- CONNEXIONS ---
 	if resume_btn: resume_btn.pressed.connect(toggle_pause)
@@ -65,6 +83,18 @@ func _process(_delta):
 	if hovered_button and is_instance_valid(hovered_button):
 		var time = Time.get_ticks_msec() / 1000.0
 		hovered_button.modulate = Color.from_hsv(fmod(time * 0.5, 1.0), 1.0, 1.0)
+
+# ==========================================
+# AUDIO HELPERS
+# ==========================================
+func _play_main_click(pitch_val: float = 1.0):
+	if click_main:
+		click_main.pitch_scale = pitch_val
+		click_main.play()
+
+func _play_option_click():
+	if click_option:
+		click_option.play()
 
 # ==========================================
 # LOGIQUE DE PAUSE ET NAVIGATION
@@ -223,6 +253,7 @@ func _setup_simple_rgb_effect(btn: Button):
 	btn.add_theme_stylebox_override("pressed", empty_style)
 	btn.add_theme_stylebox_override("focus", empty_style)
 	
+	# DA QUI IN POI IL TESTO DEL BOTTONE NON VIENE MAI TOCCATO! NESSUNO SPOSTAMENTO!
 	
 	btn.mouse_entered.connect(func(): 
 		hovered_button = btn
@@ -230,7 +261,6 @@ func _setup_simple_rgb_effect(btn: Button):
 	btn.focus_entered.connect(func(): 
 		hovered_button = btn
 	)
-	
 	btn.mouse_exited.connect(func(): 
 		if hovered_button == btn: hovered_button = null
 		btn.modulate = Color.WHITE

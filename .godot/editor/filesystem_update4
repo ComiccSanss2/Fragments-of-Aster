@@ -1,5 +1,5 @@
 res://default_bus_layout.tres
-res://main_menu.tscn
+res://pause_menu.tscn
 res://scenes/gravitydistortion.gdshader
 res://scenes/deathtransition.gdshader
 res://scenes/transition.gdshader
@@ -7,9 +7,12 @@ res://scenes/wind.gdshader
 res://scenes/wind2.gdshader
 res://background.gdshader
 res://scenes/levels/matrix.gdshader
+res://main_menu.gdshader
 res://glitch_wall.gdshader
 res://scenes/levels/level_16.gdshader
 res://scenes/shard.gdshader
-res://main_menu.gdshader
-res://pause_menu.tscn
+res://main_menu.gd
+res://main_menu.tscn
 res://pause_menu.gd
+res://save_manager.gd
+res://scenes/main.gd

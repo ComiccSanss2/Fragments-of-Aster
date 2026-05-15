@@ -43,6 +43,10 @@ extends Control
 @onready var confirm_btn = $DeletePopup/VBoxContainer/HBoxContainer/ConfirmButton
 @onready var cancel_btn = $DeletePopup/VBoxContainer/HBoxContainer/CancelButton
 
+# --- AUDIO NODES ---
+@onready var click_main = $ClickMain
+@onready var click_option = $ClickOption
+
 # --- ÉTATS DU MENU ---
 enum State { TITLE, MENU, SLOTS, OPTIONS, POPUP }
 var current_state = State.TITLE
@@ -56,6 +60,18 @@ var vol_master: int = 10
 var vol_music: int = 10
 var vol_sfx: int = 10
 var is_fullscreen: bool = false
+
+# ==========================================
+# FUNZIONE MAGICA "CATTURA BOTTONI"
+# ==========================================
+func _get_all_buttons(node: Node) -> Array:
+	var arr = []
+	for c in node.get_children():
+		if c is Button:
+			arr.append(c)
+		if c.get_child_count() > 0:
+			arr.append_array(_get_all_buttons(c))
+	return arr
 
 func _ready():
 	button_container_target_x = button_container.position.x
@@ -83,46 +99,85 @@ func _ready():
 			t.tween_property(title_container, "modulate:a", 1.0, 2.0)
 			t.tween_callback(loop_press_key_anim)
 	
-	# --- INIZIALIZZAZIONE EFFETTI BOTTONI PRINCIPALI ---
-	var main_buttons = [btn_play, btn_options, btn_exit]
-	for btn in main_buttons:
-		if btn: _setup_button_effects(btn, true)
+	# --- INIZIALIZZAZIONE EFFETTI E SUONI ---
+	if btn_play: 
+		_setup_button_effects(btn_play, true)
+		btn_play.pressed.connect(_play_main_click.bind(1.2))
+		
+	if btn_options: 
+		_setup_button_effects(btn_options, true)
+		btn_options.pressed.connect(_play_main_click.bind(0.85))
+		
+	if btn_exit: 
+		_setup_button_effects(btn_exit, true)
+		btn_exit.pressed.connect(_play_main_click.bind(0.85))
 		
 	var back_buttons = [options_back_btn, slot_back_btn]
 	for btn in back_buttons:
-		if btn: _setup_button_effects(btn, false)
+		if btn: 
+			_setup_button_effects(btn, false)
+			btn.pressed.connect(_play_main_click.bind(0.85))
 	
-	# --- INIZIALIZZAZIONE EFFETTI FRECCETTE OPZIONI (Solo RGB) ---
 	var option_arrows = [master_minus, master_plus, music_minus, music_plus, sfx_minus, sfx_plus, video_minus, video_plus]
 	for arrow in option_arrows:
-		if arrow: _setup_simple_rgb_effect(arrow)
+		if arrow: 
+			_setup_simple_rgb_effect(arrow)
+			arrow.pressed.connect(_play_option_click)
 	
-	# --- Connexions ---
+	# --- Connexions Logica ---
 	if btn_play: btn_play.pressed.connect(_on_play_pressed)
 	if btn_options: btn_options.pressed.connect(_on_options_pressed)
 	if btn_exit: btn_exit.pressed.connect(_on_exit_pressed)
 	
+	# --- INIZIALIZZAZIONE SLOTS ---
 	if slot_container:
 		for i in range(1, 4):
 			if slot_container.get_child_count() >= i:
-				var hbox = slot_container.get_child(i-1)
-				var slot_btn = hbox.get_node_or_null("SlotButton")
-				var del_btn = hbox.get_node_or_null("DeleteButton")
-				if slot_btn and del_btn:
+				var slot_node = slot_container.get_child(i-1)
+				var btns = _get_all_buttons(slot_node)
+				
+				if btns.size() >= 2:
+					var slot_btn = btns[0]
+					var del_btn = btns[1]
+					
+					# Applichiamo SOLO l'effetto RGB ai bottoni dei salvataggi (niente più simboli = niente più spostamenti)
+					_setup_simple_rgb_effect(slot_btn)
+					_setup_simple_rgb_effect(del_btn)
+					
 					slot_btn.pressed.connect(_on_slot_pressed.bind(i))
+					slot_btn.pressed.connect(_play_main_click.bind(1.0))
+					
 					del_btn.pressed.connect(_on_delete_request.bind(i))
-					update_slot_display(i)
+					del_btn.pressed.connect(_play_main_click.bind(0.85))
+					
+				update_slot_display(i)
 
 	if slot_back_btn: slot_back_btn.pressed.connect(_on_back_to_menu)
 	if options_back_btn: options_back_btn.pressed.connect(_on_back_to_menu)
 	
+	if confirm_btn: 
+		confirm_btn.pressed.connect(_on_confirm_delete)
+		confirm_btn.pressed.connect(_play_main_click.bind(0.7))
+	if cancel_btn: 
+		cancel_btn.pressed.connect(_on_cancel_delete)
+		cancel_btn.pressed.connect(_play_main_click.bind(0.85))
+		
 	_setup_options_ui()
 
-	if confirm_btn: confirm_btn.pressed.connect(_on_confirm_delete)
-	if cancel_btn: cancel_btn.pressed.connect(_on_cancel_delete)
+# ==========================================
+# AUDIO HELPERS (GESTIONE PITCH)
+# ==========================================
+func _play_main_click(pitch_val: float = 1.0):
+	if click_main:
+		click_main.pitch_scale = pitch_val
+		click_main.play()
+
+func _play_option_click():
+	if click_option:
+		click_option.play()
 
 # ==========================================
-# ANIMAZIONE ENTRATA (SLIDE-IN)
+# ANIMAZIONE ENTRATA (SLIDE-IN PRINCIPALE)
 # ==========================================
 func _animate_buttons_entry():
 	button_container.visible = true
@@ -151,19 +206,35 @@ func show_main_menu():
 		t.tween_property(title_label, "modulate:a", 1.0, 0.5)
 
 # ==========================================
-# EFFETTI RGB E BRACKET DI SISTEMA (LORE ASTER)
+# EFFETTI RGB E BRACKET DI SISTEMA
 # ==========================================
 func _process(_delta):
 	if hovered_button and is_instance_valid(hovered_button):
 		var time = Time.get_ticks_msec() / 1000.0
 		hovered_button.modulate = Color.from_hsv(fmod(time * 0.5, 1.0), 1.0, 1.0)
 
+# Questa funzione aggiunge i bracket (usata SOLO per i bottoni Play/Options/Exit)
 func _setup_button_effects(btn: Button, allow_zoom: bool):
+	btn.flat = true 
+	
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	
 	var clean_text = btn.text.strip_edges()
 	btn.set_meta("orig_text", clean_text)
 	btn.set_meta("allow_zoom", allow_zoom)
 	btn.text = "   " + clean_text + "   "
 	
+	# Disconnettiamo per evitare bug se la funzione viene richiamata
+	if btn.mouse_entered.is_connected(_on_btn_hovered):
+		btn.mouse_entered.disconnect(_on_btn_hovered)
+		btn.focus_entered.disconnect(_on_btn_hovered)
+		btn.mouse_exited.disconnect(_on_btn_unhovered)
+		btn.focus_exited.disconnect(_on_btn_unhovered)
+		
 	btn.mouse_entered.connect(_on_btn_hovered.bind(btn))
 	btn.focus_entered.connect(_on_btn_hovered.bind(btn))
 	btn.mouse_exited.connect(_on_btn_unhovered.bind(btn))
@@ -171,21 +242,30 @@ func _setup_button_effects(btn: Button, allow_zoom: bool):
 
 func _on_btn_hovered(btn: Button):
 	hovered_button = btn
-	# Stile Terminale per coerenza con la simulazione di Aster
-	btn.text = "⩺  " + btn.get_meta("orig_text") + "  ⩹"
-	if btn.get_meta("allow_zoom"):
+	var txt = str(btn.get_meta("orig_text", ""))
+	btn.text = "⩺  " + txt + "  ⩹"
+	if btn.get_meta("allow_zoom", false):
 		btn.pivot_offset = Vector2(0, btn.size.y / 2.0)
 		create_tween().tween_property(btn, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE)
 
 func _on_btn_unhovered(btn: Button):
 	if hovered_button == btn: hovered_button = null
-	btn.text = "   " + btn.get_meta("orig_text") + "   "
+	var txt = str(btn.get_meta("orig_text", ""))
+	btn.text = "   " + txt + "   "
 	btn.modulate = Color.WHITE
-	if btn.get_meta("allow_zoom"):
+	if btn.get_meta("allow_zoom", false):
 		create_tween().tween_property(btn, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE)
 
+# Questa funzione accende solo l'RGB e NON tocca mai i testi (usata per Slots, Purge e frecce Opzioni)
 func _setup_simple_rgb_effect(btn: Button):
-	# Solo RGB per le freccette delle opzioni (< >)
+	btn.flat = true 
+	
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	
 	btn.mouse_entered.connect(func(): hovered_button = btn)
 	btn.focus_entered.connect(func(): hovered_button = btn)
 	btn.mouse_exited.connect(func(): 
@@ -201,7 +281,6 @@ func _setup_simple_rgb_effect(btn: Button):
 # LOGICA OPZIONI (AUDIO E VIDEO)
 # ==========================================
 func _setup_options_ui():
-	# Inizializza i valori leggendo dal sistema di Godot
 	vol_master = _get_bus_vol_int("Master")
 	vol_music = _get_bus_vol_int("Music")
 	vol_sfx = _get_bus_vol_int("SFX")
@@ -266,17 +345,57 @@ func toggle_fullscreen():
 func update_video_label():
 	if video_label: video_label.text = "Fullscreen : ON" if is_fullscreen else "Fullscreen : OFF"
 
+# ==========================================
+# LOGICA DI NAVIGAZIONE E SLOTS (SISTEMA ASTER)
+# ==========================================
 
-# ==========================================
-# LOGICA DI NAVIGAZIONE E SLOTS
-# ==========================================
+func format_time(seconds: int) -> String:
+	var h = seconds / 3600
+	var m = (seconds % 3600) / 60
+	var s = seconds % 60
+	return "%02d:%02d:%02d" % [h, m, s]
+
+func update_slot_display(slot_id: int):
+	var slot_node = slot_container.get_child(slot_id-1)
+	
+	var btns = _get_all_buttons(slot_node)
+	if btns.size() < 2:
+		return 
+		
+	var slot_btn = btns[0]
+	var del_btn = btns[1]
+	
+	slot_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# CENTRIAMO IL TESTO
+	slot_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	del_btn.flat = true
+	del_btn.modulate = Color(1.0, 0.2, 0.2) # Rosso errore
+	del_btn.text = "[ PURGE ]"
+	
+	if SaveManager.save_exists(slot_id):
+		var data = SaveManager.load_data(slot_id)
+		var lvl_name = data["current_level"].get_file().get_basename().to_upper()
+		
+		var play_time_seconds = data.get("play_time", 0) 
+		var time_str = format_time(play_time_seconds)
+		
+		var new_text = "SECTOR_0%d : STABLE // %s [%s]" % [slot_id, lvl_name, time_str]
+		
+		# Solo testo puro, nessun bracket nascosto
+		slot_btn.text = new_text
+		del_btn.visible = true 
+	else:
+		var new_text = "SECTOR_0%d : UNALLOCATED // NULL" % slot_id
+		slot_btn.text = new_text
+		del_btn.visible = false 
 
 func _on_play_pressed():
-	var first_slot = slot_container.get_child(0).get_node_or_null("SlotButton")
+	var btns = _get_all_buttons(slot_container.get_child(0))
+	var first_slot = btns[0] if btns.size() > 0 else null
 	_switch_view(button_container, slot_container, State.SLOTS, first_slot)
 
 func _on_options_pressed():
-	# Diamo il focus al primo bottone delle opzioni
 	_switch_view(button_container, options_container, State.OPTIONS, master_plus)
 
 func _on_back_to_menu():
@@ -288,34 +407,61 @@ func _on_back_to_menu():
 func _switch_view(from_node: Control, to_node: Control, new_state: State, focus_node: Control = null):
 	current_state = new_state
 	var t = create_tween()
+	
+	# FADE OUT del menu attuale
 	t.tween_property(from_node, "modulate:a", 0.0, 0.2)
 	if from_node == button_container and title_label:
 		t.parallel().tween_property(title_label, "modulate:a", 0.0, 0.2)
+		
 	t.tween_callback(func(): 
 		from_node.visible = false
 		if title_label: title_label.visible = (to_node == button_container)
 		to_node.visible = true
-		to_node.modulate.a = 0.0
+		to_node.modulate.a = 1.0
+		
+		# ANIMAZIONE A CASCATA 
+		# (1s primo slot -> 1s pausa -> 1s secondo slot -> 1s pausa -> 1s terzo slot)
+		if to_node == slot_container:
+			for i in range(3):
+				var slot_node = slot_container.get_child(i)
+				slot_node.modulate.a = 0.0
+				
+				# Logica: 0 (Sinistra), 1 (Destra), 2 (Sinistra)
+				var start_x = -300.0 if i % 2 == 0 else 300.0
+				slot_node.position.x = start_x
+				
+				var cascade = create_tween()
+				
+				# i * 2.0 calcola la pausa perfetta:
+				# i = 0 -> 0 secondi di ritardo
+				# i = 1 -> 2 secondi di ritardo (cioè 1s di slot precedente + 1s di pausa)
+				# i = 2 -> 4 secondi di ritardo (cioè 2s di slot precedenti + 2s di pause totali)
+				var start_delay = i * 2.0 
+				if start_delay > 0:
+					cascade.tween_interval(start_delay)
+					
+				# Movimento e comparsa (durano esattamente 1.0 secondo)
+				cascade.parallel().tween_property(slot_node, "modulate:a", 1.0, 1.0).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+				cascade.parallel().tween_property(slot_node, "position:x", 0.0, 1.0).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+			
+			# Il bottone back entra in ritardo quando la cascata è finita
+			slot_back_btn.modulate.a = 0.0
+			var b_t = create_tween()
+			b_t.tween_interval(5.0)
+			b_t.tween_property(slot_back_btn, "modulate:a", 1.0, 0.5)
+		else:
+			to_node.modulate.a = 0.0
+			var t2 = create_tween()
+			t2.tween_property(to_node, "modulate:a", 1.0, 0.2)
+			
 		if focus_node: focus_node.grab_focus()
 	)
-	t.tween_property(to_node, "modulate:a", 1.0, 0.2)
+	
 	if to_node == button_container and title_label:
 		t.parallel().tween_property(title_label, "modulate:a", 1.0, 0.2)
 
 func _on_exit_pressed():
 	get_tree().quit()
-
-func update_slot_display(slot_id: int):
-	var hbox = slot_container.get_child(slot_id-1)
-	var slot_btn = hbox.get_node("SlotButton")
-	var del_btn = hbox.get_node("DeleteButton")
-	if SaveManager.save_exists(slot_id):
-		var data = SaveManager.load_data(slot_id)
-		slot_btn.text = "Slot %d - %s" % [slot_id, data["current_level"].get_file().get_basename().capitalize()]
-		del_btn.visible = true 
-	else:
-		slot_btn.text = "Slot %d - Empty" % slot_id
-		del_btn.visible = false 
 
 func _on_slot_pressed(slot_id: int):
 	SaveManager.current_slot_id = slot_id

@@ -1,9 +1,8 @@
-[gd_scene load_steps=32 format=3 uid="uid://bxtyfo1fbee7j"]
+[gd_scene load_steps=37 format=3 uid="uid://bxtyfo1fbee7j"]
 
 [ext_resource type="Script" uid="uid://44ktlxkrq8la" path="res://main_menu.gd" id="1_jix8l"]
 [ext_resource type="Texture2D" uid="uid://d0opw5p13hoqj" path="res://assets/Parallax/1.png" id="2_glbon"]
 [ext_resource type="Texture2D" uid="uid://dgdfs07xtnowr" path="res://assets/Parallax/2.png" id="3_8qtwp"]
-[ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="3_nlkkf"]
 [ext_resource type="Texture2D" uid="uid://cb356o7yedki8" path="res://assets/Parallax/3.png" id="4_dy7ct"]
 [ext_resource type="Texture2D" uid="uid://dv1t2nvyryp4t" path="res://assets/Parallax/4.png" id="5_0o4t1"]
 [ext_resource type="Shader" uid="uid://bgjsox6ujjsem" path="res://scenes/wind.gdshader" id="5_glbon"]
@@ -11,6 +10,9 @@
 [ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="7_0o4t1"]
 [ext_resource type="AudioStream" uid="uid://ceaiulggpmof1" path="res://assets/sfx/aster's dormancy.wav" id="9_dy7ct"]
 [ext_resource type="Shader" uid="uid://b1nk1webgxa57" path="res://main_menu.gdshader" id="11_0k4wn"]
+[ext_resource type="Texture2D" uid="uid://bbso0kiwum8v1" path="res://fragmentsofasterlogo.png" id="11_w44g7"]
+[ext_resource type="AudioStream" uid="uid://k5onb7xif4g5" path="res://assets/sfx/clickmain.wav" id="12_iotk1"]
+[ext_resource type="AudioStream" uid="uid://c3um1y26fqcsa" path="res://assets/sfx/clickoptions.wav" id="13_w44g7"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_nlkkf"]
 frequency = 0.0139
@@ -36,23 +38,28 @@ shader_parameter/chromatic_aberration = 1.5
 shader_parameter/glitch_intensity = 0.002000000095
 shader_parameter/time_speed = 0.400000019
 
-[sub_resource type="LabelSettings" id="LabelSettings_8qtwp"]
-font = ExtResource("3_nlkkf")
-font_size = 100
-font_color = Color(1, 0.62352943, 0.8509804, 1)
-outline_size = 11
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 25
-shadow_color = Color(0.16917068, 0.1676555, 0.77984864, 0.5568628)
-
 [sub_resource type="LabelSettings" id="LabelSettings_dy7ct"]
 font = ExtResource("7_0o4t1")
-font_size = 70
+font_size = 60
 font_color = Color(0.33333334, 1, 0.8901961, 0.8784314)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_glbon"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nlkkf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iotk1"]
+content_margin_left = 15.0
+content_margin_top = 15.0
+content_margin_right = 15.0
+content_margin_bottom = 15.0
+bg_color = Color(0, 0, 0, 0.6784314)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1760802, 0.6349964, 0.72747225, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mg3m2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qe12f"]
 
@@ -91,6 +98,10 @@ font = ExtResource("7_0o4t1")
 font_size = 80
 shadow_size = 25
 shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cm266"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g8g3n"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -203,23 +214,18 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -911.0
-offset_top = -416.0
+offset_top = -251.0
 offset_right = 911.0
-offset_bottom = 416.0
+offset_bottom = 581.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 150
 
-[node name="Label" type="Label" parent="TitleContainer"]
+[node name="Label" type="TextureRect" parent="TitleContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "FRAGMENTS
-OF
-ASTER"
-label_settings = SubResource("LabelSettings_8qtwp")
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("11_w44g7")
+stretch_mode = 3
 
 [node name="Label2" type="Label" parent="TitleContainer"]
 layout_mode = 2
@@ -233,26 +239,19 @@ stream = ExtResource("6_nlkkf")
 volume_db = -0.445
 autoplay = true
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="TextureRect" parent="."]
 visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -829.9999
-offset_top = 107.0
-offset_right = 173.0
-offset_bottom = 602.0
+offset_left = -945.0
+offset_top = 63.0
+offset_right = 57.999878
+offset_bottom = 558.0
 grow_horizontal = 0
-scale = Vector2(0.7, 0.7)
-size_flags_vertical = 1
-theme_override_font_sizes/font_size = 14
-text = "FRAGMENTS
-OF
-ASTER"
-label_settings = SubResource("LabelSettings_8qtwp")
-horizontal_alignment = 1
-vertical_alignment = 1
+pivot_offset = Vector2(-60, 0)
+texture = ExtResource("11_w44g7")
 
 [node name="ButtonContainer" type="VBoxContainer" parent="."]
 visible = false
@@ -326,10 +325,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 50
 
-[node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer"]
+[node name="SlotPanel1" type="PanelContainer" parent="SlotContainer"]
+custom_minimum_size = Vector2(1300, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_iotk1")
 
-[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer/SlotPanel1"]
+layout_mode = 2
+alignment = 1
+
+[node name="SlotButton" type="Button" parent="SlotContainer/SlotPanel1/HBoxContainer"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
@@ -337,18 +343,27 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
-[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer"]
+[node name="DeleteButton" type="Button" parent="SlotContainer/SlotPanel1/HBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9607843, 0, 0.5372549, 1)
-theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
+theme_override_colors/font_color = Color(0.6244871, 0.025733503, 2.8878452e-07, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 0)
+theme_override_colors/font_hover_color = Color(1.6568738, 0, 0, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mg3m2")
 text = "X"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="SlotContainer"]
+[node name="SlotPanel2" type="PanelContainer" parent="SlotContainer"]
+custom_minimum_size = Vector2(1300, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_iotk1")
 
-[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer/SlotPanel2"]
+layout_mode = 2
+alignment = 1
+
+[node name="SlotButton" type="Button" parent="SlotContainer/SlotPanel2/HBoxContainer"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
@@ -356,18 +371,27 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
-[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer2"]
+[node name="DeleteButton" type="Button" parent="SlotContainer/SlotPanel2/HBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
-theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
+theme_override_colors/font_color = Color(0.6244871, 0.025733503, 2.8878452e-07, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 0)
+theme_override_colors/font_hover_color = Color(1.6568738, 0, 0, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mg3m2")
 text = "X"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="SlotContainer"]
+[node name="SlotPanel3" type="PanelContainer" parent="SlotContainer"]
+custom_minimum_size = Vector2(1300, 0)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_iotk1")
 
-[node name="SlotButton" type="Button" parent="SlotContainer/HBoxContainer3"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SlotContainer/SlotPanel3"]
+layout_mode = 2
+alignment = 1
+
+[node name="SlotButton" type="Button" parent="SlotContainer/SlotPanel3/HBoxContainer"]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.6426303, 0.9558731, 1)
@@ -375,12 +399,14 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
 
-[node name="DeleteButton" type="Button" parent="SlotContainer/HBoxContainer3"]
+[node name="DeleteButton" type="Button" parent="SlotContainer/SlotPanel3/HBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9597481, 9.62615e-07, 0.5355809, 1)
-theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 1)
+theme_override_colors/font_color = Color(0.6244871, 0.025733503, 2.8878452e-07, 1)
+theme_override_colors/font_focus_color = Color(0.9607843, 0, 0.5372549, 0)
+theme_override_colors/font_hover_color = Color(1.6568738, 0, 0, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 40
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mg3m2")
 text = "X"
 
 [node name="SlotBackButton" type="Button" parent="SlotContainer"]
@@ -569,8 +595,8 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-theme_override_fonts/font = ExtResource("3_nlkkf")
-theme_override_font_sizes/font_size = 30
+theme_override_fonts/font = ExtResource("7_0o4t1")
+theme_override_font_sizes/font_size = 40
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_8u0te")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_oiatc")
 text = "BACK"
@@ -620,6 +646,7 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cm266")
 text = "YES"
 flat = true
 
@@ -629,6 +656,7 @@ theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726,
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("7_0o4t1")
 theme_override_font_sizes/font_size = 65
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g8g3n")
 text = "NO"
 flat = true
 
@@ -636,3 +664,11 @@ flat = true
 stream = ExtResource("9_dy7ct")
 autoplay = true
 bus = &"Music"
+
+[node name="ClickMain" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_iotk1")
+bus = &"SFX"
+
+[node name="ClickOption" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_w44g7")
+bus = &"SFX"

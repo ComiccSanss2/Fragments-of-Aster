@@ -12,7 +12,9 @@ func get_default_data():
 		"current_level": "res://scenes/levels/level_1.tscn",
 		"grapple_unlocked": false,
 		"dash_unlocked": false,
-		"intro_played": false
+		"gravity_unlocked": false,
+		"intro_played": false,
+		"play_time": 0.0 
 	}
 
 # Vérifie si un slot existe
@@ -34,7 +36,6 @@ func save_game(slot_id: int, data: Dictionary):
 	var file = FileAccess.open(SAVE_PATH_TEMPLATE % slot_id, FileAccess.WRITE)
 	var json_string = JSON.stringify(data)
 	file.store_string(json_string)
-
 
 func delete_save(slot_id: int):
 	var path = SAVE_PATH_TEMPLATE % slot_id
