@@ -196,30 +196,36 @@ color = Color(2.1658838e-07, 0, 0.22171634, 1)
 stream = ExtResource("5_tbgi4")
 volume_db = -4.208
 autoplay = true
+bus = &"SFX"
 
 [node name="FragmentsOfRoots" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_trceg")
 volume_db = -13.0
 autoplay = true
+bus = &"Music"
 
 [node name="FragmentsOfPulse" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_85g3d")
 volume_db = -13.0
 autoplay = true
+bus = &"Music"
 
 [node name="FragmentsOfEchoes" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_trceg")
 volume_db = -13.0
+bus = &"Music"
 
 [node name="MusicBossIntro" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_ya4ey")
 volume_db = -8.0
+bus = &"Music"
 
 [node name="MusicBossChase" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_eb6dy")
 volume_db = -6.0
-bus = &"GlitchEffect"
+bus = &"Music"
 
 [node name="MusicCinematicFinal" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_a8y0u")
 volume_db = -6.0
+bus = &"Music"

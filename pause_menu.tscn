@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7vmj7cyeqx71"]
+[gd_scene load_steps=19 format=3 uid="uid://b7vmj7cyeqx71"]
 
 [ext_resource type="FontFile" uid="uid://qtdo6q3u2vck" path="res://assets/fonts/Daydream DEMO.otf" id="1_hdmo1"]
 [ext_resource type="Script" uid="uid://7d8s77kg1q85" path="res://pause_menu.gd" id="1_nwcfo"]
+[ext_resource type="FontFile" uid="uid://bmhml35hqa1wf" path="res://assets/fonts/Evil Empire.otf" id="3_05uyy"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nwcfo"]
 
@@ -15,17 +16,33 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mxa3g"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_05uyy"]
-bg_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
-border_width_top = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-expand_margin_top = 10.0
-expand_margin_bottom = 10.0
+[sub_resource type="LabelSettings" id="LabelSettings_05uyy"]
+font = ExtResource("3_05uyy")
+font_size = 40
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e8sti"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q2yj1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a32ks"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g7dbl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_lv42l"]
+font = ExtResource("3_05uyy")
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_ub45p"]
+font = ExtResource("3_05uyy")
+font_size = 40
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_42xcf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1meuf"]
 
 [node name="PauseMenu" type="Control"]
 process_mode = 3
@@ -45,7 +62,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.43137255)
+color = Color(0, 0, 0, 0.30588236)
 
 [node name="MenuContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -72,8 +89,7 @@ theme_override_fonts/font = ExtResource("1_hdmo1")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_nwcfo")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_05uyy")
-text = "Resume
-"
+text = "RESUME"
 flat = true
 
 [node name="Control" type="Control" parent="MenuContainer"]
@@ -92,7 +108,7 @@ theme_override_fonts/font = ExtResource("1_hdmo1")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_p81d2")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2nc7s")
-text = "OPTIONS"
+text = "SETTINGS"
 flat = true
 
 [node name="Control2" type="Control" parent="MenuContainer"]
@@ -111,7 +127,7 @@ theme_override_fonts/font = ExtResource("1_hdmo1")
 theme_override_font_sizes/font_size = 60
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_d3xb4")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_mxa3g")
-text = "back to menu"
+text = "MAIN MENU"
 flat = true
 
 [node name="OptionsContainer" type="VBoxContainer" parent="."]
@@ -134,49 +150,163 @@ theme_override_constants/separation = 50
 [node name="LabelAudio" type="Label" parent="OptionsContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "----- AUDIO -----"
+text = "⬩ AUDIO ⬩"
+label_settings = SubResource("LabelSettings_05uyy")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MasterVolumeSlider" type="HSlider" parent="OptionsContainer"]
+[node name="MasterBox" type="HBoxContainer" parent="OptionsContainer"]
 layout_mode = 2
-theme_override_styles/slider = SubResource("StyleBoxFlat_05uyy")
-max_value = 1.0
-step = 0.05
-value = 0.5
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="MasterMinus" type="Button" parent="OptionsContainer/MasterBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩹"
+flat = true
+
+[node name="MasterLabel" type="Label" parent="OptionsContainer/MasterBox"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Master : 50%"
+label_settings = SubResource("LabelSettings_lv42l")
+horizontal_alignment = 1
+
+[node name="MasterPlus" type="Button" parent="OptionsContainer/MasterBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩺"
+flat = true
+
+[node name="MusicBox" type="HBoxContainer" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="MusicMinus" type="Button" parent="OptionsContainer/MusicBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩹"
+flat = true
+
+[node name="MusicLabel" type="Label" parent="OptionsContainer/MusicBox"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "Music : 50%"
+label_settings = SubResource("LabelSettings_lv42l")
+horizontal_alignment = 1
+
+[node name="MusicPlus" type="Button" parent="OptionsContainer/MusicBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩺"
+flat = true
+
+[node name="SFXBox" type="HBoxContainer" parent="OptionsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="SFXMinus" type="Button" parent="OptionsContainer/SFXBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩹"
+flat = true
+
+[node name="SFXLabel" type="Label" parent="OptionsContainer/SFXBox"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "SFX : 50%"
+label_settings = SubResource("LabelSettings_lv42l")
+horizontal_alignment = 1
+
+[node name="SFXPlus" type="Button" parent="OptionsContainer/SFXBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩺"
+flat = true
 
 [node name="LabelVideo" type="Label" parent="OptionsContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
-text = "----- VIDEO -----"
+text = "⬩ VIDEO ⬩"
+label_settings = SubResource("LabelSettings_ub45p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FullscreenCheck" type="CheckBox" parent="OptionsContainer"]
-custom_minimum_size = Vector2(30, 30)
+[node name="VideoBox" type="HBoxContainer" parent="OptionsContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 30
-text = "Fullscreen"
-alignment = 2
-icon_alignment = 1
+theme_override_constants/separation = 12
+alignment = 1
 
-[node name="VSyncCheck" type="CheckBox" parent="OptionsContainer"]
-custom_minimum_size = Vector2(30, 30)
+[node name="VideoMinus" type="Button" parent="OptionsContainer/VideoBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 30
-text = "VSync"
-alignment = 2
-icon_alignment = 1
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩹"
+flat = true
+
+[node name="VideoLabel" type="Label" parent="OptionsContainer/VideoBox"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+text = "FULLSCREEN : ON"
+label_settings = SubResource("LabelSettings_lv42l")
+horizontal_alignment = 1
+
+[node name="VideoPlus" type="Button" parent="OptionsContainer/VideoBox"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_05uyy")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxEmpty_e8sti")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_a32ks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_g7dbl")
+text = "⩺"
+flat = true
 
 [node name="OptionsBackButton" type="Button" parent="OptionsContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_colors/font_hover_color = Color(0.9098039, 0.6627451, 0.84313726, 1)
 theme_override_fonts/font = ExtResource("1_hdmo1")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_e8sti")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_q2yj1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_42xcf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1meuf")
 text = "BACK"
 flat = true

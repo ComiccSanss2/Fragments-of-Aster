@@ -338,6 +338,7 @@ texture = SubResource("GradientTexture2D_a8ls1")
 [node name="JumpSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_qlg0r")
 volume_db = -10.0
+bus = &"SFX"
 
 [node name="HandCheck" type="RayCast2D" parent="."]
 position = Vector2(5.5, -4)
@@ -346,11 +347,13 @@ target_position = Vector2(1, 0)
 [node name="HitSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_f1ej7")
 volume_db = -6.158
+bus = &"SFX"
 
 [node name="DecaySFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_oprun")
 volume_db = -9.579
 pitch_scale = 0.95
+bus = &"SFX"
 
 [node name="GrappleTrail" type="CPUParticles2D" parent="."]
 emitting = false
@@ -364,6 +367,7 @@ scale_amount_curve = SubResource("Curve_f1ej7")
 [node name="GrappleSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_oprun")
 volume_db = -15.171
+bus = &"SFX"
 
 [node name="GravityDistortion" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_qfm1y")
