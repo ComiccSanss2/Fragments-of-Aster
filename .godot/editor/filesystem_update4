@@ -10,8 +10,4 @@ res://scenes/levels/matrix.gdshader
 res://glitch_wall.gdshader
 res://scenes/levels/level_16.gdshader
 res://scenes/shard.gdshader
-res://main_menu.gd
-res://scenes/main.tscn
-res://scenes/player.tscn
-res://pause_menu.tscn
-res://pause_menu.gd
+res://main_menu.gdshader

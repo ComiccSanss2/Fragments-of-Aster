@@ -1,3 +1,4 @@
+ColorRect
 PanelContainer
 Button
 Label
@@ -11,5 +12,3 @@ CPUParticles2D
 TextureRect
 ParallaxLayer
 ParallaxBackground
-ColorRect
-CanvasLayer
