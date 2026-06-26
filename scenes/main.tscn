@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bpmrvciu2q13f"]
+[gd_scene load_steps=28 format=3 uid="uid://bpmrvciu2q13f"]
 
 [ext_resource type="PackedScene" uid="uid://pbmoqjvodepq" path="res://scenes/player.tscn" id="1_jyhfs"]
 [ext_resource type="Script" uid="uid://b31yk3icfbvmv" path="res://scenes/main.gd" id="1_tbgi4"]
@@ -15,6 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://db47dgtuonhnr" path="res://assets/sfx/drop.wav" id="11_eb6dy"]
 [ext_resource type="Shader" uid="uid://siin6ououh57" path="res://scenes/wind2.gdshader" id="12_jkv2x"]
 [ext_resource type="AudioStream" uid="uid://cbpsth5mprlka" path="res://assets/sfx/outro.wav" id="14_a8y0u"]
+[ext_resource type="AudioStream" uid="uid://kworoffmecbe" path="res://assets/sfx/scrapeyard-aster.wav" id="16_jbj1t"]
 
 [sub_resource type="Environment" id="Environment_tefeu"]
 background_mode = 3
@@ -228,4 +229,9 @@ bus = &"Music"
 [node name="MusicCinematicFinal" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("14_a8y0u")
 volume_db = -6.0
+bus = &"Music"
+
+[node name="ScrapeyardOST" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_jbj1t")
+volume_db = -13.0
 bus = &"Music"

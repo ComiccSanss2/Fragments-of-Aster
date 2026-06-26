@@ -20,6 +20,7 @@ extends Node2D
 @onready var music_boss_intro := $MusicBossIntro
 @onready var music_boss_chase := $MusicBossChase
 @onready var music_cinematic_final := $MusicCinematicFinal
+@onready var music_scrapeyard := $ScrapeyardOST
 
 var current_level_path: String = ""
 var intro_played := false
@@ -282,21 +283,34 @@ func show_grapple_message(msg: String):
 func hide_grapple_message(): $UI.visible = false
 
 func check_music_progression():
-	if "level15" in current_level_path or "level_15" in current_level_path:
+	var path_lower = current_level_path.to_lower()
+	
+	if "level15" in path_lower or "level_15" in path_lower:
 		_stop_exploration_music()
 		if music_boss_chase.playing: music_boss_chase.stop()
 		if music_boss_intro.playing: music_boss_intro.stop()
 		return
 
-	elif "level16" in current_level_path or "level_16" in current_level_path:
+	elif "level16" in path_lower or "level_16" in path_lower:
 		_stop_exploration_music()
 		if music_boss_intro.playing: music_boss_intro.stop()
 		if not music_boss_chase.playing:
 			music_boss_chase.play()
 		return
+		
+	# --- ZONA SCRAPEYARD ---
+	elif "level17" in path_lower or "level_17" in path_lower:
+		if music_boss_intro.playing: music_boss_intro.stop()
+		if music_boss_chase.playing: music_boss_chase.stop()
+		_stop_exploration_music()
+		if music_scrapeyard and not music_scrapeyard.playing:
+			music_scrapeyard.play()
+		return
 
+	# --- LIVELLI PRECEDENTI ---
 	if music_boss_intro.playing: music_boss_intro.stop()
 	if music_boss_chase.playing: music_boss_chase.stop()
+	if music_scrapeyard and music_scrapeyard.playing: music_scrapeyard.stop()
 
 	if dash_collected:
 		if music_roots.playing: music_roots.stop()
@@ -315,6 +329,7 @@ func _stop_exploration_music():
 	if music_roots.playing: music_roots.stop()
 	if music_echoes.playing: music_echoes.stop()
 	if music_pulse.playing: music_pulse.stop()
+	if music_scrapeyard and music_scrapeyard.playing: music_scrapeyard.stop()
 
 func cleanup_before_exit():
 	_stop_exploration_music()

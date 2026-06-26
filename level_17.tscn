@@ -1,11 +1,12 @@
-[gd_scene load_steps=12 format=3 uid="uid://d1pfbo63krp67"]
+[gd_scene load_steps=16 format=3 uid="uid://d1pfbo63krp67"]
 
 [ext_resource type="Texture2D" uid="uid://ca6pfmxuq156" path="res://assets/Bloc_Ruine_32x32.png" id="1_0y6gu"]
 [ext_resource type="Script" uid="uid://0sofqkr2jai6" path="res://level_17.gd" id="1_o1uqt"]
-[ext_resource type="Texture2D" uid="uid://w551nc12j5nt" path="res://assets/Parallax/city/background.png" id="2_74rdr"]
-[ext_resource type="Texture2D" uid="uid://ga7srnwnajfn" path="res://assets/Parallax/city/city1plan.png" id="3_o1uqt"]
-[ext_resource type="Texture2D" uid="uid://crniiiuedxft7" path="res://assets/Parallax/city/city2plan.png" id="4_gkbo1"]
-[ext_resource type="Texture2D" uid="uid://ehl2frcl68mg" path="res://assets/Parallax/city/city3plan.png" id="5_yyr68"]
+[ext_resource type="Texture2D" uid="uid://ut5dken2o4w0" path="res://assets/Decharge_biome.png" id="3_0y6gu"]
+[ext_resource type="Texture2D" uid="uid://d3q6qe0jklxhn" path="res://assets/Decharge parallax/BG4_PARALAX_DECHARGE.png" id="4_74rdr"]
+[ext_resource type="Texture2D" uid="uid://dnl6315cjx752" path="res://assets/Decharge parallax/BG3_PARALAX_DECHARGE.png" id="5_o1uqt"]
+[ext_resource type="Texture2D" uid="uid://bsesqln5bo68o" path="res://assets/Decharge parallax/BG2_PARALAX_DECHARGE.png" id="6_gkbo1"]
+[ext_resource type="Texture2D" uid="uid://dbxp453an275s" path="res://assets/Decharge parallax/BG1_PARALAX_DECHARGE.png" id="7_yyr68"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="9_74rdr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v6p2n"]
@@ -49,10 +50,62 @@ texture_region_size = Vector2i(32, 32)
 4:5/0 = 0
 5:5/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_38pf1"]
+texture = ExtResource("3_0y6gu")
+texture_region_size = Vector2i(32, 32)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+6:1/0 = 0
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+3:3/0 = 0
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+4:3/0 = 0
+4:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
 [sub_resource type="TileSet" id="TileSet_garqv"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_v6p2n")
+sources/1 = SubResource("TileSetAtlasSource_38pf1")
+
+[sub_resource type="Gradient" id="Gradient_oliui"]
+offsets = PackedFloat32Array(0.99196786)
+colors = PackedColorArray(0.46165407, 0.19583505, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_27ng6"]
+gradient = SubResource("Gradient_oliui")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1uqt"]
 size = Vector2(6994, 45913.5)
@@ -69,48 +122,9 @@ position = Vector2(586, -1637)
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_garqv")
 format = 2
-layer_0/tile_data = PackedInt32Array(2031616, 65536, 1, 2097152, 65536, 1, 2031617, 65536, 1, 2097153, 65536, 1, 2031618, 65536, 1, 2097154, 65536, 1, 2031619, 65536, 1, 2097155, 65536, 1, 2031620, 65536, 1, 2097156, 65536, 1, 2031621, 65536, 1, 2097157, 65536, 1, 2031622, 65536, 1, 2097158, 65536, 1, 2031623, 65536, 1, 2097159, 65536, 1, 2031624, 65536, 1, 2097160, 65536, 1, 2031625, 65536, 1, 2097161, 65536, 1, 2031626, 65536, 1, 2097162, 65536, 1, 2031627, 65536, 1, 2097163, 65536, 1, 2031628, 65536, 1, 2097164, 65536, 1, 2031629, 65536, 1, 2097165, 65536, 1, 2031630, 65536, 1, 2097166, 65536, 1, 2031631, 65536, 1, 2097167, 65536, 1, 2031632, 65536, 1, 2097168, 65536, 1, 2031633, 65536, 1, 2097169, 65536, 1, 2031634, 65536, 1, 2097170, 65536, 1, 2031635, 65536, 1, 2097171, 65536, 1, 2031636, 65536, 1, 2097172, 65536, 1, 2031637, 65536, 1, 2097173, 65536, 1, 2031638, 65536, 1, 2097174, 65536, 1, 2031639, 65536, 1, 2097175, 65536, 1, 2031640, 65536, 1, 2097176, 65536, 1, 2031641, 65536, 1, 2097177, 65536, 1, 2031642, 65536, 1, 2097178, 65536, 1, 2031643, 65536, 1, 2097179, 65536, 1, 2031644, 65536, 1, 2097180, 65536, 1, 2031645, 65536, 1, 2097181, 65536, 1, 2031646, 65536, 1, 2097182, 65536, 1, 2031647, 65536, 1, 2097183, 65536, 1, 2031648, 65536, 1, 2097184, 65536, 1, 2031649, 65536, 1, 2097185, 65536, 1, 2031650, 65536, 1, 2097186, 65536, 1, 2031651, 65536, 1, 2097187, 65536, 1, 2031652, 65536, 1, 2097188, 65536, 1, 2031653, 65536, 1, 2097189, 65536, 1, 2031654, 65536, 1, 2097190, 65536, 1, 2031655, 65536, 1, 2097191, 65536, 1, 2031656, 65536, 1, 2097192, 65536, 1, 2031657, 65536, 1, 2097193, 65536, 1, 2031658, 65536, 1, 2097194, 65536, 1, 2031659, 65536, 1, 2097195, 65536, 1, 2031660, 65536, 1, 2097196, 65536, 1, 2031661, 65536, 1, 2097197, 65536, 1, 2031662, 65536, 1, 2097198, 65536, 1, 2031663, 65536, 1, 2097199, 65536, 1)
+layer_0/tile_data = PackedInt32Array(2031616, 1, 1, 2097152, 1, 2, 2031617, 65537, 1, 2097153, 65537, 2, 2031618, 196609, 1, 2097154, 65537, 2, 2031619, 65537, 1, 2097155, 65537, 2, 2031620, 65537, 0, 2097156, 65537, 2, 2031621, 65537, 1, 2097157, 65537, 2, 2031622, 262145, 1, 2097158, 65537, 2, 2031623, 65537, 0, 2097159, 65537, 2, 2031624, 196609, 1, 2097160, 65537, 2, 2031625, 65537, 1, 2097161, 65537, 2, 2031626, 262145, 3, 2097162, 65537, 2, 2031627, 65537, 1, 2097163, 65537, 2, 2031628, 65537, 1, 2097164, 65537, 2, 2031629, 65537, 0, 2097165, 65537, 2, 2031630, 65537, 1, 2097166, 65537, 2, 2031631, 65537, 1, 2097167, 65537, 2, 2031632, 196609, 1, 2097168, 65537, 2, 2031633, 65537, 1, 2097169, 65537, 2, 2031634, 65537, 1, 2097170, 65537, 2, 2031635, 196609, 1, 2097171, 65537, 2, 2031636, 65537, 1, 2097172, 65537, 2, 2031637, 65537, 0, 2097173, 65537, 2, 2031638, 65537, 1, 2097174, 65537, 2, 2031639, 65537, 1, 2097175, 65537, 2, 2031640, 65537, 1, 2097176, 65537, 2, 2031641, 65537, 1, 2097177, 65537, 2, 2031642, 65537, 1, 2097178, 65537, 2, 2031643, 65537, 1, 2097179, 65537, 2, 2031644, 196609, 1, 2097180, 65537, 2, 2031645, 65537, 0, 2097181, 65537, 2, 2031646, 65537, 0, 2097182, 65537, 2, 2031647, 65537, 1, 2097183, 65537, 2, 2031648, 262145, 1, 2097184, 65537, 2, 2031649, 65537, 0, 2097185, 65537, 2, 2031650, 65537, 1, 2097186, 65537, 2, 2031651, 65537, 1, 2097187, 65537, 2, 2031652, 65537, 1, 2097188, 65537, 2, 2031653, 65537, 1, 2097189, 65537, 2, 2031654, 196609, 1, 2097190, 65537, 2, 2031655, 65537, 0, 2097191, 65537, 2, 2031656, 65537, 1, 2097192, 65537, 2, 2031657, 65537, 1, 2097193, 65537, 2, 2031658, 65537, 1, 2097194, 65537, 2, 2031659, 65537, 1, 2097195, 65537, 2, 2031660, 196609, 1, 2097196, 65537, 2, 2031661, 65537, 1, 2097197, 65537, 2, 2031662, 65537, 1, 2097198, 65537, 2, 2031663, 131073, 1, 2097199, 131073, 2, 2162688, 1, 3, 2162735, 131073, 3, 2162690, 65537, 3, 2162691, 65537, 3, 2162689, 65537, 3, 2162692, 65537, 3, 2162693, 65537, 3, 2162694, 65537, 3, 2162695, 65537, 3, 2162696, 65537, 3, 2162697, 65537, 3, 2162698, 65537, 3, 2162699, 65537, 3, 2162700, 65537, 3, 2162701, 65537, 3, 2162702, 65537, 3, 2162703, 65537, 3, 2162704, 65537, 3, 2162705, 65537, 3, 2162706, 65537, 3, 2162707, 65537, 3, 2162708, 65537, 3, 2162709, 65537, 3, 2162710, 65537, 3, 2162711, 65537, 3, 2162712, 65537, 3, 2162713, 65537, 3, 2162714, 65537, 3, 2162715, 65537, 3, 2162716, 65537, 3, 2162717, 65537, 3, 2162718, 65537, 3, 2162719, 65537, 3, 2162720, 65537, 3, 2162721, 65537, 3, 2162722, 65537, 3, 2162723, 65537, 3, 2162724, 65537, 3, 2162725, 65537, 3, 2162726, 65537, 3, 2162727, 65537, 3, 2162728, 65537, 3, 2162729, 65537, 3, 2162730, 65537, 3, 2162731, 65537, 3, 2162732, 65537, 3, 2162733, 65537, 3, 2162734, 65537, 3)
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_mirroring = Vector2(1920, 0)
-
-[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
-offset_right = 1923.0
-offset_bottom = 1084.0
-texture = ExtResource("2_74rdr")
-metadata/_edit_use_anchors_ = true
-
-[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(0, 12)
-motion_mirroring = Vector2(1920, 0)
-
-[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer2"]
-offset_right = 1917.0
-offset_bottom = 1078.0
-texture = ExtResource("3_o1uqt")
-metadata/_edit_use_anchors_ = true
-
-[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(6, -60)
-motion_mirroring = Vector2(1920, 0)
-
-[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer3"]
-offset_right = 1925.0
-offset_bottom = 1083.0
-texture = ExtResource("4_gkbo1")
-metadata/_edit_use_anchors_ = true
-
-[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
-position = Vector2(0, 2)
-motion_mirroring = Vector2(1920, 0)
-
-[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer4"]
-offset_right = 1921.0
-offset_bottom = 1074.0
-texture = ExtResource("5_yyr68")
-metadata/_edit_use_anchors_ = true
 
 [node name="ParallaxLayer5" type="ParallaxLayer" parent="ParallaxBackground"]
 position = Vector2(-6, 18)
@@ -119,7 +133,50 @@ motion_mirroring = Vector2(1920, 0)
 [node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer5"]
 offset_right = 1920.0
 offset_bottom = 1078.0
-texture = ExtResource("4_gkbo1")
+texture = SubResource("GradientTexture1D_27ng6")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 2)
+motion_scale = Vector2(0.1, 1)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer4"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("4_74rdr")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(6, -60)
+motion_scale = Vector2(0.25, 1)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer3"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("5_o1uqt")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 12)
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer2"]
+offset_right = 1917.0
+offset_bottom = 1078.0
+texture = ExtResource("6_gkbo1")
+metadata/_edit_use_anchors_ = true
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0.75, 1)
+motion_mirroring = Vector2(1920, 0)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/ParallaxLayer"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("7_yyr68")
 metadata/_edit_use_anchors_ = true
 
 [node name="LevelBounds" type="Node2D" parent="."]
