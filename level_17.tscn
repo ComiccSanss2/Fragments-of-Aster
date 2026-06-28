@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://d1pfbo63krp67"]
+[gd_scene load_steps=21 format=3 uid="uid://d1pfbo63krp67"]
 
 [ext_resource type="Texture2D" uid="uid://ca6pfmxuq156" path="res://assets/Bloc_Ruine_32x32.png" id="1_0y6gu"]
 [ext_resource type="Script" uid="uid://0sofqkr2jai6" path="res://level_17.gd" id="1_o1uqt"]
@@ -8,6 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://bsesqln5bo68o" path="res://assets/Decharge parallax/BG2_PARALAX_DECHARGE.png" id="6_gkbo1"]
 [ext_resource type="Texture2D" uid="uid://dbxp453an275s" path="res://assets/Decharge parallax/BG1_PARALAX_DECHARGE.png" id="7_yyr68"]
 [ext_resource type="Script" uid="uid://c17i5h1prm6ys" path="res://scenes/levels/level_bounds.gd" id="9_74rdr"]
+[ext_resource type="PackedScene" uid="uid://jm4vash3xp8y" path="res://hack_node.tscn" id="9_o1uqt"]
+[ext_resource type="PackedScene" uid="uid://c6w32fvakk3wh" path="res://hacking_zone.tscn" id="10_o1uqt"]
+[ext_resource type="PackedScene" uid="uid://blpp8fxlrskuj" path="res://tutorial_prompt.tscn" id="11_38pf1"]
+[ext_resource type="Texture2D" uid="uid://cgcg0ysf6w83p" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0120.png" id="12_oliui"]
+[ext_resource type="Texture2D" uid="uid://mx0vfq20vaii" path="res://assets/kenney_input-prompts-pixel-16/Tiles/tile_0619.png" id="13_27ng6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v6p2n"]
 texture = ExtResource("1_0y6gu")
@@ -209,4 +214,68 @@ scale_amount_max = 3.0
 position = Vector2(540, 987)
 shape = SubResource("RectangleShape2D_gkbo1")
 
+[node name="HackNode" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(1765, 942)
+
+[node name="HackNode2" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(1981, 941)
+
+[node name="HackNode3" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2093, 814)
+
+[node name="HackNode4" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2094, 645)
+
+[node name="HackNode5" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2497, 639)
+
+[node name="HackNode6" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2740, 639)
+
+[node name="HackNode7" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2772, 639)
+
+[node name="HackNode8" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2804, 639)
+
+[node name="HackNode9" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2836, 639)
+
+[node name="HackNode10" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2868, 639)
+
+[node name="HackNode11" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 639)
+
+[node name="HackNode12" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 607)
+
+[node name="HackNode13" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 575)
+
+[node name="HackNode14" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 543)
+
+[node name="HackNode15" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 511)
+
+[node name="HackNode16" parent="." instance=ExtResource("9_o1uqt")]
+position = Vector2(2900, 479)
+
+[node name="HackingZone" parent="." instance=ExtResource("10_o1uqt")]
+position = Vector2(1534, 963)
+
+[node name="TutorialPrompt" parent="." instance=ExtResource("11_38pf1")]
+position = Vector2(1733, 936)
+tex_keyboard = ExtResource("12_oliui")
+tex_gamepad = ExtResource("13_27ng6")
+
+[node name="CollisionShape2D" parent="TutorialPrompt" index="0"]
+position = Vector2(-214, 22)
+
+[node name="Sprite2D" parent="TutorialPrompt" index="1"]
+position = Vector2(-166, 11)
+
 [connection signal="body_entered" from="ImpactTrigger" to="." method="_on_impact_trigger_body_entered"]
+
+[editable path="TutorialPrompt"]

@@ -44,6 +44,7 @@ var last_facing_dir := 0
 var is_cinematic := false
 var cinematic_target: Node2D = null
 var is_locked := false
+var hack_target: Node2D = null
 
 # ------------------------------------------------------------
 # INITIALISATION
@@ -71,6 +72,9 @@ func _physics_process(delta):
 	var follow_node = target
 	if is_cinematic and cinematic_target:
 		follow_node = cinematic_target
+	elif "hack_target" in self and hack_target != null:
+		follow_node = hack_target
+		
 	if not follow_node: return
 
 	var ideal_pos = follow_node.global_position

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://jm4vash3xp8y"]
+
+[ext_resource type="Script" uid="uid://dvvj5ybqr1rxd" path="res://hack_node.gd" id="1_u7qn8"]
+[ext_resource type="Texture2D" uid="uid://b1yve4j2a4js8" path="res://assets/sfx/testspritematerializzato.png" id="2_4maqt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4maqt"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8l3h7"]
+size = Vector2(32, 32)
+
+[node name="HackNode" type="Area2D"]
+script = ExtResource("1_u7qn8")
+
+[node name="SpriteOlogramma" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.28235295)
+texture = ExtResource("2_4maqt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4maqt")
+
+[node name="CorpoSolido" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CorpoSolido"]
+shape = SubResource("RectangleShape2D_8l3h7")
+
+[node name="SpriteMaterializzato" type="Sprite2D" parent="CorpoSolido"]
+visible = false
+texture = ExtResource("2_4maqt")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://pbmoqjvodepq"]
+[gd_scene load_steps=56 format=3 uid="uid://pbmoqjvodepq"]
 
 [ext_resource type="Script" uid="uid://cikm0sgul6rns" path="res://scenes/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://d0lbwlc6bdtx1" path="res://assets/Escalade-Sheet.png" id="2_d2wvv"]
@@ -15,6 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://bxf7wsejawk4e" path="res://assets/sfx/decading.wav" id="14_oprun"]
 [ext_resource type="AudioStream" uid="uid://jbl7evhke65g" path="res://assets/sfx/laserShoot (1).wav" id="15_oprun"]
 [ext_resource type="Shader" uid="uid://dimweon17ipwh" path="res://scenes/gravitydistortion.gdshader" id="16_a8ls1"]
+[ext_resource type="Texture2D" uid="uid://cwten0ko0kogt" path="res://assets/sfx/HackReticle.png" id="16_qfm1y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i4ail"]
 atlas = ExtResource("2_d2wvv")
@@ -288,6 +289,9 @@ colors = PackedColorArray(0.16206557, 0.1620656, 0.16206557, 1, 1, 1, 1, 0)
 [sub_resource type="Gradient" id="Gradient_fulsm"]
 colors = PackedColorArray(0.27752772, 0.27752772, 0.27752772, 1, 1, 1, 1, 0)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a8ls1"]
+size = Vector2(8, 8)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 2
 scale = Vector2(2, 2)
@@ -428,3 +432,16 @@ damping_max = 40.0
 scale_amount_min = 3.0
 scale_amount_max = 3.0
 color_ramp = SubResource("Gradient_fulsm")
+
+[node name="HackReticle" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="HackReticle"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("16_qfm1y")
+
+[node name="Area2D" type="Area2D" parent="HackReticle"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HackReticle/Area2D"]
+shape = SubResource("RectangleShape2D_a8ls1")
+
+[node name="HackSFX" type="AudioStreamPlayer" parent="HackReticle"]

@@ -75,6 +75,12 @@ var gravity_dir: int = 1 # 1 = Normal (Bas), -1 = Inversé (Haut)
 var gravity_cooldown: float = 0.0
 var can_invert_gravity: bool = true 
 
+# --- HACKING ---
+var is_hacking: bool = false
+var can_hack_in_zone: bool = false # <--- ATTIVATA DALLA ZONA
+const HACK_RETICLE_SPEED = 350.0
+const MAX_HACK_DISTANCE = 300.0
+
 # Visuals
 var was_on_floor: bool = true
 var default_scale := Vector2(1, 1)
@@ -98,9 +104,14 @@ var default_hand_check_y := 0.0
 @onready var hit_sfx = get_node_or_null("HitSFX")
 @onready var decay_sfx = get_node_or_null("DecaySFX")
 @onready var grapple_sfx = get_node_or_null("GrappleSFX")
+@onready var hack_sfx = get_node_or_null("HackSFX")
 
 @onready var anim_player = get_node_or_null("AnimationPlayer")
 @onready var hand_check = get_node_or_null("HandCheck")
+
+# --- NOEUDS HACKING ---
+@onready var hack_reticle = get_node_or_null("HackReticle")
+@onready var hack_area = get_node_or_null("HackReticle/Area2D")
 
 # --- FX ---
 @onready var grapple_trail = get_node_or_null("GrappleTrail")
@@ -124,6 +135,9 @@ func _ready():
 	up_direction = Vector2.UP
 	gravity_dir = 1
 	
+	if hack_reticle:
+		hack_reticle.visible = false
+	
 	if has_node("AnimationPlayer") and anim_player.has_animation("spawn"):
 		start_respawn_sequence()
 
@@ -137,6 +151,9 @@ func _process(delta):
 			spawn_dash_ghost()
 			dash_ghost_timer = 0.03
 
+# ------------------------------------------------------------
+# PHYSICS PROCESS
+# ------------------------------------------------------------
 # ------------------------------------------------------------
 # PHYSICS PROCESS
 # ------------------------------------------------------------
@@ -164,6 +181,111 @@ func _physics_process(delta):
 				play_anim("idle")
 		move_and_slide()
 		return
+
+# ========================================================
+	# --- HACKING SYSTEM (MIRINO VELOCE, TEMPO VARIABILE) ---
+	# ========================================================
+	var main = get_tree().root.get_node_or_null("Main")
+
+	if is_hacking:
+		# Blocchiamo il movimento, ma non perdiamo l'informazione di cosa stavamo facendo
+		velocity = Vector2.ZERO 
+		
+		# GESTIONE TEMPO E ANIMAZIONE
+		if not is_on_floor():
+			Engine.time_scale = 0.2
+			# Se non avevamo ancora salvato l'animazione, guardiamo la gravità
+			if gravity_dir == 1:
+				if velocity.y < 0: play_anim("jump")
+				else: play_anim("fall")
+			else: # Gravità invertita
+				if velocity.y > 0: play_anim("jump")
+				else: play_anim("fall")
+		else:
+			Engine.time_scale = 1.0
+			play_anim("idle")
+		
+		# Annulla hacking
+		if Input.is_action_just_pressed("hack"):
+			is_hacking = false
+			Engine.time_scale = 1.0 # Reset tempo
+			if hack_reticle: hack_reticle.visible = false
+			if main and main.camera and "hack_target" in main.camera:
+				main.camera.hack_target = null
+			return
+			
+		# Movimento Mirino (Velocità costante, NON influenzata da time_scale)
+		# Nota: Moltiplichiamo per delta*50 per compensare il time_scale se necessario
+		var rx = Input.get_axis("ui_left", "ui_right")
+		var ry = Input.get_axis("ui_up", "ui_down")
+		var speed_mult = 1.0 / Engine.time_scale # Compensa il rallentamento del tempo
+		
+		if hack_reticle:
+			hack_reticle.position += Vector2(rx, ry).normalized() * HACK_RETICLE_SPEED * delta * speed_mult
+			
+			if hack_reticle.position.length() > MAX_HACK_DISTANCE:
+				hack_reticle.position = hack_reticle.position.normalized() * MAX_HACK_DISTANCE
+
+			# Interazione
+			if hack_area:
+				for area in hack_area.get_overlapping_areas():
+					if area.is_in_group("hackable") and area.has_method("trigger_hack"):
+						hack_reticle.modulate = Color("00ff99")
+						if Input.is_action_just_pressed("ui_accept"):
+							area.trigger_hack()
+							# Se vuoi che il tempo torni normale APPENA hackeri:
+							Engine.time_scale = 1.0 
+							if main and main.has_method("trigger_shake"): main.trigger_shake(2.0)
+						break 
+			if not hack_area.get_overlapping_areas():
+				hack_reticle.modulate = Color(1, 1, 1)
+		return 
+
+	# Attivazione
+	elif Input.is_action_just_pressed("hack") and can_hack_in_zone:
+		is_hacking = true
+		velocity = Vector2.ZERO
+		if hack_reticle:
+			hack_reticle.visible = true
+			hack_reticle.position = Vector2.ZERO
+			if hack_sfx: hack_sfx.play()
+			if main and main.camera and "hack_target" in main.camera:
+				main.camera.hack_target = hack_reticle
+		return
+
+	# 2. ATTIVAZIONE (Ora ammessa ovunque, basta essere nella Hacking Zone)
+	elif Input.is_action_just_pressed("hack") and can_hack_in_zone:
+		is_hacking = true
+		velocity = Vector2.ZERO
+		if hack_reticle:
+			hack_reticle.visible = true
+			hack_reticle.position = Vector2.ZERO
+			if hack_sfx: hack_sfx.play()
+			
+			# Aggancia telecamera
+			if main and main.camera and "hack_target" in main.camera:
+				main.camera.hack_target = hack_reticle
+		return 
+	# ========================================================
+
+	# 2. SE NON SIAMO IN HACKING: Controlliamo se vogliamo entrarci
+	elif Input.is_action_just_pressed("hack") and can_hack_in_zone and is_on_floor():
+		print("SUCCESSO: Lyra è in Hacking Mode!")
+		is_hacking = true
+		velocity = Vector2.ZERO
+		if hack_reticle:
+			hack_reticle.visible = true
+			hack_reticle.position = Vector2.ZERO # Centra sul player
+			if hack_sfx: hack_sfx.play()
+			
+			# Sposta la telecamera (Usa in modo sicuro la camera del Main)
+			if main and main.camera and "hack_target" in main.camera:
+				main.camera.hack_target = hack_reticle
+				print("Telecamera agganciata al mirino!")
+				
+		move_and_slide()
+		return # <-- Esce dal frame corrente
+	# ========================================================
 
 	# --- DASH EN COURS ---
 	if is_dashing:
@@ -224,7 +346,6 @@ func _physics_process(delta):
 				grapple_sfx.play()
 				
 			is_grapple_zoomed_out = true
-			var main = get_tree().root.get_node_or_null("Main")
 			if main and main.camera:
 				var t = create_tween()
 				t.tween_property(main.camera, "zoom", main.DEFAULT_ZOOM * 0.90, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -715,6 +836,8 @@ func reset_from_cinematic():
 	grappling = false
 	wall_grabbing = false
 	is_dashing = false
+	is_hacking = false
+	if hack_reticle: hack_reticle.visible = false
 	
 	set_physics_process(true)
 	set_process(true)
@@ -722,7 +845,6 @@ func reset_from_cinematic():
 	collision_layer = 1
 	collision_mask = 1
 	
-	# IL KILL-SWITCH PER LE ANIMAZIONI INCANTATE
 	if has_node("AnimationPlayer"): 
 		$AnimationPlayer.stop()
 	
@@ -734,7 +856,6 @@ func reset_from_cinematic():
 		spr.visible = true
 		spr.play("fall")
 	
-	# La scossa per il motore fisico
 	velocity = Vector2(0, 150)
 	gravity_dir = 1
 	up_direction = Vector2.UP

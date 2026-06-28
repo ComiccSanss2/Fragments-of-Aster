@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6w32fvakk3wh"]
+
+[ext_resource type="Script" uid="uid://dqpb3hnfted6a" path="res://hacking_zone.gd" id="1_hgtr1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5t2xy"]
+size = Vector2(1650, 845)
+
+[node name="HackingZone" type="Area2D"]
+script = ExtResource("1_hgtr1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(634, -298.5)
+shape = SubResource("RectangleShape2D_5t2xy")
