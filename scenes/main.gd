@@ -171,20 +171,30 @@ func load_level(path: String):
 		camera.make_current()
 		
 		var path_lower = path.to_lower()
+		
+		# Controlla in quali livelli nascondere il vento
 		var is_chase_level = "level16" in path_lower or "level_16" in path_lower
+		var is_scrapeyard = "level17" in path_lower or "level_17" in path_lower
+		var hide_wind = is_chase_level or is_scrapeyard
 		
 		if wind_layer:
-			wind_layer.visible = not is_chase_level
+			wind_layer.visible = not hide_wind
 			for child in wind_layer.get_children():
 				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
-					if is_chase_level: child.stop()
+					if hide_wind: 
+						child.stop()
+					elif not child.playing: 
+						child.play() # Lo fa ripartire se torni a un livello precedente
 					
 		var wind_layer_2 = get_node_or_null("WindLayer2")
 		if wind_layer_2:
-			wind_layer_2.visible = not is_chase_level
+			wind_layer_2.visible = not hide_wind
 			for child in wind_layer_2.get_children():
 				if child is AudioStreamPlayer or child is AudioStreamPlayer2D:
-					if is_chase_level: child.stop()
+					if hide_wind: 
+						child.stop()
+					elif not child.playing: 
+						child.play()
 		
 		check_music_progression()
 		

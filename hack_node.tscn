@@ -13,7 +13,7 @@ size = Vector2(32, 32)
 script = ExtResource("1_u7qn8")
 
 [node name="SpriteOlogramma" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.28235295)
+modulate = Color(1, 1, 1, 0.13333334)
 texture = ExtResource("2_4maqt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
