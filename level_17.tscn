@@ -113,7 +113,7 @@ colors = PackedColorArray(0.09411765, 0.105882354, 0.16862746, 1)
 gradient = SubResource("Gradient_oliui")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1uqt"]
-size = Vector2(6994, 45913.5)
+size = Vector2(8958, 7726.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gkbo1"]
 size = Vector2(278.5, 73.625)
@@ -187,12 +187,11 @@ texture = ExtResource("7_yyr68")
 metadata/_edit_use_anchors_ = true
 
 [node name="LevelBounds" type="Node2D" parent="."]
-visible = false
 position = Vector2(-35, 433)
 script = ExtResource("9_74rdr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevelBounds"]
-position = Vector2(2975, -21490.25)
+position = Vector2(3957, -2396.75)
 shape = SubResource("RectangleShape2D_o1uqt")
 
 [node name="SpeedLines" type="CPUParticles2D" parent="."]
@@ -219,47 +218,14 @@ shape = SubResource("RectangleShape2D_gkbo1")
 [node name="HackNode" parent="." instance=ExtResource("9_o1uqt")]
 position = Vector2(1765, 942)
 
-[node name="HackNode2" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(1981, 941)
-
 [node name="HackNode3" parent="." instance=ExtResource("9_o1uqt")]
 position = Vector2(2093, 814)
 
 [node name="HackNode4" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2094, 645)
-
-[node name="HackNode5" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2497, 639)
-
-[node name="HackNode6" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2740, 639)
+position = Vector2(2440, 665)
 
 [node name="HackNode7" parent="." instance=ExtResource("9_o1uqt")]
 position = Vector2(2772, 639)
-
-[node name="HackNode8" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2804, 639)
-
-[node name="HackNode9" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2836, 639)
-
-[node name="HackNode10" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2868, 639)
-
-[node name="HackNode11" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2900, 639)
-
-[node name="HackNode12" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2900, 607)
-
-[node name="HackNode13" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2900, 575)
-
-[node name="HackNode14" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2900, 543)
-
-[node name="HackNode15" parent="." instance=ExtResource("9_o1uqt")]
-position = Vector2(2900, 511)
 
 [node name="HackNode16" parent="." instance=ExtResource("9_o1uqt")]
 position = Vector2(2900, 479)
