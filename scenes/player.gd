@@ -817,16 +817,14 @@ func get_best_hack_target() -> Area2D:
 			var to_target = area.global_position - global_position
 			var distance = to_target.length()
 			
-			# Più lo score è BASSO, migliore è il bersaglio. Partiamo dalla distanza.
 			var score = distance
 			
-			# Modifichiamo lo score in base a dove stiamo guardando (Dot Product)
 			if distance > 0:
 				var dot = aim_dir.dot(to_target.normalized())
-				if dot > 0.5: # Lo stiamo guardando quasi dritto
-					score *= 0.3 # Punteggio eccellente!
-				elif dot < 0: # È dietro di noi
-					score *= 5.0 # Punteggio pessimo, sceglilo solo se è l'unico
+				if dot > 0.5: 
+					score *= 0.3 
+				elif dot < 0: 
+					score *= 5.0 
 					
 			if score < best_score:
 				best_score = score
@@ -836,6 +834,5 @@ func get_best_hack_target() -> Area2D:
 	
 	
 func _on_hack_aura_exited(area: Area2D):
-	# Se un nodo esce dalla nostra aura ed è attualmente solido, si spegne da solo!
 	if area.is_in_group("hackable") and area.get("is_hacked") == true:
 		area.trigger_hack()
